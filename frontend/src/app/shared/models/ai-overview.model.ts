@@ -5,4 +5,8 @@
 export interface AiOverview {
   summary: string;
   generatedAt: string;
+  model: string;
+  totalReviewsConsidered: number;
+  reviewSampleSize: number;
+  setuSeasons: string[] | [];
 }

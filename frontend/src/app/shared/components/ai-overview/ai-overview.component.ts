@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // PrimeNG modules
@@ -8,6 +8,8 @@ import { TooltipModule } from 'primeng/tooltip';
 // App specific models
 import { AiOverview } from '../../models/ai-overview.model';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ViewportService, ViewportType } from '../../services/viewport.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-ai-overview',
@@ -21,8 +23,12 @@ import { SkeletonModule } from 'primeng/skeleton';
   templateUrl: './ai-overview.component.html',
   styleUrl: './ai-overview.component.scss'
 })
-export class AiOverviewComponent {
+export class AiOverviewComponent implements OnInit, OnDestroy {
   @Input() unit: any = null;
+
+  window = window;
+
+  viewportType: ViewportType = 'desktop';
 
   /**
    * * Gets AI overview from unit data
@@ -31,17 +37,64 @@ export class AiOverviewComponent {
     return this.unit?.aiOverview || null;
   }
 
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private viewportService: ViewportService
+  ) { }
+
+  ngOnInit(): void {
+    // Subscribe to viewport service
+    this.viewportService.viewport$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((type) => {
+        this.viewportType = type;
+      });
+
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   /**
    * * Formats the generated date for display
    */
-  getFormattedDate(): string {
+  getFormattedDate(format: 'short' | 'default' = 'default'): string {
     if (!this.aiOverview?.generatedAt) return '';
 
-    const date = new Date(this.aiOverview.generatedAt);
+    const date: Date = new Date(this.aiOverview.generatedAt);
+
+    if (format == 'short') {
+      const yyyy = date.getFullYear().toString();
+      const mm = date.getMonth() + 1;
+      const dd = date.getDay();
+
+      let ddStr, mmStr;
+      if (dd < 10) { ddStr = '0' + dd; }
+      if (mm < 10) { mmStr = '0' + mm; }
+
+      return ddStr + '/' + mmStr + '/' + yyyy;
+    }
+
     return date.toLocaleDateString('en-AU', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      year: 'numeric', month: 'long', day: 'numeric'
     });
+  }
+
+  /**
+   * * Gets the icon for the AI model
+   */
+  getModelIcon(): string {
+    if (!this.aiOverview?.model) return '';
+
+    const model = this.aiOverview.model.toLowerCase();
+    if (model.includes('gemini')) {
+      return 'pi pi-google';
+    }
+
+    // Default icon for unknown models
+    return 'pi pi-sparkles';
   }
 }

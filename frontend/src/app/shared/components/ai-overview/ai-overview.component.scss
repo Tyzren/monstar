@@ -38,17 +38,20 @@
   }
 }
 
+// Header section
 .ai-overview-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
+// Sparkles LHS title icon
 .ai-overview-icon {
   font-size: 2rem;
   color: $primary-color;
 }
 
+// Title
 .ai-overview-title {
   flex: 1;
 
@@ -62,6 +65,7 @@
   }
 }
 
+// Generated at date subheading
 .ai-overview-date {
   font-family: $poppins;
   font-size: 0.875rem;
@@ -69,6 +73,31 @@
   cursor: help;
 }
 
+// Ai model badge
+.ai-model-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  background-color: rgba($primary-color, 0.1);
+  border: 1px solid rgba($primary-color, 0.2);
+
+  i {
+    font-size: 0.875rem;
+    color: $primary-color;
+  }
+
+  span {
+    font-family: $poppins;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+}
+
+// Generated content section
 .ai-overview-content {
   p {
     margin: 0;
@@ -79,6 +108,7 @@
   }
 }
 
+// Accessiblity for reduced motion users, reduce the gradient 
 @media (prefers-reduced-motion: reduce) {
   .ai-overview-highlight {
     animation: none;
@@ -103,12 +133,6 @@
     gap: 0.5rem;
   }
 
-  .ai-overview-icon {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 1.25rem;
-  }
-
   .ai-overview-title h3 {
     font-size: 1.125rem;
   }
@@ -121,6 +145,31 @@
     p {
       font-size: 13px;
     }
+  }
+
+  .ai-model-badge {
+    padding: 0.2rem 0.5rem;
+
+    i {
+      font-size: 0.75rem;
+    }
+
+    span {
+      font-size: 0.65rem;
+    }
+  }
+}
+
+// Hide the sparkles icon on small mobile phones
+@media (max-width: 420px) {
+  .ai-overview-icon {
+    display: none;
+  }
+}
+// Hide the AI model badge on very small screen widths
+@media (max-width: 336px) {
+  .ai-model-badge {
+    display: none;
   }
 }
 

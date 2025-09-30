@@ -16,10 +16,27 @@
           <!-- Title -->
           <div class="ai-overview-title">
             <h3>AI Overview</h3>
+            
             <span class="ai-overview-date">
-              Generated {{ getFormattedDate() }}
+              @if (window.innerWidth <= 500 && window.innerWidth > 350) {
+                {{ getFormattedDate() }}
+              } @else if (window.innerWidth <= 350) { 
+                {{ getFormattedDate('short') }}
+              } @else {
+                Generated {{ getFormattedDate() }}
+              }
             </span>
           </div>
+
+          <!-- Model Badge -->
+          @if (aiOverview.model) {
+            <div class="ai-model-badge">
+              <!-- Model icon -->
+              <i [class]="getModelIcon()"></i>
+              <!-- Model name -->
+              <span>{{ aiOverview.model.replaceAll('-', ' ')}}</span>
+            </div>
+          }
         </div>
       </ng-template>
 
