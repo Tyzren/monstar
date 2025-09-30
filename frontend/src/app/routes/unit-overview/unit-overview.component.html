@@ -21,7 +21,11 @@
 
             <!-- ! CHILD: SetuCardComponent -->
             <!-- Setu header -->
-            <app-setu-card [unitCode]="unit?.unitCode"/>
+            @if (enableSetuCards) {
+                <app-setu-card [unitCode]="unit?.unitCode"/>
+            } @else {
+                <br/>
+            }
 
             <!-- ! CHILD: AiOverviewComponent -->
             <!-- AI overview -->

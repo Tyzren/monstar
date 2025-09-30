@@ -6,6 +6,9 @@ import { Meta, Title } from '@angular/platform-browser';
 import { filter, take } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
+// Environment
+import { environment } from '../../../environments/environment';
+
 // Constants
 import { BASE_URL, getMetaUnitOverviewDescription, getMetaUnitOverviewKeywords, getMetaUnitOverviewOpenGraphDescription, getMetaUnitOverviewOpenGraphTitle, getMetaUnitOverviewTitle, getMetaUnitOverviewTwitterDescription, getMetaUnitOverviewTwitterTitle, NAVBAR_HEIGHT } from '../../shared/constants';
 
@@ -54,6 +57,9 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   unit: any = null;
   reviews: Review[] = [];
   reviewsLoading: boolean = true;
+
+  // Environment flags
+  enableSetuCards = environment.enableSetuCards;
 
   // Split view boolean
   isSplitView: boolean = false;

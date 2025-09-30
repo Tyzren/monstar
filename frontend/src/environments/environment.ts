@@ -3,5 +3,6 @@ export const environment = {
   apiUrl: '/api/v1',
   authUrl: '/api/v1/auth',
   setuUrl: '/api/v1/setus',
-  githubUrl: '/api/v1/github'
+  githubUrl: '/api/v1/github',
+  enableSetuCards: false
 };
