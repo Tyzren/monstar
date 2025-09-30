@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export type ViewportType = 'desktop' | 'laptop' | 'tablet' | 'mobile';
 
@@ -22,7 +23,7 @@ export class ViewportService {
    * 
    * Detects the current viewport and listens for window resize events
    */
-  constructor() { 
+  constructor() {
     // Detect the current viewport
     this.detectViewport();
 
@@ -44,16 +45,24 @@ export class ViewportService {
   private getCurrentViewportType(): ViewportType {
     const width = window.innerWidth;
     if (width <= this.mobileLimit) {
-      // console.log('ViewportService | getCurrentViewportType: mobile');
+      if (!environment.production) {
+        console.log('ViewportService | getCurrentViewportType: mobile');
+      }
       return 'mobile';
     } else if (width <= this.tabletLimit) {
-      // console.log('ViewportService | getCurrentViewportType: tablet');
+      if (!environment.production) {
+        console.log('ViewportService | getCurrentViewportType: tablet');
+      }
       return 'tablet';
     } else if (width <= this.desktopLimit) {
-      // console.log('ViewportService | getCurrentViewportType: laptop');
+      if (!environment.production) {
+        console.log('ViewportService | getCurrentViewportType: laptop');
+      }
       return 'laptop';
     } else {
-      // console.log('ViewportService | getCurrentViewportType: desktop');
+      if (!environment.production) {
+        console.log('ViewportService | getCurrentViewportType: desktop');
+      }
       return 'desktop';
     }
   }
