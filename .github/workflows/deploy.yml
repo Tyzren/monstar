@@ -31,6 +31,9 @@ jobs:
           git config credential.helper store
           echo "https://${{ secrets.USERNAME }}:${{ secrets.PAT }}@github.com" > ~/.git-credentials
 
+          # Discard local changes to package-lock.json
+          git checkout -- frontend/package-lock.json || true
+
           # Pull latest changes
           git pull origin main
 
