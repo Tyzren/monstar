@@ -19,17 +19,17 @@
                 (reviewAdded)="refreshReviews()"
             />
 
-            <!-- ! CHILD: SetuCardComponent -->
-            <!-- Setu header -->
-            @if (enableSetuCards) {
-                <app-setu-card [unitCode]="unit?.unitCode"/>
-            } @else {
-                <br/>
-            }
+            <br/><br/>
 
             <!-- ! CHILD: AiOverviewComponent -->
             <!-- AI overview -->
             <app-ai-overview [unit]="unit"/>
+
+            <!-- ! CHILD: SetuCardComponent -->
+            <!-- Setu header -->
+            <app-setu-card [unitCode]="unit?.unitCode"/>
+
+            <br/><br/>
         </p-scrollPanel>
     </div>
     <div class="right-column">
