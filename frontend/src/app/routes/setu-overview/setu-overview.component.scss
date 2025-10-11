@@ -1,5 +1,103 @@
 @import '../../_variables.scss';
 
+// Wrapper for authenticated content with blur protection
+.setu-content-wrapper {
+  position: relative;
+  min-height: calc(100vh - 60px);
+
+  // Blur content when locked
+  &.locked > :not(.auth-overlay) {
+    filter: blur(6px) brightness(0.75); // Reduced blur intensity for performance
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    will-change: filter; // Hint browser to optimize
+  }
+}
+
+// Auth overlay styles - Multi-layer approach for effective obscuring
+.auth-overlay {
+  position: fixed;
+  top: 57.2px; // Start below navbar
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-start; // Align to top instead of center
+  justify-content: center;
+  padding-top: 8vh; // Position content higher up
+  z-index: 100; // Below navbar and PrimeNG dialogs (1100+)
+  overflow: hidden; // Prevent any scrolling
+
+  // Simplified background for better performance
+  background:
+    // Gradient overlay
+    linear-gradient(135deg,
+      rgba(44, 44, 44, 0.97) 0%,
+      rgba(55, 8, 51, 0.95) 50%,
+      rgba(44, 44, 44, 0.97) 100%
+    ),
+    // Solid fallback
+    #2c2c2c;
+
+  // Reduced backdrop blur for better performance
+  // Only use on devices that can handle it smoothly
+  @media (min-width: 1024px) {
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+  }
+}
+
+.auth-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem;
+  position: relative;
+  z-index: 101; // Just above the overlay background
+  max-width: 500px;
+}
+
+.poop-emoji {
+  width: 128px;
+  height: 128px;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+  animation: gentle-bounce 2s ease-in-out infinite;
+  will-change: transform; // Optimize animation performance
+  transform: translateZ(0); // Force GPU acceleration
+}
+
+@keyframes gentle-bounce {
+  0%, 100% {
+    transform: translateY(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(-12px) translateZ(0);
+  }
+}
+
+.auth-title {
+  color: white;
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.auth-message {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: normal;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+}
+
 .loading-container,
 .error-container,
 .no-data-container {

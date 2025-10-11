@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges, OnInit, OnDestroy, HostListener, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
+import { Subscription } from 'rxjs';
 
 // PrimeNG modules
 import { AccordionModule } from 'primeng/accordion';
@@ -13,6 +14,8 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 // App specific services and models
 import { SetuService } from '../../services/setu.service';
+import { AuthService } from '../../services/auth.service';
+import { ProfileDialogService } from '../../services/profile-dialog.service';
 import { Setu } from '../../models/setu.model';
 
 @Component({
@@ -45,7 +48,11 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
 
   // Viewport size tracking
   isDesktopView = false;
-  accordionExpanded = false;
+  activeIndex: number | null = null;
+
+  // Authentication
+  isAuthenticated = false;
+  private authSubscription?: Subscription;
 
   // Host binding for CSS class when no SETU data
   @HostBinding('class.no-setu-data')
@@ -53,14 +60,26 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
     return this.isDesktopView && !this.hasSetuData();
   }
 
-  constructor(private setuService: SetuService) { }
+  constructor(
+    private setuService: SetuService,
+    private authService: AuthService,
+    private profileDialogService: ProfileDialogService
+  ) { }
 
   ngOnInit(): void {
     this.checkViewportSize();
+
+    // Subscribe to auth state
+    this.authSubscription = this.authService.getCurrentUser().subscribe(user => {
+      this.isAuthenticated = user !== null;
+    });
   }
 
   ngOnDestroy(): void {
-    // Cleanup is handled automatically for HostListener
+    // Cleanup auth subscription
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -79,16 +98,22 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
    * Checks if we're in desktop view (two-column layout) and updates accordion state
    */
   private checkViewportSize(): void {
+    const wasDesktop = this.isDesktopView;
     this.isDesktopView = window.innerWidth >= 1414; // Match the CSS breakpoint
 
-    if (this.isDesktopView) {
-      // Force accordion to be expanded in desktop view, but only if we have data
-      this.accordionExpanded = this.hasSetuData();
-
-    } else {
-      // Allow normal collapsible behavior in mobile view
-      this.accordionExpanded = false;
+    // ? Only set accordion state on initial load or when data changes
+    // ? Don't override user's manual state when just resizing between mobile/desktop
+    
+    // Transitioning from mobile to desktop for first time - expand if we have data
+    if (this.isDesktopView && !wasDesktop && this.activeIndex === null) {
+      this.activeIndex = this.hasSetuData() ? 0 : null;
+    } 
+    // Already in desktop view - ensure it's expanded if we have data
+    else if (this.isDesktopView && wasDesktop) {
+      this.activeIndex = this.hasSetuData() ? 0 : null;
     }
+    // In mobile view, let user control the accordion state via two-way binding
+
   }
 
   /**
@@ -206,5 +231,12 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
     if (this.unitCode) {
       window.open(`/setu/${this.unitCode.toLowerCase()}`, '_blank');
     }
+  }
+
+  /**
+   * Opens the profile dialog for login
+   */
+  openProfileDialog(): void {
+    this.profileDialogService.openDialog();
   }
 }

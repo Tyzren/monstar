@@ -5,7 +5,10 @@
     borderRadius="16px"
   />
 } @else {
-  <p-accordion [activeIndex]="accordionExpanded ? 0 : null">
+  <p-accordion
+    [(activeIndex)]="activeIndex"
+    [ngClass]="{'locked': !isAuthenticated}"
+  >
     <p-accordionTab
       [pTooltip]="headerTooltip"
       tooltipPosition="bottom"
@@ -38,7 +41,10 @@
         <!-- Controls -->
         <div class="setu-controls">
           <!-- Choose SETU season -->
-          <p-splitButton [label]="getSeasonDisplay(selectedSetu.Season)" icon="pi pi-calendar" [model]="semesterMenuItems"
+          <p-splitButton 
+            [label]="getSeasonDisplay(selectedSetu.Season)" 
+            icon="pi pi-calendar" 
+            [model]="semesterMenuItems"
             styleClass="semester-btn" [disabled]="semesterMenuItems.length === 0">
           </p-splitButton>
 
@@ -95,6 +101,23 @@
           ></p-button>
         </div>
       </ng-container>
+
+      <!-- Auth Overlay -->
+      @if (!isAuthenticated && !error && selectedSetu) {
+        <div class="auth-overlay">
+          <div class="auth-overlay-content">
+            <img src="/emojis/poop.svg" alt="Locked" class="poop-emoji" />
+            <p class="auth-message">Login with your student email to see SETU</p>
+            <p-button
+              class="mt-4"
+              label="Login"
+              rounded="true"
+              icon="pi pi-sign-in"
+              (onClick)="openProfileDialog()"
+            ></p-button>
+          </div>
+        </div>
+      }
 
     </p-accordionTab>
   </p-accordion>

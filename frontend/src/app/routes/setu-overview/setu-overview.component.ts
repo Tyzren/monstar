@@ -4,6 +4,8 @@ import { ViewportService, ViewportType } from '../../shared/services/viewport.se
 import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SetuService } from '../../shared/services/setu.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { ProfileDialogService } from '../../shared/services/profile-dialog.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CarouselModule } from 'primeng/carousel';
 import { CommonModule } from '@angular/common';
@@ -45,6 +47,9 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
   error: string | null = null;
   viewportType: ViewportType = 'desktop';
 
+  // Authentication
+  isAuthenticated = false;
+
   // Carousel responsive options
   responsiveOptions = [
     {
@@ -71,11 +76,22 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
     private router: Router,
     private setuService: SetuService,
     private viewportService: ViewportService,
+    private authService: AuthService,
+    private profileDialogService: ProfileDialogService,
     private meta: Meta,
     private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    // Subscribe to auth state
+    this.authService.getCurrentUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        this.isAuthenticated = user !== null;
+        // Prevent body scrolling when not authenticated
+        this.updateBodyScrollLock();
+      });
+
     // Subscribe to viewport changes
     this.viewportService.viewport$
       .pipe(takeUntil(this.destroy$))
@@ -93,6 +109,10 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    // Re-enable scrolling when leaving the component
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
 
     // Clean up meta tags
     this.meta.removeTag("name='description'");
@@ -283,12 +303,34 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
     this.meta.updateTag({ property: 'og:description', content: getMetaSetuOverviewOpenGraphDescription(this.unitCode.toUpperCase(), aggregateScore) });
     this.meta.updateTag({ property: 'og:url', content: pageUrl });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
-    
+
     // Twitter Card tags
     this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
     this.meta.updateTag({ name: 'twitter:title', content: getMetaSetuOverviewTwitterTitle(this.unitCode.toUpperCase()) });
     this.meta.updateTag({ name: 'twitter:description', content: getMetaSetuOverviewTwitterDescription(this.unitCode.toUpperCase(), aggregateScore) });
 
     console.log('[SETU Overview] Meta tags updated');
+  }
+
+  /**
+   * Opens the profile dialog for login
+   */
+  openProfileDialog(): void {
+    this.profileDialogService.openDialog();
+  }
+
+  /**
+   * Updates body scroll lock based on authentication state
+   */
+  private updateBodyScrollLock(): void {
+    if (!this.isAuthenticated) {
+      // Prevent scrolling on both html and body when overlay is shown
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-enable scrolling when authenticated
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
   }
 }

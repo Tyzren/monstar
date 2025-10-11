@@ -44,8 +44,10 @@
     </div>
   </div>
 } @else {
-  <!-- Header Section -->
-  <div class="setu-header">
+  <!-- Main content wrapper with conditional class for auth overlay -->
+  <div class="setu-content-wrapper" [class.locked]="!isAuthenticated">
+    <!-- Header Section -->
+    <div class="setu-header">
     <div class="header-content">
       <div class="unit-info">
         <div class="back-button">
@@ -234,5 +236,25 @@
         </div>
       </div>
     </div>
-  } 
+  }
+
+  <!-- Auth Overlay -->
+  @if (!isAuthenticated) {
+    <div class="auth-overlay">
+      <div class="auth-overlay-content">
+        <img src="/emojis/poop.svg" alt="Locked" class="poop-emoji" />
+        <h2 class="auth-title">You need access</h2>
+        <p class="auth-message">Login with your student email to view SETU data. Monash University only allows students and staff to view SETU data.</p>
+        <p-button
+          class="mt-4"
+          label="Login"
+          icon="pi pi-sign-in"
+          rounded="true"
+          size="large"
+          (onClick)="openProfileDialog()"
+        ></p-button>
+      </div>
+    </div>
+  }
+  </div>
 }

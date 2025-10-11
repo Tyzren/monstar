@@ -15,6 +15,7 @@ import { BadgeModule } from 'primeng/badge';
 import { filter } from 'rxjs/operators';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { NavigationService } from '../../services/navigation.service';
+import { ProfileDialogService } from '../../services/profile-dialog.service';
 import { NotificationsPopupComponent } from '../notifications/notifications-popup/notifications-popup.component';
 
 @Component({
@@ -92,7 +93,8 @@ export class NavbarComponent implements OnInit {
     private messageService: MessageService,
     private router: Router,
     private viewportService: ViewportService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private profileDialogService: ProfileDialogService
   ) {
     // Subscribes to changes in navigation
     this.router.events.pipe(
@@ -109,12 +111,19 @@ export class NavbarComponent implements OnInit {
    * - Updates the navbar color
    * - Subcribes to viewport changes
    */
-  ngOnInit(): void {  
+  ngOnInit(): void {
     this.updateNavbarColor();
 
     // Subscribe to viewport changes
-    this.viewportService.viewport$.subscribe(type => { 
-      this.viewportType = type; 
+    this.viewportService.viewport$.subscribe(type => {
+      this.viewportType = type;
+    });
+
+    // Subscribe to profile dialog open requests
+    this.profileDialogService.openDialog$.subscribe(shouldOpen => {
+      if (shouldOpen && !this.profileDialogVisible) {
+        this.showProfileDialog();
+      }
     });
   }
 
@@ -177,18 +186,21 @@ export class NavbarComponent implements OnInit {
 
   /**
    * * Called when the dialog is closed
-   * 
+   *
    * This method emits an event to the children that the dialog was closed.
    * It will also set the profile state to 'logged out' if the user is in the 'signed up' state.
-   * 
+   *
    * @event dialogClosedEvent Event emitter for when the dialog is closed.
    */
   onDialogClose() {
     // Emit to children that we closed the dialog
     this.dialogClosedEvent.emit();
 
+    // Reset the service state
+    this.profileDialogService.closeDialog();
+
     // If the user is in the signed up state, meaning the profile dialog shows
-    // 'Verify your email', then if we close the dialog the profile dialog 
+    // 'Verify your email', then if we close the dialog the profile dialog
     // will show the login page next time it is opened.
     if (this.profileState == 'signed up') {
       this.profileState = 'logged out';
