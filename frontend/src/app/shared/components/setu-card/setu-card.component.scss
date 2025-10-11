@@ -186,20 +186,35 @@ p-accordion {
     position: relative;
 }
 
-// Auth overlay styles
+// Auth overlay styles - Multi-layer approach for effective obscuring
 .auth-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    backdrop-filter: blur(32px);
-    background: rgba(55, 8, 51, 0.192);
     border-radius: 0 0 16px 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 10;
+    overflow: hidden; // Ensure nothing bleeds through
+
+    // Multi-layer background for complete obscuring
+    background:
+        // Top layer: Semi-transparent dark overlay
+        linear-gradient(135deg,
+            rgba(44, 44, 44, 0.95) 0%,
+            rgba(55, 8, 51, 0.92) 50%,
+            rgba(44, 44, 44, 0.95) 100%
+        ),
+        // Bottom layer: Solid fallback to prevent any see-through
+        #2c2c2c;
+
+    // Subtle backdrop blur for browsers that support it (Safari, Chrome)
+    // This adds polish without relying on it for security
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
 }
 
 .auth-overlay-content {
@@ -209,6 +224,8 @@ p-accordion {
     justify-content: center;
     text-align: center;
     padding: 2rem;
+    position: relative;
+    z-index: 11; // Above the overlay background
 }
 
 .poop-emoji {
@@ -216,6 +233,13 @@ p-accordion {
     height: 92px;
     opacity: 0.9;
     margin-bottom: 0.25rem;
+    // Add subtle animation to draw attention
+    animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+@keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
 }
 
 .auth-message {
@@ -226,10 +250,14 @@ p-accordion {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-// Blur content when locked
+// Blur content when locked - This adds extra security layer
 :host ::ng-deep .p-accordion.locked .p-accordion-content > :not(.auth-overlay) {
-    filter: blur(4px);
+    filter: blur(8px) brightness(0.7); // Increased blur + darkening
     pointer-events: none;
+    user-select: none; // Prevent text selection
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 // Custom button styles
