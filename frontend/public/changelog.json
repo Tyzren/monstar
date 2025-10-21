@@ -1,0 +1,219 @@
+{
+  "records": [
+    {
+      "year": 2025,
+      "entries": [
+        {
+          "month": 10,
+          "content": {
+            "Changelog Page": [
+              "Implemented changelog page with vertical timeline UI and clickable commit hash chips (`5329cd1`, `8168e2a`, `0db3c30`, `4b95235`)."
+            ],
+            "SETU Authentication Guard": [
+              "Added multi-layer authentication overlay and content protection for SETU overview cards (`dfe786d`, `5f60133`).",
+              "Integrated `ProfileDialogService` for navbar profile state management (`85c70e4`).",
+              "New shiny gradient text & 'Ryzes' font on homepage (`897940a`)."
+            ],
+            "Developer Tools": [
+              "Expanded Claude code-assistant integration with Chrome DevTools permissions (`e429689`, `76ea39e`)."
+            ],
+            "Build & Deployment": [
+              "CI improvements (`4a83ce5`).",
+              "SETU cards enabled in production and development environments (`1cbd9fc`)."
+            ]
+          }
+        },
+        {
+          "month": 9,
+          "content": {
+            "AI Overview Feature": [
+              "Added AI overview cards powered by Gemini 2.5 Pro (`f918804`, `7195a98`, `4f8b818`).",
+              "Added model badge display and responsive date formatting (`d0cee8d`)."
+            ],
+            "Environment Config Refactor": [
+              "Unified backend/frontend environment configuration (`3e21a54` → `a4fc666`).",
+              "Added `.env.template` and migration guide."
+            ],
+            "Security & Tooling": [
+              "Added CSRF protection (`3dea8af`).",
+              "Swagger UI docs setup (`e7b4deb`).",
+              "Prettier formatting for backend files (`0c0a237`)."
+            ],
+            "UI Enhancements": [
+              "Loading skeletons for SETU and AI overview cards.",
+              "Spacing and tooltip fixes for multiple components."
+            ],
+            "Docs & Licensing": [
+              "Added AGPL-3.0 license (`f6ee0c2`).",
+              "Improved README and contribution guide (`a39fde4`)."
+            ]
+          }
+        },
+        {
+          "month": 8,
+          "content": [
+            "User page system introduced (`c502961`).",
+            "Enforced unique username updates (`98420ac`)."
+          ]
+        },
+        {
+          "month": 7,
+          "content": {
+            "SETU Overview Integration": [
+              "Added main SETU overview page with accordions, charts, and carousel (`a760cb4`, `b9c9ccc`, `d5f246e`).",
+              "Introduced `constants.ts` and compile time constants (`ec80601`)."
+            ],
+            "User Reviews": [
+              "Editing/deleting user reviews directly in profile (`c9e8083`, `818f6ca`)."
+            ],
+            "Contributors Section": [
+              "GitHub contributor stats and percentages on About page (`abb91c1`, `5d95c6c`)."
+            ],
+            "SEO & Accessibility": [
+              "Added meta tags and sitemaps for SETU pages (`b25ef93`)."
+            ]
+          }
+        },
+        {
+          "month": 6,
+          "content": [
+            "Full-page layout and scroll fixes for unit overview.",
+            "Added circular knob UI for SETU metrics (`e282a67`).",
+            "Optimised SETU bulk endpoint and backend performance."
+          ]
+        },
+        {
+          "monthStart": 4,
+          "monthEnd": 5,
+          "content": [
+            "Implemented `HighlightUnitPipe` to hyperlink unit codes (`e571b61`).",
+            "Added review sorting by likes/dislikes (`5f05c37`)."
+          ]
+        },
+        {
+          "month": 3,
+          "content": {
+            "SEO & Performance": [
+              "Implemented Google SEO verification, sitemap, and performance improvements (`dadb2ea` → `5de9f23`)."
+            ],
+            "Notifications System": [
+              "Added backend and frontend notification routes, models, and UI badges (`c4f4e0c` → `a3fee7e`)."
+            ],
+            "Review System": [
+              "Enabled review editing dialogs and one-review-per-unit restriction.",
+              "Fixed major security vulnerabilities in review endpoints (`7b63888`)."
+            ],
+            "About Page & Auth Updates": [
+              "Added About page with contributor information and staff/masters Monash email login support (`934f279`).",
+              "Removed legacy authentication functions and improved navigation service."
+            ]
+          }
+        },
+        {
+          "month": 2,
+          "content": {
+            "Unit Map & Graph Visualization": [
+              "Created `unit-map` component using `@swimlane/ngx-graph@10.0.0-alpha.0` and `d3`.",
+              "Implemented graph rendering with prerequisites and dependent units via `fetchAndBuildUnitGraph()`.",
+              "Added graph toolbar for reset, zoom, and center operations.",
+              "Created backend endpoint `api/v1/units/:unitCode/required-by` to fetch units that depend on the selected unit.",
+              "Added API service method for the new endpoint.",
+              "Fixed panning bug on smaller graphs by customising `<ngx-graph>` options."
+            ],
+            "UI Improvements": [
+              "Added tooltips for unit map toolbar buttons (Feb 5).",
+              "Introduced back button to unit map page and loading skeletons for review cards and headers (Feb 8).",
+              "Added circular progress bars for detailed ratings and tooltips to explain rating categories.",
+              "Enhanced `unit-card` component with credit points, prerequisites, tags, offering chips, and performance optimisations (`O(n + mlog(m) + klog(k) + p)` complexity).",
+              "Optimised period/location sorting and caching for better chip overflow handling."
+            ],
+            "Backend Enhancements": [
+              "Added `tags` field to Unit schema with enum validation.",
+              "Implemented `tagManager.service` with `node-cron` to update popular unit tags hourly.",
+              "Improved filtering API to hide units with no offerings."
+            ],
+            "Security & API Upgrades": [
+              "Moved Monash email validation to backend with proper 403 error handling.",
+              "Restricted user deletion and update endpoints to admin/self verification.",
+              "Improved transactional safety for user deletion using MongoDB sessions (ACID compliance).",
+              "Verified review update permissions by user ID.",
+              "Ensured register endpoint enforces Monash email validation."
+            ],
+            "Profile & Account Features": [
+              "Added graph layout toggler in unit map toolbar.",
+              "Fixed Google user profile picture bug.",
+              "Added Delete Account button in Profile Settings with backend integration."
+            ],
+            "Terms & Conditions": [
+              "Added Terms and Conditions page modeled after DevSoc’s Unilectives format referencing Monash Student Code of Conduct."
+            ],
+            "UI & UX Enhancements": [
+              "Improved review cards with filled like/dislike colours, compact circles for ratings, and reworked layout.",
+              "Added ‘Report Review’ button next to delete option.",
+              "Fixed review typing bugs, improved newline handling, added close sidebar button for mobile users, and made sign-in forms responsive.",
+              "Added global CSS variables for colour palette consistency."
+            ],
+            "Responsive Design": [
+              "Added `viewport.service` to manage viewport detection across the app.",
+              "Upgraded profile component layout for better responsiveness.",
+              "Improved `rating.component`, `write-review-unit` dialog, and `unit-review-header` for tablet and mobile viewports."
+            ],
+            "Content & Display": [
+              "Changed rating criteria text to ‘Enjoyment’, ‘Simplicity’, and ‘Usefulness’.",
+              "Removed legacy default auth; now exclusively uses Google Auth.",
+              "Enhanced home hero section with animated floating emotes, improved header visibility, and subheader randomisation."
+            ]
+          }
+        },
+        {
+          "month": 1,
+          "content": {
+            "Review System Overhaul": [
+              "Advanced filtering with local storage persistence (`45aa097`, `f71622c`).",
+              "Added ‘Friends’ prototype setup (`3b1fcf3`)."
+            ],
+            "Auth Updates": [
+              "Integrated Google One-Tap and JWT login system."
+            ],
+            "UI": [
+              "Implemented ‘Forgot Password’ reset flow (`32d5fd4`).",
+              "Added profile review section (`be37ff0`)."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "entries": [
+        {
+          "month": 12,
+          "content": {
+            "Initial Release": [
+              "Launched MonSTAR v1.0 with core authentication, review CRUD, like/dislike logic, and toast system.",
+              "Integrated Angular + Primeng UI and Express + MongoDB backend APIs.",
+              "Added ProfileDialog, 404 route, and user verification with cloud storage."
+            ],
+            "Deployment": [
+              "Configured deployment with Vercel + GCP (`ae73c53`, `e538118`)."
+            ],
+            "Enhancements": [
+              "Improved profile dialogs, user deletion handling, and frontend skeleton loaders."
+            ]
+          }
+        },
+        {
+          "monthStart": 9,
+          "monthEnd": 11,
+          "content": {
+            "Project Genesis": [
+              "Initialized MonSTAR project with Angular frontend and Express backend.",
+              "Added review cards, write review popup, and Primeng integration.",
+              "Implemented authentication and MongoDB schemas for Monash user system."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
