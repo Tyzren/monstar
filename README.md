@@ -1,11 +1,8 @@
-# 🌟 MonSTAR by WIRED Projects
-
 <img width="956" height="311" alt="banner" src="https://github.com/user-attachments/assets/6ec6c7d4-3059-4a76-9579-69d074726cff" />
 
-> *Connecting Monash students through shared academic experiences and data-driven insights.*
+<h1 align="center"><span>MonSTAR by WIRED Projects</span></h1>
 
-MonSTAR is a digital platform where Monash University students can come together and share their experiences in subjects they've completed, backed by comprehensive SETU data spanning years of student feedback.
-
+> *MonSTAR is a digital platform where Monash University students can come together and share their experiences in subjects they've completed, backed by comprehensive SETU data spanning years of student feedback.*
 
 ## 🚀 Highlights
 
@@ -14,10 +11,6 @@ Here's what makes MonSTAR special:
 - **Student-Centered Community**: Real experiences from real students about Monash units
 - **Comprehensive SETU Database**: Complete historical data up until Semester 1 of 2025
 - **Modern Tech Stack**: Built with Angular, Node.js, Express, and MongoDB
-- **Smart Environment Configuration**: Unified development/production setup with environment variables
-- **Easy Development Workflow**: Get started with a single `npm run dev` command
-- **Cloudinary Integration**: Seamless profile picture management
-
 
 ## ℹ️ Overview
 
