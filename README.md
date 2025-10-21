@@ -1,6 +1,6 @@
 # 🌟 MonSTAR by WIRED Projects
 
-<img width="1381" height="475" alt="banner" src="https://github.com/user-attachments/assets/6281a492-2d9b-4a31-89c5-fd6da285f884" />
+<img width="956" height="311" alt="banner" src="https://github.com/user-attachments/assets/6ec6c7d4-3059-4a76-9579-69d074726cff" />
 
 > *Connecting Monash students through shared academic experiences and data-driven insights.*
 
