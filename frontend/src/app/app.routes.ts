@@ -11,6 +11,7 @@ import { UnitMapComponent } from './routes/unit-map/unit-map.component';
 import { TermsAndCondsComponent } from './routes/terms-and-conds/terms-and-conds.component';
 import { AboutComponent } from './routes/about/about.component';
 import { SetuOverviewComponent } from './routes/setu-overview/setu-overview.component';
+import { ChangelogComponent } from './routes/changelog/changelog.component';
 
 export const routes: Routes = [
   // Homepage
@@ -31,6 +32,8 @@ export const routes: Routes = [
   { path: 'terms-and-conditions', component: TermsAndCondsComponent },
   // About Page
   { path: 'about', component: AboutComponent },
+  // Changelog Page
+  { path: 'changelog', component: ChangelogComponent },
 
   // 404 Not Found for all other routes
   { path: '**', component: NotFoundComponent },
