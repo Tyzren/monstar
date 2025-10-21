@@ -326,61 +326,153 @@
 .sponsors-section {
   margin: 3rem auto;
   text-align: center;
-  
+  overflow: hidden;
+
   h2 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
     font-weight: 500;
     color: white;
-    
+
     @media (max-width: 576px) {
       font-size: 1.5rem;
+      margin-bottom: 2rem;
     }
   }
-  
-  .sponsor-card {
-    background: rgba(44, 44, 44, 0.8);
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    max-width: 500px;
-    margin: 0 auto;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
+
+  .sponsors-track-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 100px;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    &::before {
+      left: 0;
+      background: linear-gradient(to right, $bg-dark-color, transparent);
+    }
+
+    &::after {
+      right: 0;
+      background: linear-gradient(to left, $bg-dark-color, transparent);
+    }
+  }
+
+  .sponsors-track {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+    animation: scroll-left 30s linear infinite;
+    width: fit-content;
+
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 28px rgba(226, 136, 226, 0.2);
+      animation-play-state: paused;
     }
-    
-    a {
-      display: block;
-      text-decoration: none;
+
+    @media (max-width: 768px) {
+      gap: 3rem;
+      animation-duration: 25s;
     }
-    
-    .jane-street-logo {
-      // Make the SVG white
-      fill: white;
-      max-width: 100%;
-      height: auto;
-      transition: opacity 0.2s ease;
-      
-      &:hover {
-        opacity: 0.9;
-      }
+
+    @media (max-width: 576px) {
+      gap: 2rem;
+      animation-duration: 20s;
     }
   }
-  
-  // Mobile responsive adjustments
-  @media (max-width: 576px) {
-    margin: 2rem auto;
-    
-    .sponsor-card {
-      padding: 1.5rem;
-      
-      .jane-street-logo {
-        width: 120px;
-        height: auto;
-      }
+
+  .sponsor-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      transform: scale(1.1);
+      opacity: 0.8;
     }
+
+    @media (max-width: 768px) {
+      min-width: 150px;
+      padding: 0.75rem 1.5rem;
+    }
+
+    @media (max-width: 576px) {
+      min-width: 120px;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  .sponsor-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+    @media (max-width: 768px) {
+      font-size: 1.25rem;
+    }
+
+    @media (max-width: 576px) {
+      font-size: 1rem;
+    }
+  }
+
+  :global(.sponsor-logo) {
+    fill: white;
+    max-width: 100%;
+    height: auto;
+    width: 140px;
+    height: 55px;
+
+    @media (max-width: 768px) {
+      width: 120px;
+      height: 47px;
+    }
+
+    @media (max-width: 576px) {
+      width: 100px;
+      height: 39px;
+    }
+  }
+
+  .sponsor-image {
+    max-width: 180px;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+
+    @media (max-width: 768px) {
+      max-width: 150px;
+      max-height: 65px;
+    }
+
+    @media (max-width: 576px) {
+      max-width: 120px;
+      max-height: 50px;
+    }
+  }
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% / 2));
   }
 }
 
