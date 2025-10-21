@@ -195,7 +195,7 @@
               "Added ProfileDialog, 404 route, and user verification with cloud storage."
             ],
             "Deployment": [
-              "Configured deployment with Vercel + GCP (`ae73c53`, `e538118`)."
+              "Configured deployment with Linode VPS (`ae73c53`, `e538118`)."
             ],
             "Enhancements": [
               "Improved profile dialogs, user deletion handling, and frontend skeleton loaders."
