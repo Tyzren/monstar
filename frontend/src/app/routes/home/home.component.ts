@@ -60,15 +60,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Subheader variables
   subheaders: string[] = [
     'Best reviews for Monash Uni',
-    'Login with your Monash Google',
+    'Login with your Monash Google account',
     'Find the best units for you!', 
-    "Don't be afraid, just do it! 💪",
+    "Don't be afraid, just write a review! 💪",
+    "Don't be afraid, just write a review! 💪",
+    "Don't be afraid, just write a review! 💪",
+    "Don't be afraid, just write a review! 💪",
     'What units should I take next semester?',
     'Rate and review your favourite units!',
     "What's a WAM booster?",
     'What unit should I do bro?',
     'Yes, we have all the units you need!',
-    'I forgor 🤪',
     'Also check out our unit map!',
     'Made by students for students!',
     'Discover units with highest satisfaction',
@@ -78,10 +80,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     'Honest reviews from real students',
     'Plan your degree path with confidence',
     'Stay ahead with student recommendations',
-    'Helping you choose better units since 2023',
-    'Get the inside scoop on assessments',
+    'Helping you choose better units since 2025',
     'Did someone say HD? 🎓',
-    'Maximize your learning potential',
+    'Maximise your learning potential',
     'Units rated by students like you',
     'Easy units? Hard units? We got you covered!',
     'Find the units everyone is raving about',
@@ -119,7 +120,41 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       numVisible: 1,
       numScroll: 1
     }
-  ];  
+  ];
+
+  // Sponsors data
+  sponsors = [
+    {
+      name: 'Jane Street',
+      url: 'https://www.janestreet.com/',
+      logoType: 'image' as const,
+      imagePath: 'sponsors/jane-street.svg'
+    },
+    {
+      name: 'Faculty of IT - Monash University',
+      url: 'https://www.monash.edu/it',
+      logoType: 'image' as const,
+      imagePath: 'sponsors/monash.svg'
+    },
+    {
+      name: 'WIRED Monash',
+      url: 'https://wired.org.au/',
+      logoType: 'image' as const,
+      imagePath: 'sponsors/wired.svg'
+    },
+    {
+      name: 'Honeywell',
+      url: 'https://www.honeywell.com/',
+      logoType: 'image' as const,
+      imagePath: 'sponsors/honeywell.svg'
+    },
+    {
+      name: 'Record Point',
+      url: 'https://www.recordpoint.com/',
+      logoType: 'image' as const,
+      imagePath: 'sponsors/record-point.svg'
+    }
+  ];
 
 
   /**
