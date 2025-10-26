@@ -24,6 +24,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { BASE_URL, META_BASIC_DESCRIPTION, META_BASIC_KEYWORDS, META_BASIC_OPEN_GRAPH_DESCRIPTION, META_BASIC_TITLE, META_BASIC_TWITTER_TITLE, META_UNIT_LIST_TITLE } from '../../shared/constants';
 import { scrollToTop } from '../../shared/helpers';
+import { SortOptions, SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
 
 @Component({
   selector: 'app-unit-list',
@@ -57,9 +58,9 @@ export class UnitListComponent implements OnInit, OnDestroy {
   search: string = ''; 
 
   // Current page
-  first: number = 0; 
+  first: number = 0;
   // Total no. of rows of unit cards shown on the page
-  rows: number = 20; 
+  rows: number = 24;
   // Total number of unit cards
   totalRecords: number = 0; 
 
@@ -74,8 +75,11 @@ export class UnitListComponent implements OnInit, OnDestroy {
   // Is search bar focused?
   isSearchFocused: boolean = false;
 
-  // NgModel value for the sort by dropdown (default: Alphabetic)
-  sortBy: string = 'Most Reviews'; 
+  // Sort options list for dropdown
+  sortOptions = SORT_OPTIONS_LIST;
+
+  // NgModel value for the sort by dropdown (default: Most Reviews)
+  sortBy: string = SortOptions.MOST_REVIEWS; 
 
   // Advanced filtering overlay panel reference
   @ViewChild('op') overlayPanel!: OverlayPanel;
@@ -189,7 +193,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
       this.selectedCampuses = JSON.parse(savedCampuses);
 
     // Fetches the paginated units from the backend
-    this.fetchPaginatedUnits(); 
+    this.fetchPaginatedUnits();
 
     // Subscribe to the viewport service and get the viewport type
     this.viewportService.viewport$.subscribe(type => {
@@ -203,7 +207,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Reset title
     this.titleService.setTitle('MonSTAR | Browse and Review Monash University Units');
-    
+
     // Remove all custom meta tags
     this.meta.removeTag("name='description'");
     this.meta.removeTag("name='keywords'");
@@ -220,15 +224,15 @@ export class UnitListComponent implements OnInit, OnDestroy {
   }
 
 
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | PAGINATION & UNITS RETRIEVAL                                                     
+   *  ! | PAGINATION & UNITS RETRIEVAL
    *  ! |======================================================================|
    */
 
   /**
    * * Fetch paginated units from the backend and update the filteredUnits array.
-   * 
+   *
    * Utilies the ApiService to make a HTTP GET request.
    */
   fetchPaginatedUnits() {
@@ -237,7 +241,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
     // ? Debug log the fetch request details
     // console.log('UnitList | Fetching units:', this.first, this.rows, searchLower, this.sortBy, this.showReviewed, this.showUnreviewed, this.hideNoOfferings, this.selectedFaculty, this.selectedSemesters, this.selectedCampuses);
-    
+
     // Fetch the paginated units from the backend
     this.apiService.getUnitsFilteredGET(this.first, this.rows, searchLower, this.sortBy, this.showReviewed, this.showUnreviewed, this.hideNoOfferings, this.selectedFaculty, this.selectedSemesters, this.selectedCampuses).subscribe({
       next: (response: any) => {
@@ -299,11 +303,11 @@ export class UnitListComponent implements OnInit, OnDestroy {
     localStorage.removeItem('selectedFaculty');
     localStorage.removeItem('selectedSemesters');
     localStorage.removeItem('selectedCampuses');
-    // Save filters to local storage 
+    // Save filters to local storage
     if (this.selectedFaculty) localStorage.setItem('selectedFaculty', JSON.stringify(this.selectedFaculty));
     if (this.selectedSemesters) localStorage.setItem('selectedSemesters', JSON.stringify(this.selectedSemesters));
     if (this.selectedCampuses) localStorage.setItem('selectedCampuses', JSON.stringify(this.selectedCampuses));
-  
+
     this.first = 0;
     this.fetchPaginatedUnits();
   }

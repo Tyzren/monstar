@@ -11,7 +11,7 @@
           <p-dropdown
             #sortByDropdown
             id="sortByDropdown"
-            [options]="['Alphabetic', 'Most Reviews', 'Highest Overall', 'Lowest Overall']"
+            [options]="sortOptions"
             [(ngModel)]="sortBy"
             [editable]="true"
             placeholder="Sort By"
@@ -202,13 +202,13 @@
 <!-- === Bottom paginator === -->
 <div class="flex align-items-center justify-content-center paginator-container">
   <div class="flex-1">
-      <p-paginator 
-        (onPageChange)="onPageChange($event);" 
-        [first]="first" 
-        [rows]="rows" 
-        [totalRecords]="totalRecords" 
-        [rowsPerPageOptions]="[20, 40, 60]" 
-        [showFirstLastIcon]="true" 
+      <p-paginator
+        (onPageChange)="onPageChange($event);"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="[24, 48, 72]"
+        [showFirstLastIcon]="true"
         styleClass="shadow-2"
         [style]="{ 'border-radius': '3rem' }"
       ></p-paginator>

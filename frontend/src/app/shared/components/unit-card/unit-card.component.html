@@ -46,10 +46,10 @@
             <!-- ! Unit name -->
             <p 
               class="unit-name" 
-              [pTooltip]="unit.name && unit.name.length > 70 ? unit.name : ''" 
+              [pTooltip]="unit.name && unit.name.length > 60 ? unit.name : ''" 
               tooltipPosition="bottom"
             >
-              {{ unit.name || 'No Title' | truncate:70 }}
+              {{ unit.name || 'No Title' | truncate:60 }}
             </p>
 
             <!-- No. of reviews -->
