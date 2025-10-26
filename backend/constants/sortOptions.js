@@ -22,9 +22,11 @@ function getSortCriteria(sortOption) {
     case SORT_OPTIONS.MOST_REVIEWS:
       return { reviewCount: -1 };
     case SORT_OPTIONS.HIGHEST_OVERALL:
-      return { avgOverallRating: -1 };
+      // Sort by: 1) has reviews (yes first), 2) highest rating first
+      return { hasReviews: -1, avgOverallRating: -1 };
     case SORT_OPTIONS.LOWEST_OVERALL:
-      return { avgOverallRating: 1 };
+      // Sort by: 1) has reviews (yes first), 2) lowest rating first
+      return { hasReviews: -1, avgOverallRating: 1 };
     default:
       return { unitCode: 1 }; // Default to alphabetic
   }

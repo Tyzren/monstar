@@ -3,7 +3,6 @@ const express = require('express');
 
 // Model Imports
 const Unit = require('../models/unit');
-const Review = require('../models/review');
 
 // Function Imports
 const { verifyAdmin } = require('../utils/verify_token.js');
@@ -174,14 +173,14 @@ router.get('/filter', async function (req, res) {
           as: 'reviews',
         },
       },
-      // Compute the number of reviews for each unit
-      { $addFields: { reviewCount: { $size: '$reviews' } } },
+      // Compute the number of reviews for each unit and whether it has reviews
+      {
+        $addFields: {
+          reviewCount: { $size: '$reviews' },
+          hasReviews: { $cond: [{ $gt: [{ $size: '$reviews' }, 0] }, 1, 0] }
+        }
+      },
     ];
-
-    // FIX: When sorting by rating, only show units with reviews
-    if (requiresReviews(sort)) {
-      pipeline.push({ $match: { reviewCount: { $gt: 0 } } });
-    }
 
     // Add sorting, pagination
     pipeline.push(
@@ -201,15 +200,14 @@ router.get('/filter', async function (req, res) {
           as: 'reviews',
         },
       },
-      { $addFields: { reviewCount: { $size: '$reviews' } } },
+      {
+        $addFields: {
+          reviewCount: { $size: '$reviews' },
+          hasReviews: { $cond: [{ $gt: [{ $size: '$reviews' }, 0] }, 1, 0] }
+        }
+      },
+      { $count: 'total' },
     ];
-
-    // Apply the same review filter for count if needed
-    if (requiresReviews(sort)) {
-      countPipeline.push({ $match: { reviewCount: { $gt: 0 } } });
-    }
-
-    countPipeline.push({ $count: 'total' });
 
     // Execute both queries
     const [units, countResult] = await Promise.all([
