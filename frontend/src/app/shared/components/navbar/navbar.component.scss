@@ -106,9 +106,13 @@
   }
 }
 
-// * Sidebar title
+// * Sidebar text
 .sidebar-title {
   color: white;
+  font-family: $poppins;
+}
+
+.sidebar-links{
   font-family: $poppins;
 }
 
