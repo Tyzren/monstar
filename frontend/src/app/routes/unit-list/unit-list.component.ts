@@ -24,6 +24,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { BASE_URL, META_BASIC_DESCRIPTION, META_BASIC_KEYWORDS, META_BASIC_OPEN_GRAPH_DESCRIPTION, META_BASIC_TITLE, META_BASIC_TWITTER_TITLE, META_UNIT_LIST_TITLE } from '../../shared/constants';
 import { scrollToTop } from '../../shared/helpers';
+import { SortOptions, SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
 
 @Component({
   selector: 'app-unit-list',
@@ -74,8 +75,11 @@ export class UnitListComponent implements OnInit, OnDestroy {
   // Is search bar focused?
   isSearchFocused: boolean = false;
 
-  // NgModel value for the sort by dropdown (default: Alphabetic)
-  sortBy: string = 'Most Reviews'; 
+  // Sort options list for dropdown
+  sortOptions = SORT_OPTIONS_LIST;
+
+  // NgModel value for the sort by dropdown (default: Most Reviews)
+  sortBy: string = SortOptions.MOST_REVIEWS; 
 
   // Advanced filtering overlay panel reference
   @ViewChild('op') overlayPanel!: OverlayPanel;

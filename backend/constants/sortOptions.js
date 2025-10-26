@@ -1,0 +1,57 @@
+/**
+ * Sort options for unit filtering
+ * These constants ensure consistency across the application
+ */
+
+const SORT_OPTIONS = {
+  ALPHABETIC: 'Alphabetic',
+  MOST_REVIEWS: 'Most Reviews',
+  HIGHEST_OVERALL: 'Highest Overall',
+  LOWEST_OVERALL: 'Lowest Overall',
+};
+
+/**
+ * Returns MongoDB sort criteria for a given sort option
+ * @param {string} sortOption - One of SORT_OPTIONS values
+ * @returns {Object} MongoDB sort criteria object
+ */
+function getSortCriteria(sortOption) {
+  switch (sortOption) {
+    case SORT_OPTIONS.ALPHABETIC:
+      return { unitCode: 1 };
+    case SORT_OPTIONS.MOST_REVIEWS:
+      return { reviewCount: -1 };
+    case SORT_OPTIONS.HIGHEST_OVERALL:
+      return { avgOverallRating: -1 };
+    case SORT_OPTIONS.LOWEST_OVERALL:
+      return { avgOverallRating: 1 };
+    default:
+      return { unitCode: 1 }; // Default to alphabetic
+  }
+}
+
+/**
+ * Checks if the sort option requires filtering by review count
+ * @param {string} sortOption - One of SORT_OPTIONS values
+ * @returns {boolean} True if units should be filtered to only those with reviews
+ */
+function requiresReviews(sortOption) {
+  return sortOption === SORT_OPTIONS.HIGHEST_OVERALL ||
+         sortOption === SORT_OPTIONS.LOWEST_OVERALL;
+}
+
+/**
+ * Validates if a sort option is valid
+ * @param {string} sortOption - Sort option to validate
+ * @returns {boolean} True if valid
+ */
+function isValidSortOption(sortOption) {
+  return Object.values(SORT_OPTIONS).includes(sortOption);
+}
+
+module.exports = {
+  SORT_OPTIONS,
+  getSortCriteria,
+  requiresReviews,
+  isValidSortOption,
+};

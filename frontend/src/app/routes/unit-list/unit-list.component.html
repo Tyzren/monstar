@@ -11,7 +11,7 @@
           <p-dropdown
             #sortByDropdown
             id="sortByDropdown"
-            [options]="['Alphabetic', 'Most Reviews', 'Highest Overall', 'Lowest Overall']"
+            [options]="sortOptions"
             [(ngModel)]="sortBy"
             [editable]="true"
             placeholder="Sort By"
