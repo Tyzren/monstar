@@ -6,6 +6,11 @@
         {
           "month": 10,
           "content": {
+            "Unit List Fixes": [
+              "The filtering method for lowest overall used to show units with no reviews first, now unit with reviews are shown.",
+              "The number of unit cards is now flush for each row, each row has an equal amount of unit cards. Fixed this by using commonly divisible numbers instead for page size.",
+              "Made unit card's unit names shorter to prevent overflow for some units with long names."
+            ],
             "Changelog Page": [
               "Implemented changelog page with vertical timeline UI and clickable commit hash chips (`5329cd1`, `8168e2a`, `0db3c30`, `4b95235`)."
             ],
