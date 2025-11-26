@@ -38,9 +38,9 @@ export class ResetPasswordComponent implements OnInit {
 
   // State
   state: 'resetting' | 'reset' = 'resetting';
-  
+
   // ! Injects ActivatedRoute, AuthService, Router
-  constructor (
+  constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
@@ -66,13 +66,13 @@ export class ResetPasswordComponent implements OnInit {
    */
   resetPassword() {
     if (this.password1 !== this.password2)
-      return this.messageService.add({ severity:'error', summary:'Error', detail:'Passwords do not match' });
+      return this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Passwords do not match' });
 
     // Reset the password
     this.authService.resetPassword(this.token, this.password1).subscribe({
       next: (response: any) => {
         // Show a toast
-        this.messageService.add({ severity:'success', summary:'Success', detail:'Password reset successfully' });
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password reset successfully' });
 
         // Change the state to password has been reset
         this.state = 'reset';
@@ -92,7 +92,7 @@ export class ResetPasswordComponent implements OnInit {
       },
       error: (error: any) => {
         // Show error toast
-        this.messageService.add({ severity:'error', summary:'Error', detail:'Failed to reset password' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to reset password' });
       }
     });
   }

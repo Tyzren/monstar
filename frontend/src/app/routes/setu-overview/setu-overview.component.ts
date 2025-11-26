@@ -80,7 +80,7 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
     private profileDialogService: ProfileDialogService,
     private meta: Meta,
     private titleService: Title
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Subscribe to auth state
@@ -272,7 +272,7 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
   }
 
 
-  
+
   /** 
    *  ! |======================================================================|
    *  ! | META TAGS                                                            

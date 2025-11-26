@@ -15,7 +15,7 @@ import { MessageService } from 'primeng/api';
     ButtonModule,
     RouterLink,
     ToastModule
-  ], 
+  ],
   providers: [
     MessageService
   ],
@@ -28,11 +28,11 @@ export class VerifiedComponent implements OnInit {
   verificationSuccess: boolean = false;
 
   // ! Inject ActivatedRoute, AuthService & MessageService
-  constructor (
-    private activatedRoute: ActivatedRoute, 
+  constructor(
+    private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   /**
    * * Runs on initialisation

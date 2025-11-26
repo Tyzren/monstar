@@ -1,12 +1,13 @@
-@import './_variables.scss';
+@import "./_variables.scss";
 
-// Ensure the html and body elements occupy full height 
-html, body {
+// Ensure the html and body elements occupy full height
+html,
+body {
   height: 100%;
   margin: 0;
 }
 
-// Make the wrapper a flex container 
+// Make the wrapper a flex container
 .wrapper {
   display: flex;
   flex-direction: column;

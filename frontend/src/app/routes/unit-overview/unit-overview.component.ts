@@ -78,7 +78,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param {ActivatedRoute} route - The route service to get the route parameters.
    * @param {MessageService} messageService - The message service to show toasts.
    */
-  constructor (
+  constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
     private messageService: MessageService,
@@ -93,7 +93,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
    * * Runs on initialisation
    * 
    * Gets the unitcode from the URL param and uses it to get the unit and reviews.
-   */ 
+   */
   ngOnInit(): void {
     // Hide the footer
     this.footerService.hideFooter();
@@ -131,7 +131,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Reset title
     this.titleService.setTitle('MonSTAR | Browse and Review Monash University Units');
-    
+
     // Remove all custom meta tags
     this.meta.removeTag("name='description'");
     this.meta.removeTag("name='keywords'");
@@ -225,7 +225,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   sortReviews(criteria: string) {
     // ? Debug log: Sorting reviews message
     // console.log('Sorting reviews', criteria); 
-    
+
     // Criterion
     switch (criteria) {
 
@@ -248,12 +248,12 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
       case 'highest-rating':
         this.reviews.sort((a, b) => b.overallRating - a.overallRating);
         break;
-      
+
       // Sorting by most likes
       case 'most-likes':
         this.reviews.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes));
         break;
-      
+
       // Sorting by most dislikes
       case 'most-dislikes':
         this.reviews.sort((a, b) => (a.likes - a.dislikes) - (b.likes - b.dislikes));
@@ -317,7 +317,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('Resetting scroll position');
 
     // Reset main window scroll
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 
@@ -358,7 +358,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     const unitCode = this.unit.unitCode.toUpperCase();
     const unitName = this.unit.name;
     const pageUrl = `${BASE_URL}/unit/${this.unit.unitCode}`;
-    
+
     // Basic meta tags
     this.titleService.setTitle(getMetaUnitOverviewTitle(unitCode, unitName));
     this.meta.updateTag({ name: 'description', content: getMetaUnitOverviewDescription(unitReviewsCount, unitCode, unitName) });
@@ -369,7 +369,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.meta.updateTag({ property: 'og:description', content: getMetaUnitOverviewOpenGraphDescription(unitCode, unitAverageRating, unitReviewsCount) });
     this.meta.updateTag({ property: 'og:url', content: pageUrl });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
-    
+
     // Twitter Card tags
     this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
     this.meta.updateTag({ name: 'twitter:title', content: getMetaUnitOverviewTwitterTitle(unitCode) });

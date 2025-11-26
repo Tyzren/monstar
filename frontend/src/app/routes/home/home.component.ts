@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   subheaders: string[] = [
     'Best reviews for Monash Uni',
     'Login with your Monash Google account',
-    'Find the best units for you!', 
+    'Find the best units for you!',
     "Don't be afraid, just write a review! 💪",
     "Don't be afraid, just write a review! 💪",
     "Don't be afraid, just write a review! 💪",
@@ -160,7 +160,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * ! Constructor
    */
-  constructor (
+  constructor(
     private router: Router,
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
@@ -220,7 +220,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.meta.removeTag("name='twitter:card'");
     this.meta.removeTag("name='twitter:title'");
     this.meta.removeTag("name='twitter:description'");
-    
+
     // Reset title to default
     this.titleService.setTitle('MonSTAR | Browse and Review Monash University Units');
   }
@@ -304,7 +304,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.subheaderState = 'out';
 
       // Update text and fade in after animation
-      setTimeout(() => { 
+      setTimeout(() => {
         // Store previous index
         const prevIndex = this.subheaderCurrentIndex;
 
@@ -368,14 +368,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private updateMetaTags(): void {
     const pageUrl = BASE_URL;
-    
+
     // Set the document title
     this.titleService.setTitle(META_BASIC_TITLE);
-    
+
     // Core meta tags
     this.meta.updateTag({ name: 'viewport', content: 'width=device-width, initial-scale=1' });
     this.meta.updateTag({ name: 'robots', content: 'index, follow' });
-    
+
     // Basic meta tags
     this.meta.updateTag({ name: 'description', content: META_HOME_DESCRIPTION });
     this.meta.updateTag({ name: 'keywords', content: META_HOME_KEYWORDS });
@@ -388,7 +388,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.meta.updateTag({ property: 'og:url', content: pageUrl });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
     this.meta.updateTag({ property: 'og:locale', content: 'en_AU' });
-    
+
     // Twitter Card tags
     this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title', content: META_BASIC_TWITTER_TITLE });

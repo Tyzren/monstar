@@ -2,17 +2,29 @@
 <div class="hero-section">
   <div class="hero-content">
     <!-- BIG Title -->
-    <h1 class="prevent-select" aria-label="Welcome to MonSTAR">Mon<span class="star-gradient">STAR</span></h1>
+    <h1 class="prevent-select" aria-label="Welcome to MonSTAR">
+      Mon<span class="star-gradient">STAR</span>
+    </h1>
 
     <!-- Description -->
     <div class="subheader-container">
-      <p class="prevent-select" [@fadeInOut]="subheaderState" [innerHTML]="getSafeHtml(subheaders[subheaderCurrentIndex])">
+      <p
+        class="prevent-select"
+        [@fadeInOut]="subheaderState"
+        [innerHTML]="getSafeHtml(subheaders[subheaderCurrentIndex])"
+      >
         {{ subheaders[subheaderCurrentIndex] }}
       </p>
     </div>
-    
+
     <!-- Explore Units -->
-    <p-button label="Explore Units" [rounded]="true" [raised]="true" icon="pi pi-compass" (onClick)="exploreUnits()"></p-button>
+    <p-button
+      label="Explore Units"
+      [rounded]="true"
+      [raised]="true"
+      icon="pi pi-compass"
+      (onClick)="exploreUnits()"
+    ></p-button>
   </div>
 
   <!-- Shooting Stars -->
@@ -32,18 +44,19 @@
 
   <!-- Floating Emotes -->
   <div class="floating-emotes-container">
-    @if (emoteLoadingComplete) {
-      @for (emote of emotes; track $index) {
-        <img [src]="emote" class="floating-emote" loading="lazy">
-      }
-    }
+    @if (emoteLoadingComplete) { @for (emote of emotes; track $index) {
+    <img [src]="emote" class="floating-emote" loading="lazy" />
+    } }
   </div>
 </div>
 
 <!-- Centered Content -->
 <div class="content container mb-5">
   <!-- Divider -->
-  <p-divider class="first-divider" [style]="{ 'margin-bottom': '3rem' }"></p-divider>
+  <p-divider
+    class="first-divider"
+    [style]="{ 'margin-bottom': '3rem' }"
+  ></p-divider>
 
   <!-- Sponsors -->
   <div class="sponsors-section">
@@ -51,83 +64,94 @@
     <div class="sponsors-track-container">
       <div class="sponsors-track">
         @for (sponsor of sponsors; track sponsor.name) {
-          <a
-            [href]="sponsor.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
-            class="sponsor-item"
-          >
-            @if (sponsor.logoType === 'image') {
-              <img [src]="sponsor.imagePath" [alt]="sponsor.name + ' logo'" class="sponsor-image">
-            }
-          </a>
-        }
-        @for (sponsor of sponsors; track sponsor.name + '-duplicate') {
-          <a
-            [href]="sponsor.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
-            class="sponsor-item"
-          >
-            @if (sponsor.logoType === 'image') {
-              <img [src]="sponsor.imagePath" [alt]="sponsor.name + ' logo'" class="sponsor-image">
-            }
-          </a>
+        <a
+          [href]="sponsor.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
+          class="sponsor-item"
+        >
+          @if (sponsor.logoType === 'image') {
+          <img
+            [src]="sponsor.imagePath"
+            [alt]="sponsor.name + ' logo'"
+            class="sponsor-image"
+          />
+          }
+        </a>
+        } @for (sponsor of sponsors; track sponsor.name + '-duplicate') {
+        <a
+          [href]="sponsor.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
+          class="sponsor-item"
+        >
+          @if (sponsor.logoType === 'image') {
+          <img
+            [src]="sponsor.imagePath"
+            [alt]="sponsor.name + ' logo'"
+            class="sponsor-image"
+          />
+          }
+        </a>
         }
       </div>
     </div>
   </div>
 
   <!-- Divider -->
-  <p-divider class="first-divider" [style]="{ 'margin-bottom': '3rem' }"></p-divider>
-  
+  <p-divider
+    class="first-divider"
+    [style]="{ 'margin-bottom': '3rem' }"
+  ></p-divider>
+
   <!-- Popular Units Header -->
-  <h2 
-    class="popular-units-header text-center text-white prevent-select"
-  >Check out these units!</h2>
+  <h2 class="popular-units-header text-center text-white prevent-select">
+    Check out these units!
+  </h2>
   <!-- Popular Units Carousel -->
   @if (loading) {
-    <!-- Show skeletons if loading -->
-    <p-carousel 
-      [value]="[1,2,3,4,5,6]"
-      [numVisible]="3"
-      [numScroll]="1"
-      [circular]="true"
-      [autoplayInterval]="4500"
-      [responsiveOptions]="responsiveOptions"
-      styleClass="custom-carousel"
-    >
-      <ng-template pTemplate="item">
-        <p-skeleton 
-          width="20rem" 
-          height="15rem" 
-          styleClass="mx-auto" 
-          [style]="{ 'margin-bottom': '2em', 'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.2)' }"
-        ></p-skeleton>
-      </ng-template>
-    </p-carousel>  
+  <!-- Show skeletons if loading -->
+  <p-carousel
+    [value]="[1, 2, 3, 4, 5, 6]"
+    [numVisible]="3"
+    [numScroll]="1"
+    [circular]="true"
+    [autoplayInterval]="4500"
+    [responsiveOptions]="responsiveOptions"
+    styleClass="custom-carousel"
+  >
+    <ng-template pTemplate="item">
+      <p-skeleton
+        width="20rem"
+        height="15rem"
+        styleClass="mx-auto"
+        [style]="{
+          'margin-bottom': '2em',
+          'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.2)'
+        }"
+      ></p-skeleton>
+    </ng-template>
+  </p-carousel>
   } @else {
-    <!-- Show popular units if loaded -->
-    <p-carousel 
-      [value]="popularUnits"
-      [numVisible]="3"
-      [numScroll]="1"
-      [circular]="true"
-      [showNavigators]="true"
-      [showIndicators]="true"
-      [responsiveOptions]="responsiveOptions"
-      styleClass="custom-carousel"
-    >
-      <ng-template let-unit pTemplate="item">
-        <div class="carousel-item-wrapper">
-          <app-unit-card
-            [unit]="unit"
-          ></app-unit-card>
-        </div>
-      </ng-template>
-    </p-carousel>
+  <!-- Show popular units if loaded -->
+  <p-carousel
+    [value]="popularUnits"
+    [numVisible]="3"
+    [numScroll]="1"
+    [circular]="true"
+    [showNavigators]="true"
+    [showIndicators]="true"
+    [responsiveOptions]="responsiveOptions"
+    styleClass="custom-carousel"
+  >
+    <ng-template let-unit pTemplate="item">
+      <div class="carousel-item-wrapper">
+        <app-unit-card [unit]="unit"></app-unit-card>
+      </div>
+    </ng-template>
+  </p-carousel>
   }
 
   <!-- Divider -->
@@ -135,49 +159,49 @@
 
   <!-- FAQ Title -->
   <h2 class="FAQ prevent-select">FAQ</h2>
-  <p-accordion 
-    [multiple]="true"
-  >
-    <p-accordionTab 
-      header="What is MonSTAR?"
-    >
-        <p>
-          MonSTAR is an online platform designed for Monash University students to browse, review, and share feedback on academic units, helping others make informed decisions.
-        </p>
-        <div class="flex justify-content-center mt-3">
-          <p-button 
-              label="Terms and Conditions" 
-              icon="pi pi-shield" 
-              [rounded]="true"
-              [raised]="true"
-              (click)="navigateTo('/terms-and-conditions')"
-          ></p-button>
+  <p-accordion [multiple]="true">
+    <p-accordionTab header="What is MonSTAR?">
+      <p>
+        MonSTAR is an online platform designed for Monash University students to
+        browse, review, and share feedback on academic units, helping others
+        make informed decisions.
+      </p>
+      <div class="flex justify-content-center mt-3">
+        <p-button
+          label="Terms and Conditions"
+          icon="pi pi-shield"
+          [rounded]="true"
+          [raised]="true"
+          (click)="navigateTo('/terms-and-conditions')"
+        ></p-button>
       </div>
     </p-accordionTab>
     <p-accordionTab header="How do I write a review for a unit?">
       <p>
-        1. To be able to write a review you must first login with your Monash Google Account<br/>
-        2. Go to the explore page and find a unit you want to review. <br/>
+        1. To be able to write a review you must first login with your Monash
+        Google Account<br />
+        2. Go to the explore page and find a unit you want to review. <br />
         3. Click on the 'Review' button.
       </p>
     </p-accordionTab>
-    <p-accordionTab header="How do I update or delete a review that I previously submitted?">
-        <p>
-          To update your review, go to your profile then go to the reviews tab, you can update or delete it there.
-        </p>
+    <p-accordionTab
+      header="How do I update or delete a review that I previously submitted?"
+    >
+      <p>
+        To update your review, go to your profile then go to the reviews tab,
+        you can update or delete it there.
+      </p>
     </p-accordionTab>
     <p-accordionTab header="Who made MonSTAR?">
-      <p>
-        MonSTAR was developed by a team of students from WIRED Monash.
-      </p>
+      <p>MonSTAR was developed by a team of students from WIRED Monash.</p>
       <div class="flex justify-content-center mt-3">
-          <p-button 
-              label="Meet the Team" 
-              icon="pi pi-users" 
-              [rounded]="true"
-              [raised]="true"
-              (click)="navigateTo('/about')"
-          ></p-button>
+        <p-button
+          label="Meet the Team"
+          icon="pi pi-users"
+          [rounded]="true"
+          [raised]="true"
+          (click)="navigateTo('/about')"
+        ></p-button>
       </div>
     </p-accordionTab>
   </p-accordion>

@@ -1,4 +1,4 @@
-@import '../../_variables.scss';
+@import "../../_variables.scss";
 
 // Wrapper for authenticated content with blur protection
 .setu-content-wrapper {
@@ -34,7 +34,8 @@
   // Simplified background for better performance
   background:
     // Gradient overlay
-    linear-gradient(135deg,
+    linear-gradient(
+      135deg,
       rgba(44, 44, 44, 0.97) 0%,
       rgba(55, 8, 51, 0.95) 50%,
       rgba(44, 44, 44, 0.97) 100%
@@ -73,7 +74,8 @@
 }
 
 @keyframes gentle-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateZ(0);
   }
   50% {

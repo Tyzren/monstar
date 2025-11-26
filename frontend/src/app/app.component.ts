@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   title = 'frontend';
   showFooter: boolean = true;
 
-  constructor (
+  constructor(
     private primengConfig: PrimeNGConfig,
     private footerService: FooterService
   ) {

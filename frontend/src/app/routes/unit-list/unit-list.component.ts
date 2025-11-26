@@ -52,17 +52,17 @@ import { SortOptions, SORT_OPTIONS_LIST } from '../../shared/constants/sort-opti
 })
 export class UnitListComponent implements OnInit, OnDestroy {
   // Array to hold the filtered list of units
-  filteredUnits: Unit[] = []; 
+  filteredUnits: Unit[] = [];
 
   // String to hold the current search
-  search: string = ''; 
+  search: string = '';
 
   // Current page
   first: number = 0;
   // Total no. of rows of unit cards shown on the page
   rows: number = 24;
   // Total number of unit cards
-  totalRecords: number = 0; 
+  totalRecords: number = 0;
 
   // Loading state of unit cards
   loading: boolean = true;
@@ -79,7 +79,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
   sortOptions = SORT_OPTIONS_LIST;
 
   // NgModel value for the sort by dropdown (default: Most Reviews)
-  sortBy: string = SortOptions.MOST_REVIEWS; 
+  sortBy: string = SortOptions.MOST_REVIEWS;
 
   // Advanced filtering overlay panel reference
   @ViewChild('op') overlayPanel!: OverlayPanel;
@@ -106,7 +106,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
   selectedCampuses: any = null;
 
   // Ratings
-  ratings: number[] = [1,2,3,4,5];
+  ratings: number[] = [1, 2, 3, 4, 5];
   selectedRating: number = 0;
 
   // Prerequisites
@@ -161,7 +161,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
         if (this.search !== params['search']) {
           this.search = params['search'];
           this.fetchPaginatedUnits();
-        } 
+        }
       } else if (this.search) {
         this.search = '';
       }
@@ -169,7 +169,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
     // Retrieve the sortBy state from local storage
     const savedSortBy = localStorage.getItem('sortBy');
-    if (savedSortBy) 
+    if (savedSortBy)
       this.sortBy = savedSortBy;
 
     // Retrieve the rows per page state from local storage
@@ -416,18 +416,18 @@ export class UnitListComponent implements OnInit, OnDestroy {
    */
   private updateMetaTags(): void {
     const pageUrl = `${BASE_URL}/list`;
-    
+
     // Basic meta tags
     this.titleService.setTitle(META_UNIT_LIST_TITLE);
     this.meta.updateTag({ name: 'description', content: META_BASIC_DESCRIPTION });
-    this.meta.updateTag({ name: 'keywords',  content: META_BASIC_KEYWORDS });
+    this.meta.updateTag({ name: 'keywords', content: META_BASIC_KEYWORDS });
 
     // Open Graph tags for social sharing
     this.meta.updateTag({ property: 'og:title', content: META_UNIT_LIST_TITLE });
     this.meta.updateTag({ property: 'og:description', content: META_BASIC_OPEN_GRAPH_DESCRIPTION });
     this.meta.updateTag({ property: 'og:url', content: pageUrl });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
-    
+
     // Twitter Card tags
     this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
     this.meta.updateTag({ name: 'twitter:title', content: META_BASIC_TWITTER_TITLE });
@@ -436,10 +436,10 @@ export class UnitListComponent implements OnInit, OnDestroy {
     // console.log('Unit List meta tags updated');
 
     // Canonical URLs
-    const canonicalUrl = this.search 
-    ? `https://monstar.wired.org.au/list?search=${encodeURIComponent(this.search)}`
-    : 'https://monstar.wired.org.au/list';
-    
+    const canonicalUrl = this.search
+      ? `https://monstar.wired.org.au/list?search=${encodeURIComponent(this.search)}`
+      : 'https://monstar.wired.org.au/list';
+
     // Remove previous canonical if it exists
     const existingCanonical = document.querySelector('link[rel="canonical"]');
     if (existingCanonical) { existingCanonical.remove(); }

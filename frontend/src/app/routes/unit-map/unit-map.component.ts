@@ -77,11 +77,11 @@ export class UnitMapComponent implements OnInit, OnDestroy {
   /**
    * === Constructor ===
    */
-  constructor (
+  constructor(
     private apiService: ApiService,
     private router: Router,
     private location: Location
-  ) {}
+  ) { }
 
 
   /**
@@ -118,7 +118,7 @@ export class UnitMapComponent implements OnInit, OnDestroy {
   fetchAndBuildUnitGraph() {
     // Get the current unit's unitcode from the url
     const unitCode = this.router.url.split('/')[2];
-    
+
     // Fetch the current unit
     this.apiService.getUnitByUnitcodeGET(unitCode).subscribe({
       next: (unit: Unit) => {
@@ -127,12 +127,12 @@ export class UnitMapComponent implements OnInit, OnDestroy {
 
         // Save the unit
         this.unit = unit;
-        
+
         // Add current unit node from router param
         const currentNode: UnitNode = {
           id: unit.unitCode,
           label: unit.unitCode.toUpperCase(),
-          data: { 
+          data: {
             type: 'current',
             name: unit.name
           }
@@ -152,7 +152,7 @@ export class UnitMapComponent implements OnInit, OnDestroy {
             .map(code => ({
               id: code,
               label: code.toUpperCase(),
-              data: {  type: 'prerequisite', name: code }
+              data: { type: 'prerequisite', name: code }
             }));
 
           // Save the prerequisite unit codes
@@ -179,12 +179,12 @@ export class UnitMapComponent implements OnInit, OnDestroy {
           next: (parentUnits) => {
             // ? Debug log: Fetched parent units
             // console.log('Parent units:', parentUnits);
-            
+
             // Add parent nodes
             const parentNodes: UnitNode[] = parentUnits.map(parent => ({
               id: parent.unitCode,
               label: parent.unitCode.toUpperCase(),
-              data: { 
+              data: {
                 type: 'parent',
                 name: parent.name
               }

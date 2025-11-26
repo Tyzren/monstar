@@ -2,114 +2,109 @@
 <p-toast></p-toast>
 
 <!-- ! Unit Overview -->
-<div 
-    #unitOverviewContainer 
-    class="unit-overview-container" 
->
-    <div class="left-column">
-        <p-scrollPanel
-            styleClass="left-column-scroll"
-            [style]="{ 'width': '100%', 'height': '100%' }"
-        >
-            <!-- ! CHILD: UnitHeaderComponent -->
-            <!-- Unit review header -->
-            <app-unit-review-header
-                [unit]="unit"
-                (sortBy)="sortReviews($event)"
-                (reviewAdded)="refreshReviews()"
-            />
+<div #unitOverviewContainer class="unit-overview-container">
+  <div class="left-column">
+    <p-scrollPanel
+      styleClass="left-column-scroll"
+      [style]="{ width: '100%', height: '100%' }"
+    >
+      <!-- ! CHILD: UnitHeaderComponent -->
+      <!-- Unit review header -->
+      <app-unit-review-header
+        [unit]="unit"
+        (sortBy)="sortReviews($event)"
+        (reviewAdded)="refreshReviews()"
+      />
 
-            <br/><br/>
+      <br /><br />
 
-            <!-- ! CHILD: AiOverviewComponent -->
-            <!-- AI overview -->
-            <app-ai-overview [unit]="unit"/>
+      <!-- ! CHILD: AiOverviewComponent -->
+      <!-- AI overview -->
+      <app-ai-overview [unit]="unit" />
 
-            <!-- ! CHILD: SetuCardComponent -->
-            <!-- Setu header -->
-            <app-setu-card [unitCode]="unit?.unitCode"/>
+      <!-- ! CHILD: SetuCardComponent -->
+      <!-- Setu header -->
+      <app-setu-card [unitCode]="unit?.unitCode" />
 
-            <br/><br/>
-        </p-scrollPanel>
-    </div>
-    <div class="right-column">
-        <p-scrollPanel 
-            styleClass="reviews-scroll" 
-            [style]="{ 'width': '100%', 'height': '100%' }"
-        >
-            <!-- ! Show all the reviews  -->
-            @if (!reviewsLoading) {
-                <!-- Review cards -->
-                <div class="reviews-container">
-                    @for (review of reviews; track $index) {
-                        <app-review-card 
-                            [review]="review" 
-                            (reviewDeleted)="refreshReviews('delete')"
-                            (reviewEdited)="refreshReviews('edit')"
-                        />
-                    }
-                </div>
-            } @else {
-                <!-- Show review card skeletons if reviews are still loading -->
-                <div class="reviews-skeleton-container mt-5">
-                    @if (!unit) {
-                        @for (i of [1,2,3]; track $index) {
-                            <p-skeleton 
-                                width="1057.52px" 
-                                height="204.4px" 
-                                borderRadius="20px"
-                                [style]="{ 'margin-top': '20px', 'margin-bottom': '20px' }"
-                            />
-                        }
-                    } @else {
-                        @for (i of [].constructor(unit.reviews.length); track $index) {
-                            <p-skeleton 
-                                width="1057.52px" 
-                                height="204.4px" 
-                                borderRadius="20px"
-                                [style]="{ 'margin-top': '20px', 'margin-bottom': '20px' }"
-                            />
-                        }
-                    }
-                </div>
-            }
+      <br /><br />
+    </p-scrollPanel>
+  </div>
+  <div class="right-column">
+    <p-scrollPanel
+      styleClass="reviews-scroll"
+      [style]="{ width: '100%', height: '100%' }"
+    >
+      <!-- ! Show all the reviews  -->
+      @if (!reviewsLoading) {
+      <!-- Review cards -->
+      <div class="reviews-container">
+        @for (review of reviews; track $index) {
+        <app-review-card
+          [review]="review"
+          (reviewDeleted)="refreshReviews('delete')"
+          (reviewEdited)="refreshReviews('edit')"
+        />
+        }
+      </div>
+      } @else {
+      <!-- Show review card skeletons if reviews are still loading -->
+      <div class="reviews-skeleton-container mt-5">
+        @if (!unit) { @for (i of [1,2,3]; track $index) {
+        <p-skeleton
+          width="1057.52px"
+          height="204.4px"
+          borderRadius="20px"
+          [style]="{ 'margin-top': '20px', 'margin-bottom': '20px' }"
+        />
+        } } @else { @for (i of [].constructor(unit.reviews.length); track
+        $index) {
+        <p-skeleton
+          width="1057.52px"
+          height="204.4px"
+          borderRadius="20px"
+          [style]="{ 'margin-top': '20px', 'margin-bottom': '20px' }"
+        />
+        } }
+      </div>
+      }
 
-            <!-- ! Show end of reviews message  -->
-            @if (reviews.length > 0) {
-                <h3 
-                    class="text-center prevent-select"
-                    [style]="{ 'color': 'var(--text-color)', 'margin-top': '5rem' }"
-                >
-                    That's all the reviews...
-                </h3>
-                <h4
-                    class="text-center prevent-select"
-                    [style]="{ 'color': 'var(--text-color)', 'margin-bottom': '5rem' }"
-                >
-                    Have you done this unit? You should write a review!
-                </h4>
-            } 
-            <!-- ! Show no reviews message if there are no reviews -->
-            @else {
-                <h3 
-                    class="text-center prevent-select"
-                    [style]="{ 'color': 'var(--text-color)', 'margin-top': '5rem', 'margin-bottom': '1rem' }"
-                >
-                    No reviews for this unit...
-                </h3>
-                <h4
-                    class="text-center prevent-select"
-                    [style]="{ 'color': 'var(--text-color)', 'margin-bottom': '5rem' }"
-                >
-                    Have you done this unit? You should write a review!
-                </h4>
-            }
+      <!-- ! Show end of reviews message  -->
+      @if (reviews.length > 0) {
+      <h3
+        class="text-center prevent-select"
+        [style]="{ color: 'var(--text-color)', 'margin-top': '5rem' }"
+      >
+        That's all the reviews...
+      </h3>
+      <h4
+        class="text-center prevent-select"
+        [style]="{ color: 'var(--text-color)', 'margin-bottom': '5rem' }"
+      >
+        Have you done this unit? You should write a review!
+      </h4>
+      }
+      <!-- ! Show no reviews message if there are no reviews -->
+      @else {
+      <h3
+        class="text-center prevent-select"
+        [style]="{
+          color: 'var(--text-color)',
+          'margin-top': '5rem',
+          'margin-bottom': '1rem'
+        }"
+      >
+        No reviews for this unit...
+      </h3>
+      <h4
+        class="text-center prevent-select"
+        [style]="{ color: 'var(--text-color)', 'margin-bottom': '5rem' }"
+      >
+        Have you done this unit? You should write a review!
+      </h4>
+      }
 
-            <!-- Spacer for the message above -->
-            <div class="spacer" style="height: 3rem;"></div>
-        </p-scrollPanel>
-    </div>
+      <!-- Spacer for the message above -->
+      <div class="spacer" style="height: 3rem"></div>
+    </p-scrollPanel>
+  </div>
 </div>
-
-
-

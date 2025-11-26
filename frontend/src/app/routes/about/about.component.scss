@@ -54,8 +54,6 @@
   text-align: center;
 }
 
-
-
 // TABLET RESPONSIVENESS
 @media (max-width: 768px) {
   .terms-container {
@@ -215,7 +213,7 @@
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;

@@ -3,208 +3,209 @@ $gap: 40px;
 $padding: 40px;
 
 .unit-list-container {
-    display: grid;
-    gap: $gap;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    padding: $padding;
-    max-width: $max-width;
-    margin: 0 auto; // center the content on the page
+  display: grid;
+  gap: $gap;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  padding: $padding;
+  max-width: $max-width;
+  margin: 0 auto; // center the content on the page
 }
 
 .unit-card-wrapper {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 // Toolbar container
 .toolbar-container {
-    max-width: $max-width;
-    margin: 0 auto;
-    padding: 0 2rem;
-    padding-top: 10px;
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 2rem;
+  padding-top: 10px;
 
-    // Toolbar styles
-    .p-toolbar {
-        display: flex;
-        justify-content: space-between;
-        width: 100%
-    }
+  // Toolbar styles
+  .p-toolbar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 
-    // Start and end groups
-    .p-toolbar-group-start,
-    .p-toolbar-group-end {
-        flex: 1;
-    }
+  // Start and end groups
+  .p-toolbar-group-start,
+  .p-toolbar-group-end {
+    flex: 1;
+  }
 
-    // Center group
-    .p-toolbar-group-center {
-        flex: 2;
-        display: flex;
-        justify-content: center;
-    }
+  // Center group
+  .p-toolbar-group-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+  }
 
-    // End group
-    .p-toolbar-group-end {
-        display: flex;
-        justify-content: flex-end;
+  // End group
+  .p-toolbar-group-end {
+    display: flex;
+    justify-content: flex-end;
 
-        // Filter options
-        .filter-options {
-            // Filter option styles
-            .filter-option {
-                display: inline-block;
-                margin-right: 1rem;
-            }
-        }
-    }
-
-    // Dropdown container
-    .dropdown-container {
-        position: relative;
+    // Filter options
+    .filter-options {
+      // Filter option styles
+      .filter-option {
         display: inline-block;
+        margin-right: 1rem;
+      }
     }
+  }
 
-    // Badge styles
-    .search-badge, .sortby-badge {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgb(83, 83, 83);
-        color: white;
-        border-radius: 0.5rem;
-        padding: 0.2rem 0.5rem;
-        font-size: 0.6rem;
-        margin-left: 0.5rem;
-    }
+  // Dropdown container
+  .dropdown-container {
+    position: relative;
+    display: inline-block;
+  }
 
-    .filter-badge {
-        font-size: 0.6rem;
-        color: white;
-        margin-right: 0.5rem;
-        padding: 0.2rem 0.5rem;
-        border-radius: 0.5rem;
-        background-color: rgb(83,83,83);
-    }
+  // Badge styles
+  .search-badge,
+  .sortby-badge {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgb(83, 83, 83);
+    color: white;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.6rem;
+    margin-left: 0.5rem;
+  }
+
+  .filter-badge {
+    font-size: 0.6rem;
+    color: white;
+    margin-right: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: rgb(83, 83, 83);
+  }
 }
 
 // Make sure the dropdown panel isn't too wide
 ::ng-deep .p-dropdown-panel {
-    max-width: 200px;
+  max-width: 200px;
 }
 
 // Make sure the dropdown items are smaller font size and other styles
 ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
-    font-size: 0.9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 // Pagination container
 .paginator-container {
-    max-width: $max-width;
-    margin: 0 auto;
-    padding: 0 2rem;
-    padding-bottom: 20px;
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 2rem;
+  padding-bottom: 20px;
 }
 
 // No results container
 .no-results-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20rem;
 
-    // Emoji styles
-    .emoji {
-        transform: scale(4);
-        margin-top: 10vh;
-        margin-bottom: 2rem;
-    }
+  // Emoji styles
+  .emoji {
+    transform: scale(4);
+    margin-top: 10vh;
+    margin-bottom: 2rem;
+  }
 }
 
 // Prevents user selection
 .prevent-select {
-    user-select: none;
+  user-select: none;
 }
 
 @media (max-width: 768px) {
-    .dropdown-container {
-        position: static;
-    }
+  .dropdown-container {
+    position: static;
+  }
 
-    .toolbar-container {
-        // Modify toolbar behavior
-        ::ng-deep .p-toolbar {
-            display: flex;
-            flex-direction: column !important;
-            padding: 1rem !important;
-            gap: 1rem;
-            
-            // Make each group take full width and center contents
-            .p-toolbar-group-start,
-            .p-toolbar-group-center,
-            .p-toolbar-group-end {
-                width: 100% !important;
-                justify-content: center !important;
-                margin: 0 !important;
-            }
-            
-            // Update dropdown and search containers to be full width
-            .dropdown-container {
-                width: 100%;
-                
-                ::ng-deep .p-dropdown {
-                    width: 100% !important;
-                }
-            }
-            
-            .p-toolbar-group-center {
-                .p-input-icon-left {
-                    width: 100%;
-                    
-                    input {
-                        width: 100% !important;
-                    }
-                }
-            }
-            
-            // Make filter button also take up more width
-            .p-toolbar-group-end {
-                button {
-                    font-size: 0.8rem !important;
-                    padding: 0.4rem 0.8rem !important;
-                }
-            }
+  .toolbar-container {
+    // Modify toolbar behavior
+    ::ng-deep .p-toolbar {
+      display: flex;
+      flex-direction: column !important;
+      padding: 1rem !important;
+      gap: 1rem;
+
+      // Make each group take full width and center contents
+      .p-toolbar-group-start,
+      .p-toolbar-group-center,
+      .p-toolbar-group-end {
+        width: 100% !important;
+        justify-content: center !important;
+        margin: 0 !important;
+      }
+
+      // Update dropdown and search containers to be full width
+      .dropdown-container {
+        width: 100%;
+
+        ::ng-deep .p-dropdown {
+          width: 100% !important;
         }
-    }
-    
-    // Adjust overlay panel for mobile
-    ::ng-deep #advancedFiltering {
-        width: 90vw !important;
-        max-width: 90vw !important;
-        
-        .filter-option {
-            margin-bottom: 0.75rem;
+      }
+
+      .p-toolbar-group-center {
+        .p-input-icon-left {
+          width: 100%;
+
+          input {
+            width: 100% !important;
+          }
         }
-    }
+      }
 
-    // Font size of the advanced filtering 
-    .filter-options {
-        font-size: 14px;
-    }
-
-    // Fitler panel that opens
-    ::ng-deep .p-multiselect-panel {
-        width: 300px;
-
-        .p-component {
-            font-size: 14px !important;;
+      // Make filter button also take up more width
+      .p-toolbar-group-end {
+        button {
+          font-size: 0.8rem !important;
+          padding: 0.4rem 0.8rem !important;
         }
+      }
     }
+  }
+
+  // Adjust overlay panel for mobile
+  ::ng-deep #advancedFiltering {
+    width: 90vw !important;
+    max-width: 90vw !important;
+
+    .filter-option {
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  // Font size of the advanced filtering
+  .filter-options {
+    font-size: 14px;
+  }
+
+  // Fitler panel that opens
+  ::ng-deep .p-multiselect-panel {
+    width: 300px;
+
+    .p-component {
+      font-size: 14px !important;
+    }
+  }
 }
