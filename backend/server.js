@@ -148,18 +148,15 @@ cron.schedule('0 2 1 6 *', async function () {
 });
 
 // === Catch all route (Production Mode) ===
-if (!isDevelopment) {
-  app.get('*', (req, res) => {
-    return res.sendFile(
-      path.join(__dirname, '../frontend/dist/frontend/browser/index.html')
-    );
+// === Export for Vercel ===
+module.exports = app;
+
+// === Start Server (for local development) ===
+if (require.main === module) {
+  const PORT = process.env.PORT || 8080; // Default to 8080 if no port specified
+  app.listen(PORT, (error) => {
+    if (error) console.log(error);
+
+    console.log(`Server running on port ${PORT}`);
   });
 }
-
-// === Start Server ===
-const PORT = process.env.PORT || 8080; // Default to 8080 if no port specified
-app.listen(PORT, (error) => {
-  if (error) console.log(error);
-
-  console.log(`Server running on port ${PORT}`);
-});

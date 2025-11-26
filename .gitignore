@@ -140,3 +140,4 @@ frontend/public/sitemap*.xml
 
 # Swagger output
 backend/docs/swagger.json
+.vercel
