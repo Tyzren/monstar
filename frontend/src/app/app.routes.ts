@@ -7,7 +7,7 @@ import { UnitOverviewComponent } from './routes/unit-overview/unit-overview.comp
 import { VerifiedComponent } from './routes/verified/verified.component';
 import { NotFoundComponent } from './routes/not-found/not-found.component';
 import { ResetPasswordComponent } from './routes/reset-password/reset-password.component';
-import { UnitMapComponent } from './routes/unit-map/unit-map.component';
+// import { UnitMapComponent } from './routes/unit-map/unit-map.component';
 import { TermsAndCondsComponent } from './routes/terms-and-conds/terms-and-conds.component';
 import { AboutComponent } from './routes/about/about.component';
 import { SetuOverviewComponent } from './routes/setu-overview/setu-overview.component';
@@ -21,7 +21,7 @@ export const routes: Routes = [
   // Unit Overview
   { path: 'unit/:unitcode', component: UnitOverviewComponent },
   // Unit Map
-  { path: 'map/:unitcode', component: UnitMapComponent },
+  // { path: 'map/:unitcode', component: UnitMapComponent },
   // SETU Data
   { path: 'setu/:unitCode', component: SetuOverviewComponent },
   // Email Verification

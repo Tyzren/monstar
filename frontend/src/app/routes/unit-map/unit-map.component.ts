@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { OrganizationChartModule } from 'primeng/organizationchart';
 import { ApiService } from '../../shared/services/api.service';
 import { Router } from '@angular/router';
-import { Edge, NgxGraphModule, NgxGraphZoomOptions } from '@swimlane/ngx-graph';
+// import { Edge, NgxGraphModule, NgxGraphZoomOptions } from '@swimlane/ngx-graph';
 import * as shape from 'd3-shape';
 import { Subject } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -30,21 +30,21 @@ interface UnitNode {
 
 /**
  * * Unit Edge Interface
- * 
+ *
  * An interface for the edges in the unit graph
  */
-interface UnitEdge extends Edge {
-  data?: {
-    type: 'prerequisite' | 'parent';
-  }
-}
+// interface UnitEdge extends Edge {
+//   data?: {
+//     type: 'prerequisite' | 'parent';
+//   }
+// }
 
 @Component({
   selector: 'app-unit-map',
   standalone: true,
   imports: [
     OrganizationChartModule,
-    NgxGraphModule,
+    // NgxGraphModule,
     ButtonModule,
     ToolbarModule,
     TooltipModule,
@@ -58,13 +58,13 @@ interface UnitEdge extends Edge {
 export class UnitMapComponent implements OnInit, OnDestroy {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
 
-  nodes: UnitNode[] = [];
-  edges: UnitEdge[] = [];
+  // nodes: UnitNode[] = [];
+  // edges: UnitEdge[] = [];
   layout = 'dagre';
   curve = shape.curveBasis;
 
   center$: Subject<boolean> = new Subject();
-  zoomToFit$: Subject<NgxGraphZoomOptions> = new Subject();
+  // zoomToFit$: Subject<NgxGraphZoomOptions> = new Subject();
 
   isLoading: boolean = false;
 
@@ -142,7 +142,7 @@ export class UnitMapComponent implements OnInit, OnDestroy {
 
         // Initalise arrays for prerequisites
         let prereqNodes: UnitNode[] = [];
-        let prereqEdges: UnitEdge[] = [];
+        // let prereqEdges: UnitEdge[] = [];
         
         // Only process prerequisites if they exist
         if (unit.requisites?.prerequisites && unit.requisites.prerequisites.length > 0) {
@@ -161,17 +161,17 @@ export class UnitMapComponent implements OnInit, OnDestroy {
           this.prerequisiteNumReq = unit.requisites.prerequisites[0].NumReq;
           
           // Add prerequisite edges
-          prereqEdges = prereqNodes.map(node => ({
-            id: `${node.id}-${currentNode.id}`,
-            source: node.id,
-            target: currentNode.id,
-            data: { type: 'prerequisite' }
-          }));
+          // prereqEdges = prereqNodes.map(node => ({
+          //   id: `${node.id}-${currentNode.id}`,
+          //   source: node.id,
+          //   target: currentNode.id,
+          //   data: { type: 'prerequisite' }
+          // }));
         }
 
         // Set initial nodes and edges
-        this.nodes = [currentNode, ...prereqNodes];
-        this.edges = prereqEdges;
+        // this.nodes = [currentNode, ...prereqNodes];
+        // this.edges = prereqEdges;
 
 
         // Fetch the units that are required by the current unit
@@ -197,7 +197,7 @@ export class UnitMapComponent implements OnInit, OnDestroy {
             // console.log('Parent nodes:', parentNodes);
   
             // Add edges from current node to parent nodes
-            const parentEdges: UnitEdge[] = parentNodes.map(node => ({
+            // const parentEdges: UnitEdge[] = parentNodes.map(node => ({
               id: `${currentNode.id}-${node.id}`,
               source: currentNode.id,
               target: node.id,
@@ -208,8 +208,8 @@ export class UnitMapComponent implements OnInit, OnDestroy {
             // console.log('Parent edges:', parentEdges);
             
             // Add parent nodes and edges to the graph
-            this.nodes = [...this.nodes, ...parentNodes];
-            this.edges = [...this.edges, ...parentEdges];
+            // this.nodes = [...this.nodes, ...parentNodes];
+            // this.edges = [...this.edges, ...parentEdges];
             
             // ? Debug log: Final graph state
             // console.log('Final graph state:', {
@@ -218,22 +218,22 @@ export class UnitMapComponent implements OnInit, OnDestroy {
             // });
 
             // Center the graph
-            this.centerGraph();
+            // this.centerGraph();
           }
         });
       }
     });
     
     // Zoom to fit
-    this.resetZoom();
+    // this.resetZoom();
   }
 
   /**
    * * Centers the Graph
    */
-  centerGraph() {
-    this.center$.next(true);
-  }
+  // centerGraph() {
+  //   this.center$.next(true);
+  // }
 
   /**
    * * Resets the Graph
@@ -246,16 +246,16 @@ export class UnitMapComponent implements OnInit, OnDestroy {
   /**
    * * Zoom to Fit
    */
-  resetZoom() {
-    this.zoomToFit$.next({ force: true, autoCenter: true });
-  }
+  // resetZoom() {
+  //   // this.zoomToFit$.next({ force: true, autoCenter: true });
+  // }
 
   /**
    * * Toggle Layout
    */
-  toggleLayout() {
-    this.layout = this.layout === 'dagre' ? 'colaForceDirected' : 'dagre';
-  }
+  // toggleLayout() {
+  //   this.layout = this.layout === 'dagre' ? 'colaForceDirected' : 'dagre';
+  // }
 
   /**
    * * Navigates back to the previous page
