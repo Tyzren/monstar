@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 // Services
@@ -10,6 +10,9 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { PrimeNGConfig, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+
+// Vercel Analytics
+import { inject as injectAnalytics } from '@vercel/analytics';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +29,10 @@ export class AppComponent implements OnInit {
   constructor (
     private primengConfig: PrimeNGConfig,
     private footerService: FooterService
-  ) {}
+  ) {
+    // Inject Vercel Analytics
+    injectAnalytics();
+  }
 
   ngOnInit(): void {
     // Subscribe to footer visibility changes
