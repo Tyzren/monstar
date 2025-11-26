@@ -36,7 +36,7 @@ Our tech stack focuses on reliability, scalability, and developer experience:
 - **Database:** MongoDB
 - **Frontend:** Angular (v18.2.14)
 - **Cloud Storage:** Cloudinary
-- **Deployment:** Akamai
+- **Deployment:** Vercel
 
 
 ## 🌐 Live Deployment
