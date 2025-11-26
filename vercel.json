@@ -20,16 +20,9 @@
       "dest": "/backend/server.js"
     },
     {
-      "src": "/sitemap(.*)\\.xml",
-      "dest": "/frontend/sitemap$1.xml"
-    },
-    {
-      "src": "/(robots\\.txt|llms\\.txt|favicon\\.ico|.*\\.png|.*\\.jpg|.*\\.svg)",
-      "dest": "/frontend/$1"
-    },
-    {
-      "src": "/(.*\\.(js|css|json|woff|woff2|ttf|eot|ico|png|jpg|jpeg|gif|svg))",
-      "dest": "/frontend/$1"
+      "src": "/(.*)",
+      "dest": "/frontend/$1",
+      "continue": true
     },
     {
       "src": "/(.*)",
