@@ -20,7 +20,16 @@
       "dest": "/backend/server.js"
     },
     {
-      "handle": "filesystem"
+      "src": "/sitemap(.*)\\.xml",
+      "dest": "/sitemap$1.xml"
+    },
+    {
+      "src": "/(robots\\.txt|llms\\.txt|favicon\\.ico|.*\\.png|.*\\.jpg|.*\\.svg)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*\\.(js|css|json|woff|woff2|ttf|eot|ico|png|jpg|jpeg|gif|svg))",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
