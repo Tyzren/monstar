@@ -125,7 +125,7 @@ cd backend && node server.js
 If you have questions about contributing or need help getting started:
 
 - **Open an Issue**: Use GitHub issues for questions or discussions
-- **Contact Us**: Reach out to jenul15ferdinand@gmail.com
+- **Contact Us**: Reach out to `jenul15ferdinand@gmail.com`
 
 ---
 
