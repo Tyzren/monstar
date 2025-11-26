@@ -21,12 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/$1",
-      "continue": true
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/index.html"
+      "dest": "/frontend/$1"
     }
   ],
   "env": {

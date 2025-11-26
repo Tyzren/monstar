@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://monstar.wired.org.au/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1</priority>
+    <lastmod>2025-11-16</lastmod>
+  </url>
+  <url>
+    <loc>https://monstar.wired.org.au/list</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-11-16</lastmod>
+  </url>
+  <url>
+    <loc>https://monstar.wired.org.au/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2025-11-16</lastmod>
+  </url>
+  <url>
+    <loc>https://monstar.wired.org.au/terms-and-conditions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <lastmod>2025-11-16</lastmod>
+  </url>
+  <url>
+    <loc>https://monstar.wired.org.au/map</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2025-11-16</lastmod>
+  </url>
+</urlset>
