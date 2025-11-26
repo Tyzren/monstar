@@ -4,35 +4,35 @@
         <p-toolbar class="toolbar" styleClass="shadow-2" [style]="{ 'border-radius': '3rem' }">
         <!-- ! Start group (Simple sorting order dropdown) -->
         <div class="p-toolbar-group-start">
-            <p-button 
+            <p-button
                 pTooltip="Reset Graph"
                 tooltipPosition="top"
                 tooltipZIndex="9999"
                 icon="pi pi-replay"
                 rounded="true"
-                <!-- (click)="resetGraph()" -->
+                (click)="resetGraph()"
             />
         </div>
     
         <!-- ! Center group (dynamic search bar)-->
         <div class="p-toolbar-group-center">
-            <p-button 
+            <p-button
                 pTooltip="Center Graph"
                 tooltipPosition="top"
                 tooltipZIndex="9999"
                 icon="pi pi-arrow-down-left-and-arrow-up-right-to-center"
                 rounded="true"
-                <!-- (click)="centerGraph()" -->
+                (click)="centerGraph()"
             />
 
-            <p-button 
+            <p-button
                 class="ml-2"
                 pTooltip="Zoom to Fit"
                 tooltipPosition="top"
                 tooltipZIndex="9999"
                 icon="pi pi-expand"
                 rounded="true"
-                <!-- (click)="resetZoom()" -->
+                (click)="resetZoom()"
             />
         </div>
     
@@ -44,7 +44,7 @@
                 tooltipZIndex="9999"
                 icon="pi pi-wave-pulse"
                 rounded="true"
-                <!-- (click)="toggleLayout()" -->
+                (click)="toggleLayout()"
             />
         </div>
         </p-toolbar>
@@ -65,7 +65,7 @@
                     icon="pi pi-arrow-left"
                     [rounded]="true"
                     [text]="true"
-                    <!-- (click)="navigateBack()" -->
+                    (click)="navigateBack()"
                     styleClass="p-button-secondary"
                     pTooltip="Go back"
                     tooltipPosition="right"
@@ -179,8 +179,8 @@
         </defs>
     </svg>
 
-    <!-- ! Graph - Temporarily disabled due to dependency conflicts -->
-    <!-- <ngx-graph
+    <!-- ! Graph -->
+    <ngx-graph
         [view]="[graphContainer.offsetWidth, graphContainer.offsetHeight]"
         [links]="edges"
         [nodes]="nodes"
@@ -218,7 +218,7 @@
             />
             </svg:g>
         </ng-template>
-    <!-- </ngx-graph> -->
+    </ngx-graph>
     
     <!-- ! The loading overlay screen (this must be put here) -->
     @if (isLoading) {

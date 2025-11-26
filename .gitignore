@@ -140,4 +140,9 @@ frontend/public/sitemap*.xml
 
 # Swagger output
 backend/docs/swagger.json
+
+# Sai's scraper
+backend/scraper/
+
+# Vercel
 .vercel

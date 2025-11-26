@@ -10,7 +10,7 @@
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist/frontend/browser",
-        "buildCommand": "npm install --legacy-peer-deps && npm run build"
+        "buildCommand": "npm install && npm run build"
       }
     }
   ],
@@ -25,6 +25,6 @@
     }
   ],
   "env": {
-    "PRODUCTION_MACHINE": "false"
+    "PRODUCTION_MACHINE": "true"
   }
 }
