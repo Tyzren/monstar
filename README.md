@@ -1,65 +1,161 @@
-<img width="956" height="311" alt="banner" src="https://github.com/user-attachments/assets/6ec6c7d4-3059-4a76-9579-69d074726cff" />
+<p align="center">
+  <img alt="MonSTAR banner" src="frontend/public/banner.png" />
+</p>
 
-<h1 align="center"><span>MonSTAR by WIRED Projects</span></h1>
+<h4 align="center">
+  A digital platform built for students at Monash University. Real unit reviews from students, provided with historical SETU data.
+</h4>
 
-> *MonSTAR is a digital platform where Monash University students can come together and share their experiences in subjects they've completed, backed by comprehensive SETU data spanning years of student feedback.*
+<h3 align="center">
+  <a href="https://monstar.wired.org.au">🌍 Website</a>
+  <span> · </span>
+  <a href="./CONTRIBUTING.md">🤝 Contributing</a>
+  <span> · </span>
+  <a href="https://github.com/wired-projects/monstar/issues">🚩 Issues</a>
+  <span> · </span>
+  <a href="https://monstar.wired.org.au/changelog">📋 Changelog</a>
+</h3>
 
-## 🚀 Highlights
+<br/>
 
-Here's what makes MonSTAR special:
+## What is MonSTAR?
 
-- **Student-Centered Community**: Real experiences from real students about Monash units
-- **Comprehensive SETU Database**: Complete historical data up until Semester 1 of 2025
-- **Modern Tech Stack**: Built with Angular, Node.js, Express, and MongoDB
+MonSTAR helps Monash University students make informed decisions about their unit selections. The platform aggregates student reviews and SETU (Student Evaluation of Teaching and Units) data from 2019 onwards, providing both qualitative experiences and quantitative metrics for thousands of units.
 
-## ℹ️ Overview
+Students can browse units, read peer reviews, compare SETU scores across semesters, and contribute their own experiences after completing units.
 
-> *Making academic decisions easier through student experiences and data.*
+## Features
 
-MonSTAR addresses the challenge many Monash students face: choosing subjects without reliable peer insights. By combining student-generated reviews with historical SETU results, we provide a comprehensive view of what to expect from any unit.
+MonSTAR provides several features for exploring and reviewing Monash subjects:
 
-The platform serves as both a community hub where students can share their honest experiences and a data repository where evidence-based decisions can be made about course selections.
+- **Unit Search** - Search by unitcode or the name, additional filtering by teaching period, faculty, etc
+- **Student Reviews** - Read and write reviews with ratings across enjoyment, simplicity, usefulness
+- **AI Sentiment Overviews** - Gemini AI overviews for units, reviewing existing student review sentiment
+- **SETU Data** - Historical SETU results from sem 1 2019 up to most recent (authentication required)
+- **Unit Pathways Map** - Interactive graph showing unit pathways, prerequistes and future requirements
+- **Google Authentication** - Monash student/staff verification through email verification
+- **Review Interactions** - Like/dislike reviews with notifications
+- **Unit Tags** - Dynamically assigned tags like "WAM Booster"
 
+## Getting Started
 
-### 🎓 Who We Are
+### Prerequisites
+- Node.js 20+ (backend dev) and Angular CLI (frontend dev)
+- MongoDB (local or Atlas cluster, you'll probably need this)
+- Google OAuth credentials (for authentication, optional)
 
-MonSTAR is developed by the **WIRED Projects Team** at Monash University, a group of passionate students building solutions for fellow students. We believe in the power of shared knowledge and community-driven platforms.
+### Dev Setup
 
-Special thanks to **Sai Kumar Murali Krishnan** for contributing the [monash-handbook-scraper](https://github.com/saikumarmk/monash-handbook-scraper) and [unit-outcome-miner](https://github.com/saikumarmk/unit-outcome-miner), which provides crucial unit and SETU information for our database.
+<details>
+<summary><strong>Local Development</strong></summary>
 
+1. Clone the repository
+    ```bash
+    git clone https://github.com/wired-projects/monstar.git
+    cd monstar
+    ```
 
-### 💻 Built With Modern Technology
+2. Install dependencies for both frontend and backend
+    ```bash
+    make install
+    ```
 
-Our tech stack focuses on reliability, scalability, and developer experience:
+3. Configure environment variables
 
-- **Backend:** Node.js with Express
-- **Database:** MongoDB
-- **Frontend:** Angular (v18.2.14)
-- **Cloud Storage:** Cloudinary
-- **Deployment:** Vercel
+    See `backend/.env.template` for all available options.
 
+4. Start the development servers
+    ```bash
+    make dev
+    ```
+    The frontend proxy configuration will automatically route API requests to the backend.
 
-## 🌐 Live Deployment
+</details>
 
-Want to see MonSTAR in action? Check out our live deployment at **[monstar.wired.org.au](https://monstar.wired.org.au)**!
+<details>
+<summary><strong>Local Development (manual)</strong></summary>
 
-Experience the platform firsthand and see how Monash students are sharing their academic experiences.
+1. Clone the repository
+    ```bash
+    git clone https://github.com/wired-projects/monstar.git
+    cd monstar
+    ```
 
-## 👥 Contributing
+2. Install dependencies for both frontend and backend
+    ```bash
+    # Backend
+    cd backend
+    npm install
 
-We welcome contributions from the Monash community! Whether you're fixing bugs, adding features, or improving documentation, your help makes MonSTAR better for everyone.
+    # Frontend
+    cd frontend
+    npm install
+    ```
 
-Ready to get involved? Check out our **[Contribution Guide](./CONTRIBUTING.md)** for detailed setup instructions, development workflow, and contribution guidelines.
+3. Configure environment variables
 
+    See `backend/.env.template` for all available options.
 
-## 📞 Get in Touch
+4. Start the development servers
+    ```bash
+    # Backend (runs on localhost:8080)
+    cd backend
+    npm run dev
 
-Have questions, suggestions, or want to contribute? We'd love to hear from you!
+    # Frontend (runs on localhost:4200)
+    cd frontend
+    npm run start
+    ```
 
-**Contact**: jenul15ferdinand@gmail.com
+    The frontend proxy configuration will automatically route API requests to the backend.
 
-**Found a bug or have a feature request?** Open an issue and let's discuss it!
+</details>
 
----
+<details>
+<summary><strong>Production Build</strong></summary>
 
-*Built with ❤️ by students, for students at Monash University.*
+```bash
+# Build frontend
+cd frontend
+npm run build
+
+# Start backend
+cd backend
+npm start
+```
+
+Production deployments should set `DEVELOPMENT=false` and configure appropriate CORS origins.
+
+</details>
+
+## Contributing
+
+MonSTAR was built by Monash students. Contributions are welcome from the community.
+
+Before starting work on a feature, please read the [Contributing Guide](./CONTRIBUTING.md) for:
+- Development environment setup
+- Code style and conventions
+- Pull request process
+- Testing requirements
+
+You can contribute by:
+- Reporting bugs or suggesting features via [GitHub Issues](https://github.com/wired-projects/monstar/issues)
+- Fixing existing issues
+- Improving documentation
+- Adding new features (after discussing in an issue first)
+
+## Data Sources
+
+MonSTAR's unit catalog and SETU data are sourced using tools developed by **Sai Kumar Murali Krishnan**:
+- [monash-handbook-scraper](https://github.com/saikumarmk/monash-handbook-scraper) - Unit metadata extraction
+- [unit-outcome-miner](https://github.com/saikumarmk/unit-outcome-miner) - SETU survey data aggregation
+
+## Contact
+
+**Developed by:** WIRED Projects Team, Monash University \
+**Primary person of contact:** Email jenul15ferdinand@gmail.com or add me on discord at proxy_dev\
+**Issues:** [GitHub Issues](https://github.com/wired-projects/monstar/issues)
+
+## License
+
+This project is licensed under the AGPL 3.0 License - see the [LICENSE](LICENSE) file for details.
