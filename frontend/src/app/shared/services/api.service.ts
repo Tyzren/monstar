@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Review } from '../models/review.model';
 import { Observable, catchError, of, tap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -222,28 +222,36 @@ export class ApiService {
    * @returns {Observable<Unit[]>} An observable containing an array of filtered units
    */
   getUnitsFilteredGET(offset: number, limit: number, search: string = '', sort: string = 'Alphabetic', showReviewed?: boolean, showUnreviewed?: boolean, hideNoOfferings?: boolean, faculty?: string[], semesters?: string[], campuses?: string[]): Observable<Unit[]> {
-    const params: { offset: string; limit: string; search: string; sort: string; showReviewed: string, showUnreviewed: string, hideNoOfferings: string, faculty: string[], semesters: string[], campuses: string[] } = {
-      offset: offset.toString(),
-      limit: limit.toString(),
-      search,
-      sort,
-      showReviewed: 'false',
-      showUnreviewed: 'false',
-      hideNoOfferings: 'false',
-      faculty: [],
-      semesters: [],
-      campuses: []
+    let params = new HttpParams()
+      .set('offset', offset.toString())
+      .set('limit', limit.toString())
+      .set('search', search)
+      .set('sort', sort)
+      .set('showReviewed', showReviewed ? 'true' : 'false')
+      .set('showUnreviewed', showUnreviewed ? 'true' : 'false')
+      .set('hideNoOfferings', hideNoOfferings ? 'true' : 'false');
+
+    // Add array parameters only if they have values
+    if (faculty && faculty.length > 0) {
+      faculty.forEach(f => {
+        params = params.append('faculty', f);
+      });
     }
 
-    if (showReviewed) { params.showReviewed = showReviewed ? 'true' : 'false'; }
-    if (showUnreviewed) { params.showUnreviewed = showUnreviewed ? 'true' : 'false'; }
-    if (hideNoOfferings) { params.hideNoOfferings = hideNoOfferings ? 'true' : 'false'; }
-    if (faculty) { params.faculty = faculty; }
-    if (semesters) { params.semesters = semesters; }
-    if (campuses) { params.campuses = campuses; }
+    if (semesters && semesters.length > 0) {
+      semesters.forEach(s => {
+        params = params.append('semesters', s);
+      });
+    }
+
+    if (campuses && campuses.length > 0) {
+      campuses.forEach(c => {
+        params = params.append('campuses', c);
+      });
+    }
 
     return this.http.get<Unit[]>(
-      `${this.url}/units/filter`, 
+      `${this.url}/units/filter`,
       { params }
     ).pipe(
       tap({
