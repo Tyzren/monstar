@@ -226,11 +226,18 @@ export class ApiService {
       .set('offset', offset.toString())
       .set('limit', limit.toString())
       .set('search', search)
-      .set('sort', sort)
-      .set('showReviewed', showReviewed ? 'true' : 'false')
-      .set('showUnreviewed', showUnreviewed ? 'true' : 'false')
-      .set('hideNoOfferings', hideNoOfferings ? 'true' : 'false');
+      .set('sort', sort);
 
+    // Add boolean parameters only if they are defined
+    if (showReviewed !== undefined) {
+      params = params.set('showReviewed', showReviewed ? 'true' : 'false');
+    }
+    if (showUnreviewed !== undefined) {
+      params = params.set('showUnreviewed', showUnreviewed ? 'true' : 'false');
+    }
+    if (hideNoOfferings !== undefined) {
+      params = params.set('hideNoOfferings', hideNoOfferings ? 'true' : 'false');
+    }
     // Add array parameters only if they have values
     if (faculty && faculty.length > 0) {
       faculty.forEach(f => {
