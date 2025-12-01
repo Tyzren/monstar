@@ -365,7 +365,7 @@ router.delete('/delete/:unitcode', verifyAdmin, async function (req, res) {
  * @throws {404} If the Unit is not found
  * @throws {500} If some error occurs
  */
-router.put('/update/:unitcode', async function (req, res) {
+router.put('/update/:unitcode', verifyAdmin, async function (req, res) {
   // #swagger.tags = ['Units']
   // #swagger.summary = 'Update unit description and/or name'
 

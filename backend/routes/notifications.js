@@ -19,12 +19,20 @@ const router = express.Router();
  * @throws {500} If an error occurs whilst fetching notifications from the database.
  * @throws {404} If the user is not found in the database.
  */
-router.get('/user/:userId', async function (req, res) {
+router.get('/user/:userId', verifyToken, async function (req, res) {
   // #swagger.tags = ['Notifications']
   // #swagger.summary = 'Get all notifications for a user from the database'
 
   try {
     const userId = req.params.userId;
+
+    // Check if the authenticated user is requesting their own notifications
+    if (req.user.id !== userId) {
+      return res
+        .status(403)
+        .json({ error: 'Unauthorized to view these notifications' });
+    }
+
     const user = await User.findById(userId);
     // console.log(`Fetching notifications for user: ${user}`);
 

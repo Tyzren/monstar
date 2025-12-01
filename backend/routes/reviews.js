@@ -571,7 +571,7 @@ router.patch(
  * @async
  * @throws {500} if error occurs when sending the report email
  */
-router.post('/send-report', async function (req, res) {
+router.post('/send-report', verifyToken, async function (req, res) {
   // #swagger.tags = ['Reviews']
   // #swagger.summary = 'Send an email corresponding to a user\'s report on a review'
 
