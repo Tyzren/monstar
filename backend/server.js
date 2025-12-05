@@ -57,8 +57,14 @@ app.use(
   })
 );
 
-/* --------------------- Database connection middleware --------------------- */
+/* --------------------------- CSRF Token endpoint -------------------------- */
+app.get('/api/v1/csrf-token', (req, res) => {
+  // #swagger.tags = ['CSRF']
+  // #swagger.summary = 'Get CSRF token'
+  res.json({ csrfToken: req.csrfToken() });
+});
 
+/* --------------------- Database connection middleware --------------------- */
 app.use(async (req, res, next) => {
   try {
     await dbConnect();
@@ -67,13 +73,6 @@ app.use(async (req, res, next) => {
     console.error('Database connection failed:', err);
     res.status(500).json({ error: 'Database connection failed' });
   }
-});
-
-/* --------------------------- CSRF Token endpoint -------------------------- */
-app.get('/api/v1/csrf-token', (req, res) => {
-  // #swagger.tags = ['CSRF']
-  // #swagger.summary = 'Get CSRF token'
-  res.json({ csrfToken: req.csrfToken() });
 });
 
 /* --------------------------------- Routes --------------------------------- */
