@@ -4,7 +4,6 @@ require('dotenv').config();
 // Module Imports
 const express = require('express');
 const mongoose = require('mongoose');
-const cron = require('node-cron');
 const cors = require('cors');
 const app = express();
 const cookieParser = require('cookie-parser');
