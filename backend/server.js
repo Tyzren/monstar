@@ -11,8 +11,7 @@ const csrf = require('csurf');
 const tagManager = require('./services/tagManager.service');
 const aiOverviewService = require("./services/aiOverview.service");
 const { setupSwagger } = require('./docs/swagger');
-const { exec } = require('child_process');
-const path = require('path');
+const { dbConnect } = require("./services/mongodb.service");
 
 // Router Imports
 const UnitRouter = require('./routes/units');
