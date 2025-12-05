@@ -124,7 +124,7 @@ if (require.main === module) {
         console.error('Initial tag update failed', e);
       }
 
-      app.listen(POST, (err) => {
+      app.listen(PORT, (err) => {
         if (err) console.error(err);
         console.log(`Server running on port ${PORT}`);
       });
