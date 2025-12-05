@@ -102,50 +102,7 @@ connect(url)
   .catch((error) => console.log(error));
 
 // === Services ===
-// Update the most reviews tag every hour
-cron.schedule('0 * * * *', async function () {
-  await tagManager.updateMostReviewsTag(1);
-});
-
-// Generate sitemaps daily at 3:00 AM
-cron.schedule('0 3 * * *', function () {
-  console.log('[Cron] Running daily sitemap generation...');
-
-  // Path to the sitemap generator script
-  const scriptPath = path.join(__dirname, 'utils', 'generate-sitemap.js');
-
-  // Use Node to execute the script
-  exec(`node ${scriptPath}`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`[Cron] Sitemap generation error: ${error.message}`);
-      return;
-    }
-
-    if (stderr) {
-      console.error(`[Cron] Sitemap stderr: ${stderr}`);
-      return;
-    }
-
-    console.log(`[Cron] Sitemap generation complete: ${stdout}`);
-  });
-});
-
-// Regenerate AI unit overviews ahead of each semester (Feb 1 & Jun 1 at 02:00)
-cron.schedule('0 2 1 2 *', async function () {
-  console.log('[Cron] Running Semester 1 AI overview refresh');
-  await aiOverviewService.generateOverviewsForAllUnits({
-    force: true,
-    delayMs: 750,
-  });
-});
-
-cron.schedule('0 2 1 6 *', async function () {
-  console.log('[Cron] Running Semester 2 AI overview refresh');
-  await aiOverviewService.generateOverviewsForAllUnits({
-    force: true,
-    delayMs: 750,
-  });
-});
+// TODO: Use vercel-cron for jobs, node-cron doesn't work on vercel.
 
 // === Catch all route (Production Mode) ===
 // === Export for Vercel ===
