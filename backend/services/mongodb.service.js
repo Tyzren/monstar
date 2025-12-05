@@ -13,21 +13,26 @@ if (!cached) {
 async function dbConnect() {
   // 1. Return existing connection if ready
   if (cached.conn) {
-    return cached.conn;
+    if (mongoose.connection.readyState === 1) {
+      return cached.conn;
+    }
+
+    cached.conn = null;
+    cached.promise = null;
   }
 
   // 2. If no promise exists, create one (Atomic lock)
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      maxPoolSize: 1, 
+      maxPoolSize: 1,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 10_000,
       family: 4,
     };
 
     mongoose.set('strictQuery', false);
-    
+
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
     });
