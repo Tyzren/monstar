@@ -6,11 +6,7 @@ const { storage, cloudinary } = require('../utils/cloudinary');
 const multer = require('multer');
 const upload = multer({ storage });
 const { verifyToken, verifyAdmin } = require('../utils/verify_token.js');
-const {
-  generateAccessToken,
-  generateRefreshToken,
-  hashRefreshToken,
-} = require('../utils/token.js');
+const TokenService = require('../services/token.service.js');
 const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
 
@@ -93,21 +89,75 @@ router.post('/google/authenticate', async function (req, res) {
         .json({ message: 'Account already exists as non-Google account.' });
     }
 
-    // Create json web token
-    const token = jwt.sign(
-      { id: user._id, isAdmin: user.admin },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
+    const accessToken = TokenService.generateAccessToken(user._id, user.admin);
+    const refreshToken = TokenService.generateRefreshToken();
+    user.refreshToken = TokenService.hashRefreshToken(refreshToken);
+    user.refreshTokenExpires = new Date(
+      Date.now() + TokenService.REFRESH_TOKEN_EXPIRY
     );
+    await user.save();
 
     // Return response as cookie with access token and user data.
     return res
-      .cookie('access_token', token, {
+      .cookie('access_token', accessToken, {
         httpOnly: true,
         sameSite: 'strict',
+        maxAge: TokenService.ACCESS_TOKEN_EXPIRY,
+      })
+      .cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: TokenService.REFRESH_TOKEN_EXPIRY,
       })
       .status(200)
       .json({ message: 'Login successful', data: user });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/refresh', async function (req, res) {
+  // #swagger.tags = ['Auth']
+  // #swagger.summary = 'Refresh access token using refresh token'
+
+  const { refresh_token } = req.cookies;
+  if (!refresh_token) {
+    return res.status(401).json({ error: 'No refresh token provided' });
+  }
+
+  try {
+    const hashedToken = hashRefreshToken(refresh_token);
+    const user = await User.findOne({
+      refreshToken: hashedToken,
+      refreshTokenExpires: { $gt: Date.now() },
+    });
+    if (!user) {
+      return res
+        .status(403)
+        .json({ error: 'Invalid or expired refresh token' });
+    }
+
+    const newAccessToken = generateAccessToken(user._id, user.admin);
+    const newRefreshToken = generateRefreshToken();
+    user.refreshToken = hashRefreshToken(newRefreshToken);
+    user.refreshTokenExpires = new Date(
+      Date.now() + TokenService.REFRESH_TOKEN_EXPIRY
+    );
+    await user.save();
+
+    return res
+      .cookie('access_token', newAccessToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: TokenService.ACCESS_TOKEN_EXPIRY,
+      })
+      .cookie('refresh_token', newRefreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: TokenService.REFRESH_TOKEN_EXPIRY,
+      })
+      .status(200)
+      .json({ message: 'Token refreshed successfully' });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -195,8 +245,9 @@ router.post('/logout', verifyToken, async function (req, res) {
   // #swagger.summary = 'Clear the token cookie to log the user out'
 
   try {
-    // Clear the cookie
+    // Clear cookies
     res.clearCookie('access_token', { httpOnly: true, sameSite: 'strict' });
+    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'strict' });
 
     // Respond with success message
     return res.status(200).json({ message: 'Logged out successfully' });
