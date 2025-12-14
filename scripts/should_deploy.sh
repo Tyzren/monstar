@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Determines which git files changes will trigger deployment on Vercel.
+# Exit 0 = Skip deployment
+# Exit 1 = Proceed with deployment
+
+echo "Checking if deployment should proceed..."
+
+# If there's no previous deployment SHA, always deploy.
+if [[ -z "$VERCEL_GIT_PREVIOUS_SHA" ]]; then
+  echo "No previous deployment found. Proceeding with deployment."
+  exit 1
+fi
+
+echo "Comparing $VERCEL_GIT_PREVIOUS_SHA (previous) with $VERCEL_GIT_COMMIT_SHA (current)..."
+
+# Check if any files other than documentation/config files were changed
+if git diff "$VERCEL_GIT_PREVIOUS_SHA" "$VERCEL_GIT_COMMIT_SHA" --quiet -- . \
+  ':(exclude)*.md' \
+  ':(exclude)LICENSE' \
+  ':(exclude).gitignore' \
+  ':(exclude).gitattributes' \
+  ':(exclude).prettierrc*' \
+  ':(exclude).prettierignore' \
+  ':(exclude).eslintrc*' \
+  ':(exclude).eslintignore' \
+  ':(exclude).editorconfig' \
+  ':(exclude).env.tempate' \
+  ':(exclude).mcp.json' \
+  ':(exclude).claude/**' \
+  ':(exclude).vscode/**' \
+  ':(exclude).idea/**' \
+  ':(exclude)bruno/**' \
+  ':(exclude)docs/**'; then
+  echo "Only documentation/config files changed. Skipping deployment."
+  exit 0
+else
+  echo "Code changes detected. Proceeding with deployment."
+  exit 1
+fi
