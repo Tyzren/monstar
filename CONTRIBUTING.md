@@ -6,10 +6,7 @@ Contributions are welcome, monash uni students preferred.
 
 ### Prerequisites
 
-Make sure you have these installed:
-- Node.js
-- Angular CLI
-- MongoDB (we use atlas)
+Make sure you have these node.js, angular, and mongodb installed.
 
 ### Setup Instructions
 
