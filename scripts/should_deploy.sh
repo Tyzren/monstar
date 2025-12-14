@@ -17,6 +17,8 @@ echo "Comparing $VERCEL_GIT_PREVIOUS_SHA (previous) with $VERCEL_GIT_COMMIT_SHA 
 # Check if any files other than documentation/config files were changed
 if git diff "$VERCEL_GIT_PREVIOUS_SHA" "$VERCEL_GIT_COMMIT_SHA" --quiet -- . \
   ':(exclude)*.md' \
+  ':(exclude)*.drawio' \
+  ':(exclude)*.dio' \
   ':(exclude)LICENSE' \
   ':(exclude).gitignore' \
   ':(exclude).gitattributes' \
