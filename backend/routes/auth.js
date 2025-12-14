@@ -126,7 +126,7 @@ router.post('/refresh', async function (req, res) {
   }
 
   try {
-    const hashedToken = hashRefreshToken(refresh_token);
+    const hashedToken = TokenService.hashRefreshToken(refresh_token);
     const user = await User.findOne({
       refreshToken: hashedToken,
       refreshTokenExpires: { $gt: Date.now() },
@@ -137,9 +137,9 @@ router.post('/refresh', async function (req, res) {
         .json({ error: 'Invalid or expired refresh token' });
     }
 
-    const newAccessToken = generateAccessToken(user._id, user.admin);
-    const newRefreshToken = generateRefreshToken();
-    user.refreshToken = hashRefreshToken(newRefreshToken);
+    const newAccessToken = TokenService.generateAccessToken(user._id, user.admin);
+    const newRefreshToken = TokenService.generateRefreshToken();
+    user.refreshToken = TokenService.hashRefreshToken(newRefreshToken);
     user.refreshTokenExpires = new Date(
       Date.now() + TokenService.REFRESH_TOKEN_EXPIRY
     );
