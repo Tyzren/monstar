@@ -239,12 +239,18 @@ router.delete('/delete/:userId', verifyToken, async function (req, res) {
  *
  * @async
  * @returns {JSON} Responds with a success message in JSON
+ * @throws {500} If an error occurs during logout
  */
 router.post('/logout', verifyToken, async function (req, res) {
   // #swagger.tags = ['Auth']
-  // #swagger.summary = 'Clear the token cookie to log the user out'
+  // #swagger.summary = 'Clear the token cookies and invalidate refresh token in database'
 
   try {
+    // Invalidate refresh token in database to prevent token reuse
+    await User.findByIdAndUpdate(req.user.id, {
+      $unset: { refreshToken: 1, refreshTokenExpires: 1 }
+    });
+
     // Clear cookies
     res.clearCookie('access_token', { httpOnly: true, sameSite: 'strict' });
     res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'strict' });
