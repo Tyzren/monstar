@@ -22,8 +22,7 @@ Make sure you have these node.js, angular, and mongodb installed.
    npm install -g @angular/cli@18
 
    # Install all project dependencies
-   npm install
-   cd frontend && npm install --legacy-peer-deps
+   cd frontend && npm install
    cd ../backend && npm install
    ```
 
@@ -49,6 +48,9 @@ Make sure you have these node.js, angular, and mongodb installed.
 # Development
 cd backend && node server.js # Starts backend server at localhost:8080
 cd frontend && ng serve # Starts frontend server at localhost:4200
+
+# If can use make
+make dev # Starts both backend and frontend servers
 
 # Production build (remember to set DEVELOPMENT=false in .env)
 cd frontend && ng build
