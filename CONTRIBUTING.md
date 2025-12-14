@@ -1,21 +1,15 @@
 # 👥 Contributing to MonSTAR
 
-We welcome contributions from the Monash community! Whether you're fixing bugs, adding features, or improving documentation, your help makes MonSTAR better for everyone.
+Contributions are welcome, monash uni students preferred.
 
-## 🎯 Development Philosophy
-
-- **Single Branch Strategy**: We use `main` for both development and production
-- **Environment-Based Configuration**: No more branch conflicts or complicated deployments
-- **Student-First**: Every feature should benefit the student experience
-
-## 🚀 Getting Started with Development
+## 🚀 Getting Started with Dev
 
 ### Prerequisites
 
 Make sure you have these installed:
-- Node.js (v20.15.1 or higher)
-- Angular CLI (v18.2.14)
-- MongoDB
+- Node.js
+- Angular CLI
+- MongoDB (we use atlas)
 
 ### Setup Instructions
 
@@ -52,7 +46,7 @@ Make sure you have these installed:
 
 ## 🛠️ Development Workflow
 
-### Development Commands
+### Development commands
 
 ```shell
 # Development
@@ -64,7 +58,7 @@ cd frontend && ng build
 cd backend && node server.js
 ```
 
-### Development Modes
+### Development modes
 
 **Development Mode** (`DEVELOPMENT=true`):
 - Backend enables CORS for frontend communication
@@ -78,49 +72,46 @@ cd backend && node server.js
 
 ## 📝 Contribution Guidelines
 
-### Code Style
+### Code style
 - Follow existing code conventions in the project
 - Use meaningful variable and function names
 - Comment complex logic where necessary
 
-### Commit Messages
-- Use clear, descriptive commit messages
-- Follow the format: `type: description`
-- Examples: `feat: add unit review functionality`, `fix: resolve login authentication issue`
+### Commit messages
+- Use [conventional commit messages](https://gist.github.com/Zekfad/f51cb06ac76e2457f11c80ed705c95a3)
 
 ### Pull Request Process
 
-1. **Create a Feature Branch**
+1. **Create a Branch**
    ```shell
-   git checkout -b feature/your-feature-name
+   git switch -c thisisabranch
    ```
 
 2. **Make Your Changes**
    - Write clean, well-documented code
-   - Test your changes thoroughly
-   - Ensure all existing tests pass
+   - Test your changes
 
 3. **Submit a Pull Request**
    - Provide a clear description of your changes
    - Reference any related issues
    - Include screenshots for UI changes
 
-### What We're Looking For
+### What you can add to this project
 
 - **Bug Fixes**: Help us squash those pesky bugs
 - **Feature Enhancements**: Improve existing functionality
-- **New Features**: Add value for Monash students
+- **New Features**: Add value for Monash students (contact jenul15ferdinand@gmail.com first, let's chat about it)
 - **Documentation**: Help others understand and contribute
 - **Performance Improvements**: Make MonSTAR faster and more efficient
 
-## 🤝 Community Guidelines
+## 🤝 Guidelines
 
 - **Be Respectful**: We're all here to learn and improve
 - **Be Constructive**: Provide helpful feedback and suggestions
 - **Be Patient**: Remember that we're all volunteers with other commitments
 - **Have Fun**: Building something great for fellow students should be enjoyable!
 
-## 📞 Need Help?
+## 📞 Support
 
 If you have questions about contributing or need help getting started:
 
