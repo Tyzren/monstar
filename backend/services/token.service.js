@@ -9,7 +9,7 @@ class TokenService {
         return jwt.sign(
             { id: userId, isAdmin },
             process.env.JWT_SECRET,
-            { expiresIn: this.ACCESS_TOKEN_EXPIRY },
+            { expiresIn: this.ACCESS_TOKEN_EXPIRY.toString() },
         );
     };
 
