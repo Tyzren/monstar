@@ -6,6 +6,11 @@ const { storage, cloudinary } = require('../utils/cloudinary');
 const multer = require('multer');
 const upload = multer({ storage });
 const { verifyToken, verifyAdmin } = require('../utils/verify_token.js');
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  hashRefreshToken,
+} = require('../utils/token.js');
 const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
 
@@ -48,12 +53,10 @@ router.post('/google/authenticate', async function (req, res) {
 
     // Invalid email error case
     if (!studentEmailRegex.test(email) && !staffEmailRegex.test(email)) {
-      return res
-        .status(403)
-        .json({
-          error:
-            'Access denied: Only students with a valid Monash email can log in.',
-        });
+      return res.status(403).json({
+        error:
+          'Access denied: Only students with a valid Monash email can log in.',
+      });
     }
 
     // Check if the user already exists
@@ -129,11 +132,9 @@ router.get('/', verifyAdmin, async function (req, res) {
     return res.status(200).json(users);
   } catch (error) {
     // Handle general errors
-    return res
-      .status(500)
-      .json({
-        error: `An error occured while getting all Users: ${error.message}`,
-      });
+    return res.status(500).json({
+      error: `An error occured while getting all Users: ${error.message}`,
+    });
   }
 });
 
@@ -265,12 +266,10 @@ router.put('/update/:userId', verifyToken, async function (req, res) {
     await targetUser.save();
 
     // Return status 200 sending success message and updated user data
-    return res
-      .status(200)
-      .json({
-        message: 'User details successfully updated',
-        username: targetUser.username,
-      });
+    return res.status(200).json({
+      message: 'User details successfully updated',
+      username: targetUser.username,
+    });
   } catch (error) {
     // Handle general errors status 500
     return res
@@ -357,12 +356,10 @@ router.post(
       await user.save();
 
       // Respond with status 200 and json containing success message and profile image
-      return res
-        .status(200)
-        .json({
-          message: 'Avatar uploaded successfully',
-          profileImg: user.profileImg,
-        });
+      return res.status(200).json({
+        message: 'Avatar uploaded successfully',
+        profileImg: user.profileImg,
+      });
     } catch (error) {
       return res
         .status(500)
