@@ -10,55 +10,32 @@ const Notification = require('./notification.js');
 
 // User Schema
 const userSchema = new Schema({
-  // Email
   email: { type: String, required: true },
-
-  // Username
   username: { type: String, required: false },
-
-  // Password NOT required for Google users
   password: { type: String, required: false },
-
-  // If user signed in using Google Auth
   isGoogleUser: { type: Boolean, default: false },
-
-  // Unique Google Identifier if Google User
   googleID: { type: String, default: null },
-
-  // Created reviews
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
-
-  // Profile picture
   profileImg: { type: String, required: false },
-
-  // Admin
   admin: { type: Boolean, default: false },
 
-  // Email verified status
   verified: { type: Boolean, default: false },
-  // Email verification token
   verificationToken: { type: String, required: false },
-  // Email verification token expiration
   verificationTokenExpires: { type: Date, required: false },
-  // Number of verification emails sent
   verificationEmailsSent: { type: Number, default: 0 },
-  // Timestamp of the last verification email sent
   lastVerificationEmail: { type: Date, required: false },
 
-  // Password reset token
   resetPasswordToken: { type: String, required: false },
-  // Password reset token expiry
   resetPasswordExpires: { type: Date, required: false },
-  // Rate limiting for password reset
   resetPasswordEmailsSent: { type: Number, default: 0 },
   lastResetPasswordEmail: { type: Date, required: false },
 
-  // Liked reviews
+  refreshToken: { type: String, required: false },
+  refreshTokenExpires: { type: Date, required: false },
+
   likedReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
-  // Disliked reviews
   dislikedReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
 
-  // Notifications
   notifications: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'Notification', default: [] },
   ],
