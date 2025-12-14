@@ -69,7 +69,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             // Refresh failed - log out user and redirect to home
             isRefreshing = false;
             authService.logout();
-            router.navigate(['/']);
             return throwError(() => refreshError)
           })
         );
@@ -81,7 +80,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
        */
       if (error.status === 403 && req.url.includes('/auth/refresh')) {
         authService.logout();
-        router.navigate(['/']);
       }
 
       // Re-throw all other errors for normal error handling
