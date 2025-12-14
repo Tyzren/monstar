@@ -4,6 +4,17 @@
       "year": 2025,
       "entries": [
         {
+          "month": 11,
+          "content": {
+            "Optimised Database": [
+              "The MongoDB Atlas database had to be tweaked to support serverless."
+            ],
+            "Migration from Akamai to Vercel": [
+              "We migrated our deployment from a monolith instance hosted on Akamai, to serverless on Vercel."
+            ]
+          }
+        },
+        {
           "month": 10,
           "content": {
             "Unit List Fixes": [
