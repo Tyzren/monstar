@@ -30,6 +30,9 @@ const userSchema = new Schema({
   resetPasswordEmailsSent: { type: Number, default: 0 },
   lastResetPasswordEmail: { type: Date, required: false },
 
+  refreshToken: { type: String, required: false },
+  refreshTokenExpires: { type: Date, required: false },
+
   likedReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
   dislikedReviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
 
