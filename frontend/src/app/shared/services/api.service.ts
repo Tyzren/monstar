@@ -21,13 +21,13 @@ interface ReportPayload {
 export class ApiService {
   // The URL of where the API Server is located
   private url = environment.apiUrl;
-
+  private urlV2 = environment.apiV2Url;
 
   // ! Inject HttpClient
   constructor(
     private http: HttpClient,
   ) { }
-  
+
   /**
    * * GET Get All Reviews
    * 
@@ -122,8 +122,8 @@ export class ApiService {
    */
   toggleReactionPATCH(reviewId: string, userId: string, reactionType: 'like' | 'dislike'): Observable<any> {
     return this.http.patch<any>(
-      `${this.url}/reviews/toggle-reaction/${reviewId}`, 
-      { userId, reactionType }, 
+      `${this.url}/reviews/toggle-reaction/${reviewId}`,
+      { userId, reactionType },
       { withCredentials: true }
     ).pipe(
       tap({
@@ -182,7 +182,7 @@ export class ApiService {
           // ? Debug log
           // console.log('ApiService | Error whilst fetching all units:', error.error);
         }
-      })  
+      })
     );
   }
 
@@ -195,7 +195,7 @@ export class ApiService {
    */
   getPopularUnitsGET(): Observable<Unit[]> {
     return this.http.get<Unit[]>(
-      `${this.url}/units/popular`
+      `${this.urlV2}/units/popular`
     ).pipe(
       tap({
         next: (response) => {
@@ -273,7 +273,7 @@ export class ApiService {
       })
     );
   }
-    
+
   /**
    * * POST Create a Review for a Unit
    * 
@@ -284,7 +284,7 @@ export class ApiService {
    * @returns {Observable<any>} An observable containing the response from the server
    */
   createReviewForUnitPOST(unitcode: string, review: Review): Observable<any> {
-    return this.http.post(`${this.url}/reviews/${unitcode}/create`, { 
+    return this.http.post(`${this.url}/reviews/${unitcode}/create`, {
       review_title: review.title,
       review_semester: review.semester,
       review_grade: review.grade,
@@ -346,16 +346,16 @@ export class ApiService {
   editReviewPUT(review: Review): Observable<any> {
     return this.http.put(
       `${this.url}/reviews/update/${review._id}`, {
-        title:            review.title,
-        semester:         review.semester,
-        grade:            review.grade,
-        year:             review.year,
-        overallRating:    review.overallRating,
-        relevancyRating:  review.relevancyRating,
-        facultyRating:    review.facultyRating,
-        contentRating:    review.contentRating,
-        description:      review.description,
-      }, { withCredentials: true }).pipe(
+      title: review.title,
+      semester: review.semester,
+      grade: review.grade,
+      year: review.year,
+      overallRating: review.overallRating,
+      relevancyRating: review.relevancyRating,
+      facultyRating: review.facultyRating,
+      contentRating: review.contentRating,
+      description: review.description,
+    }, { withCredentials: true }).pipe(
       tap({
         next: (response) => {
           // ? Debug log
@@ -387,8 +387,8 @@ export class ApiService {
           // console.log('ApiService | Error whilst sending review report:', error)
         }
       });
-   }
-  
+  }
+
 
 
 
