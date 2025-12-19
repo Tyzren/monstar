@@ -44,9 +44,9 @@ install-frontend: ## Install frontend dependencies
 ##@ Testing
 
 benchmark: ## Benchmark APIs with artillery
-	@echo "${YELLOW}Benchmarking APIs...$(NC)"
+	@echo "$(YELLOW)Benchmarking APIs...$(NC)"
 	cd backend && artillery run artillery.yml
-	@echo "${GREEN}Benchmarks of APIs complete$(NC)"
+	@echo "$(GREEN)Benchmarks of APIs complete$(NC)"
 
 ##@ Cleanup
 
