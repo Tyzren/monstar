@@ -52,6 +52,10 @@ const setupSwagger = async (app) => {
           name: 'CSRF',
           description: 'Cross-Site Request Forgery',
         },
+        {
+          name: 'Developer',
+          description: 'Helper endpoints for developers',
+        },
       ],
       securityDefinitions: {
         bearerAuth: {
