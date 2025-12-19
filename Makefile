@@ -41,6 +41,13 @@ install-frontend: ## Install frontend dependencies
 	@echo "$(GREEN)Installing frontend dependencies...$(NC)"
 	cd frontend && npm install
 
+##@ Testing
+
+benchmark: ## Benchmark APIs with artillery
+	@echo "${YELLOW}Benchmarking APIs...$(NC)"
+	cd backend && artillery run artillery.yml
+	@echo "${GREEN}Benchmarks of APIs complete$(NC)"
+
 ##@ Cleanup
 
 clean: ## Remove all node_modules
