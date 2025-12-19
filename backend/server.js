@@ -18,11 +18,13 @@ const { dbConnect } = require('./services/mongodb.service');
 
 /* ----------------------------- Router imports ----------------------------- */
 const UnitRouter = require('./routes/units');
+const UnitsV2Router = require('./routes/v2/units');
 const ReviewRouter = require('./routes/reviews');
 const AuthRouter = require('./routes/auth');
 const NotificationRouter = require('./routes/notifications');
 const GitHubRouter = require('./routes/github');
 const SetuRouter = require('./routes/setus');
+const AdminRouter = require('./routes/admin');
 
 /* ------------------------ Environment configuration ----------------------- */
 const isDevelopment = process.env.DEVELOPMENT === 'true';
@@ -77,11 +79,15 @@ app.use(async (req, res, next) => {
 
 /* --------------------------------- Routes --------------------------------- */
 app.use('/api/v1/units', UnitRouter);
+app.use('/api/v2/units', UnitsV2Router);
 app.use('/api/v1/reviews', ReviewRouter);
 app.use('/api/v1/auth', AuthRouter);
 app.use('/api/v1/notifications', NotificationRouter);
 app.use('/api/v1/github', GitHubRouter);
 app.use('/api/v1/setus', SetuRouter);
+if (isDevelopment && !isProductionMachine) {
+  app.use('/api/admin', AdminRouter);
+}
 
 /* ---------------------------- Swagger ui setup ---------------------------- */
 setupSwagger(app).catch(console.error);
