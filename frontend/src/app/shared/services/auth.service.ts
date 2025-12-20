@@ -73,7 +73,7 @@ export class AuthService {
    *
    * Called automatically by the auth interceptor when the access token expires (after 15 minutes).
    * Uses the long-lived refresh token (stored as httpOnly cookie) to obtain a new access token.
-   * This allows users to stay logged in for 7 days without re-authentication.
+   * This allows users to stay logged in for 180 days without re-authentication.
    *
    * Token Refresh Flow:
    * 1. Access token expires after 15 minutes
@@ -134,7 +134,7 @@ export class AuthService {
    *
    * Token Cleanup:
    * - Access token cookie is cleared (15-minute token)
-   * - Refresh token cookie is cleared (7-day token)
+   * - Refresh token cookie is cleared (180-day token)
    * - Refresh token hash is removed from database
    * - Current user BehaviorSubject is set to null
    *

@@ -4,10 +4,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
 
-/**
- * Flag to prevent multiple simultaneous token refresh requests.
- * When true, other failed requests wait for the ongoing refresh to complete.
- */
+// Flag to prevent multiple token refresh requests
 let isRefreshing = false;
 
 /**
@@ -18,18 +15,7 @@ let isRefreshing = false;
  * 2. Automatically calling the /auth/refresh endpoint using the long-lived refresh token
  * 3. Retrying the original failed request with the new access token
  * 4. Logging out the user if the refresh token is also expired (403 from /refresh)
- *
- * * Token Strategy:
- * - Access tokens expire after 15 minutes
- * - Refresh tokens expire after 7 days
- * - Users stay logged in for 7 days without re-authentication
- * - If refresh token expires, user is logged out and redirected to home
- *
- * * Benefits:
- * - Seamless user experience (no interruption when access token expires)
- * - Enhanced security (short-lived access tokens limit attack window)
- * - Centralized token management (no manual refresh logic in components)
- *
+ * 
  * @param req - The outgoing HTTP request
  * @param next - The next handler in the interceptor chain
  * @returns Observable of the HTTP response, with automatic retry on 401 errors
