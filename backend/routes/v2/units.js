@@ -32,7 +32,8 @@ router.get('/popular', async (req, res) => {
 
     return res.status(200).json(popularUnits);
   } catch (err) {
-    res
+    console.error('Error fetching popular units:', err);
+    return res
       .status(500)
       .json({ message: 'An error occured while fetching popular units.' });
   }
