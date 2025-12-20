@@ -140,6 +140,7 @@ backend/docs/swagger.json
 
 # Sai's scraper
 backend/scraper/
+backend/scrapers/
 
 # Vercel
 .vercel
