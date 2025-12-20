@@ -12,6 +12,7 @@ router.get('/invalidate-cache', async (req, res) => {
 
     res.status(200).json({ message: 'Successfully invalidated all cache' });
   } catch (err) {
+    console.error('Error when invalidating cache:', err);
     res.status(500).json({ message: 'Error when invalidating cache' });
   }
 });
