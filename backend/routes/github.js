@@ -12,6 +12,8 @@ const REPO_NAME = 'monstar';
 
 /**
  * Get GitHub token from environment variables
+ * 
+ * TODO: Check if this is still required now that the repo is public.
  */
 const getGitHubToken = () => {
   return process.env.GITHUB_TOKEN;
