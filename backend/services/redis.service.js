@@ -53,9 +53,9 @@ class CacheService {
                 const keys = await redis.keys(keyOrPattern);
                 if (keys.length > 0) {
                     await redis.del(...keys);
-                } else {
-                    await redis.del(keyOrPattern);
                 }
+            } else {
+                await redis.del(keyOrPattern);
             }
         } catch (err) {
             console.error('Cache invalidation error', err);
