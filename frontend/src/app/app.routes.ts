@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { environment } from '../environments/environment';
 
 // Component Imports
 import { HomeComponent } from './routes/home/home.component';
@@ -23,7 +24,7 @@ export const routes: Routes = [
   // Unit Map
   { path: 'map/:unitcode', component: UnitMapComponent },
   // SETU Data
-  { path: 'setu/:unitCode', component: SetuOverviewComponent },
+  ...(environment.enableSetuCards ? [{ path: 'setu/:unitCode', component: SetuOverviewComponent }] : []),
   // Email Verification
   { path: 'verify-email/:token', component: VerifiedComponent },
   // Reset Password
