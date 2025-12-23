@@ -144,11 +144,33 @@ class AiOverviewService {
     }
 
     let updated = 0;
+    let processed = 0;
+
+    console.log(
+      `[AIOverview] Starting generation for ${units.length} units (force: ${force}, delay: ${delayMs}ms)`
+    );
 
     for (const unit of units) {
-      const { status } = await this.generateOverviewForUnit(unit, { force });
+      processed += 1;
+      console.log(
+        `\n[AIOverview] ========== Processing ${processed}/${units.length}: ${unit.unitCode} ==========`
+      );
+
+      const { status, reason } = await this.generateOverviewForUnit(unit, { force });
+
       if (status === 'updated') {
         updated += 1;
+        console.log(
+          `[AIOverview] ✓ Successfully updated ${unit.unitCode} (${updated} total updates)`
+        );
+      } else if (status === 'skipped') {
+        console.log(
+          `[AIOverview] ⊘ Skipped ${unit.unitCode} (reason: ${reason})`
+        );
+      } else if (status === 'error') {
+        console.log(
+          `[AIOverview] ✗ Error processing ${unit.unitCode} (reason: ${reason})`
+        );
       }
 
       if (delayMs) {
@@ -157,7 +179,10 @@ class AiOverviewService {
     }
 
     console.log(
-      `[AIOverview] Completed generation. Processed: ${units.length}, Updated: ${updated}`
+      `\n[AIOverview] ========== Completed generation ==========`
+    );
+    console.log(
+      `[AIOverview] Processed: ${units.length}, Updated: ${updated}, Skipped: ${processed - updated}`
     );
     return { processed: units.length, updated };
   }
