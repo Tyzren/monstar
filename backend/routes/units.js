@@ -6,7 +6,7 @@ const Unit = require('../models/unit');
 
 // Function Imports
 const { verifyAdmin } = require('../utils/verify_token.js');
-const aiOverviewService = require('../services/aiOverview.service');
+const AiOverviewService = require('../services/aiOverview.service');
 const {
   getSortCriteria,
   requiresReviews,
@@ -414,7 +414,7 @@ router.put('/update/:unitcode', verifyAdmin, async function (req, res) {
  * ! POST Regenerate AI overview for all units
  *
  * @async
- * @param {boolean} force - Regenerate even if cached copy is fresh (default false)
+ * @param {boolean} force - Regenerate even if stored copy is fresh (default false)
  * @param {number} delayMs - Throttle between requests (default service value)
  */
 router.post('/ai-overview/regenerate', verifyAdmin, async function (req, res) {
@@ -423,7 +423,7 @@ router.post('/ai-overview/regenerate', verifyAdmin, async function (req, res) {
 
   try {
     const { force = false, delayMs } = req.body || {};
-    const result = await aiOverviewService.generateOverviewsForAllUnits({
+    const result = await AiOverviewService.generateOverviewsForAllUnits({
       force: Boolean(force),
       delayMs: typeof delayMs === 'number' ? delayMs : undefined,
     });
@@ -458,7 +458,7 @@ router.post(
       const unit = await Unit.findOne({ unitCode });
       if (!unit) return res.status(404).json({ error: 'Unit not found' });
 
-      const result = await aiOverviewService.generateOverviewForUnit(unit, {
+      const result = await AiOverviewService.generateOverviewForUnit(unit, {
         force: Boolean(force),
       });
 
