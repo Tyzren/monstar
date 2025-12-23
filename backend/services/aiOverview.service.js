@@ -182,16 +182,16 @@ const buildPrompt = ({ unit, setuEntries, reviews, totalReviewCount }) => {
     'You summarise Monash University student feedback. Speak as a summariser (e.g. "Students report..."). Highlight consensus, note disagreements, and avoid speculation.';
 
   const unitMeta =
-    `<unit>` +
-    `<code>${escapeXml(unit.unitCode)}</code>` +
-    `<name>${escapeXml(unit.name || '')}</name>` +
-    `<avg-overall>${typeof unit.avgOverallRating === 'number' ? unit.avgOverallRating.toFixed(2) : ''}</avg-overall>` +
-    `<avg-enjoyment>${typeof unit.avgContentRating === 'number' ? unit.avgContentRating.toFixed(2) : ''}</avg-enjoyment>` +
-    `<avg-simplicity>${typeof unit.avgFacultyRating === 'number' ? unit.avgFacultyRating.toFixed(2) : ''}</avg-simplicity>` +
-    `<avg-usefulness>${typeof unit.avgRelevancyRating === 'number' ? unit.avgRelevancyRating.toFixed(2) : ''}</avg-usefulness>` +
-    `<total-reviews>${totalReviewCount}</total-reviews>` +
-    `${buildSetuXml(setuEntries)}` +
-    `${buildReviewsXml(reviews)}` +
+    `<unit>\n` +
+    `  <code>${escapeXml(unit.unitCode)}</code>\n` +
+    `  <name>${escapeXml(unit.name || '')}</name>\n` +
+    `  <avg-overall>${typeof unit.avgOverallRating === 'number' ? unit.avgOverallRating.toFixed(2) : ''}</avg-overall>\n` +
+    `  <avg-enjoyment>${typeof unit.avgContentRating === 'number' ? unit.avgContentRating.toFixed(2) : ''}</avg-enjoyment>\n` +
+    `  <avg-simplicity>${typeof unit.avgFacultyRating === 'number' ? unit.avgFacultyRating.toFixed(2) : ''}</avg-simplicity>\n` +
+    `  <avg-usefulness>${typeof unit.avgRelevancyRating === 'number' ? unit.avgRelevancyRating.toFixed(2) : ''}</avg-usefulness>\n` +
+    `  <total-reviews>${totalReviewCount}</total-reviews>\n` +
+    `  ${buildSetuXml(setuEntries)}\n` +
+    `  ${buildReviewsXml(reviews)}\n` +
     '</unit>';
 
   const task = `${instructions}\n\nUse the XML below as your only source. Produce a concise (3-4 sentences) overview.`;
@@ -203,18 +203,18 @@ const buildReviewsXml = (reviews) => {
 
   const rows = reviews.map((review) => {
     return (
-      `    <review>` +
-      `<title>${escapeXml(review.title || '')}</title>` +
-      `<semester>${escapeXml(review.semester || '')}</semester>` +
-      `<year>${review.year || ''}</year>` +
-      `<grade>${escapeXml(review.grade || '')}</grade>` +
-      `${formatRatings(review)}` +
-      `<description>${sanitiseReviewBody(review.description || '')}</description>` +
-      `</review>`
+      `    <review>\n` +
+      `      <title>${escapeXml(review.title || '')}</title>\n` +
+      `      <semester>${escapeXml(review.semester || '')}</semester>\n` +
+      `      <year>${review.year || ''}</year>\n` +
+      `      <grade>${escapeXml(review.grade || '')}</grade>\n` +
+      `      ${formatRatings(review)}\n` +
+      `      <description>${sanitiseReviewBody(review.description || '')}</description>\n` +
+      `    </review>`
     );
   });
 
-  return `<reviews>\n${rows.join('\n')}\n</reviews>`;
+  return `<reviews>\n${rows.join('\n')}\n  </reviews>`;
 }
 
 const formatRatings = (review) => {
@@ -231,7 +231,7 @@ const formatRatings = (review) => {
   if (typeof review.relevancyRating === 'number') {
     parts.push(`<usefulness>${review.relevancyRating}</usefulness>`);
   }
-  return parts.join('');
+  return parts.length > 0 ? parts.join('\n      ') : '';
 }
 
 const buildSetuXml = (entries) => {
@@ -261,7 +261,7 @@ const buildSetuXml = (entries) => {
     );
   });
 
-  return `<setu>\n${rows.join('\n')}\n</setu>`;
+  return `<setu>\n${rows.join('\n')}\n  </setu>`;
 }
 
 /**
