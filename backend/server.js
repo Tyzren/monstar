@@ -3,7 +3,6 @@ require('dotenv').config();
 
 /* ----------------------------- Module imports ----------------------------- */
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
 const cookieParser = require('cookie-parser');
@@ -12,7 +11,6 @@ const path = require('path');
 
 /* ------------------------- Project module imports ------------------------- */
 const tagManager = require('./services/tagManager.service');
-const aiOverviewService = require('./services/aiOverview.service');
 const { setupSwagger } = require('./docs/swagger');
 const { dbConnect } = require('./services/mongodb.service');
 
