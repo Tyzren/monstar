@@ -26,8 +26,8 @@ class AiOverviewService {
       return null;
     }
 
-    if (!geminiClientPromise) {
-      geminiClientPromise = import('@google/genai')
+    if (!this.geminiClientPromise) {
+      this.geminiClientPromise = import('@google/genai')
         .then(
           ({ GoogleGenAI }) =>
             new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
@@ -41,7 +41,7 @@ class AiOverviewService {
         });
     }
 
-    return geminiClientPromise;
+    return this.geminiClientPromise;
   }
 
   /**
@@ -54,7 +54,7 @@ class AiOverviewService {
       return { status: 'skipped', reason: 'no-reviews' };
     }
 
-    if (!shouldGenerateOverview(unit, force)) {
+    if (!this.shouldGenerateOverview(unit, force)) {
       return { status: 'skipped', reason: 'fresh' };
     }
 
@@ -146,7 +146,7 @@ class AiOverviewService {
     let updated = 0;
 
     for (const unit of units) {
-      const { status } = await generateOverviewForUnit(unit, { force });
+      const { status } = await this.generateOverviewForUnit(unit, { force });
       if (status === 'updated') {
         updated += 1;
       }
@@ -280,7 +280,7 @@ const sanitiseReviewBody = (body = '') => {
 /**
  * Helper to pause between API calls to respect quotas/rate limits.
  */
-sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * Escape characters that would otherwise break XML formatting.
