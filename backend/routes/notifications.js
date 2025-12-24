@@ -2,11 +2,11 @@
 const express = require('express');
 
 // Model Imports
-const User = require('../models/user');
-const Notification = require('../models/notification');
+const { verifyToken } = require('@infra/utilities/verifyToken.js');
+const Notification = require('@models/notification');
+const User = require('@models/user');
 
 // Function Imports
-const { verifyToken } = require('../utils/verify_token.js');
 
 // Router instance
 const router = express.Router();
@@ -46,11 +46,9 @@ router.get('/user/:userId', verifyToken, async function (req, res) {
   } catch (error) {
     // Handle any errors that occur during the process
     console.error(`An error occurred: ${error.message}`);
-    return res
-      .status(500)
-      .json({
-        error: `An error occurred while fetching notificatons: ${error.message}`,
-      });
+    return res.status(500).json({
+      error: `An error occurred while fetching notificatons: ${error.message}`,
+    });
   }
 });
 

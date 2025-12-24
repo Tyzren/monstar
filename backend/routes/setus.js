@@ -1,14 +1,8 @@
-// Module Imports
 const express = require('express');
 
-// Model Imports
-const Unit = require('../models/unit');
-const SETU = require('../models/setu');
+const { verifyAdmin } = require('@infra/utilities/verifyToken.js');
+const SETU = require('@models/setu');
 
-// Function Imports
-const { verifyAdmin } = require('../utils/verify_token.js');
-
-// Router instance
 const router = express.Router();
 
 /**

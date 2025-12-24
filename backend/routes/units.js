@@ -1,17 +1,13 @@
-// Module Imports
 const express = require('express');
 
-// Model Imports
-const Unit = require('../models/unit');
-
-// Function Imports
-const { verifyAdmin } = require('../utils/verify_token.js');
 const {
   getSortCriteria,
-  requiresReviews,
+  requiresReviews, // eslint-disable-line
   isValidSortOption,
-} = require('../constants/sortOptions');
-const { buildFilterQuery } = require('../utils/unitFilterHelpers');
+} = require('@constants/sortOptions');
+const { buildFilterQuery } = require('@infra/utilities/unitFilterHelpers.js');
+const { verifyAdmin } = require('@infra/utilities/verifyToken.js');
+const Unit = require('@models/unit');
 
 // Router instance
 const router = express.Router();
@@ -77,8 +73,8 @@ router.get('/popular', async function (req, res) {
 
     // Respond with the popular units
     return res.status(200).json(populatedUnits);
-  } catch (error) {
-    // Handle general errors
+  } catch (err) {
+    console.error('Error occured while fetching popular units:', err);
     res
       .status(500)
       .json({ message: 'An error occured while fetching popular units.' });
@@ -176,8 +172,8 @@ router.get('/filter', async function (req, res) {
       {
         $addFields: {
           reviewCount: { $size: '$reviews' },
-          hasReviews: { $cond: [{ $gt: [{ $size: '$reviews' }, 0] }, 1, 0] }
-        }
+          hasReviews: { $cond: [{ $gt: [{ $size: '$reviews' }, 0] }, 1, 0] },
+        },
       },
     ];
 
@@ -202,8 +198,8 @@ router.get('/filter', async function (req, res) {
       {
         $addFields: {
           reviewCount: { $size: '$reviews' },
-          hasReviews: { $cond: [{ $gt: [{ $size: '$reviews' }, 0] }, 1, 0] }
-        }
+          hasReviews: { $cond: [{ $gt: [{ $size: '$reviews' }, 0] }, 1, 0] },
+        },
       },
       { $count: 'total' },
     ];

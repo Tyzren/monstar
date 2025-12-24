@@ -9,7 +9,7 @@ const redis =
       })
     : null;
 
-class CacheService {
+class CacheProvider {
     static CLIENT = redis;
     static POPULAR_UNITS_TTL = 604800; // 1 week
 
@@ -63,4 +63,4 @@ class CacheService {
     }
 }
 
-module.exports = CacheService;
+module.exports = CacheProvider;

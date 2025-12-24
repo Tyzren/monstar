@@ -1,5 +1,5 @@
-const Unit = require('../models/unit');
-const Review = require('../models/review');
+const Review = require('@models/review');
+const Unit = require('@models/unit');
 
 class TagManager {
   static async updateMostReviewsTag(threshold = 10) {

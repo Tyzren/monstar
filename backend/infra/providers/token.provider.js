@@ -1,0 +1,24 @@
+const crypto = require('crypto');
+
+const jwt = require('jsonwebtoken');
+
+class TokenProvider {
+  static ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000; // 15 minutes
+  static REFRESH_TOKEN_EXPIRY = 180 * 24 * 60 * 60 * 1000; // 180 days
+
+  static generateAccessToken(userId, isAdmin) {
+    return jwt.sign({ id: userId, isAdmin }, process.env.JWT_SECRET, {
+      expiresIn: this.ACCESS_TOKEN_EXPIRY.toString(),
+    });
+  }
+
+  static generateRefreshToken() {
+    return crypto.randomBytes(40).toString('hex');
+  }
+
+  static hashRefreshToken(token) {
+    return crypto.createHash('sha256').update(token).digest('hex');
+  }
+}
+
+module.exports = TokenProvider;

@@ -1,18 +1,15 @@
-// Module Imports
-const express = require('express');
 const axios = require('axios');
+const express = require('express');
 
-// Router instance
 const router = express.Router();
 
-// GitHub API configuration
 const GITHUB_API_BASE = 'https://api.github.com';
 const REPO_OWNER = 'wiredmonash';
 const REPO_NAME = 'monstar';
 
 /**
  * Get GitHub token from environment variables
- * 
+ *
  * TODO: Check if this is still required now that the repo is public.
  */
 const getGitHubToken = () => {
@@ -90,7 +87,6 @@ const getFallbackContributors = () => {
 router.get('/contributors', async (req, res) => {
   // #swagger.tags = ['GitHub']
   // #swagger.summary = 'Fetch contributors from the MonSTAR GitHub repository (If repository is private or API unavailable, returns fallback contributor data)'
-
 
   try {
     const headers = getAuthHeaders();

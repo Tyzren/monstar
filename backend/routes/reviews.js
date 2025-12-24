@@ -3,13 +3,13 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 
 // Model Imports
-const Review = require('../models/review');
-const Unit = require('../models/unit');
-const User = require('../models/user');
-const Notification = require('../models/notification');
+const { verifyToken } = require('@infra/utilities/verifyToken');
+const Notification = require('@models/notification');
+const Review = require('@models/review');
+const Unit = require('@models/unit');
+const User = require('@models/user');
 
 // Function Imports
-const { verifyToken } = require('../utils/verify_token.js');
 
 // Router instance
 const router = express.Router();
@@ -33,11 +33,9 @@ router.get('/', async function (req, res) {
     return res.status(200).json(reviews);
   } catch (error) {
     // Handle general errors
-    return res
-      .status(200)
-      .json({
-        error: `An error occurred while getting all reviews: ${error.message}`,
-      });
+    return res.status(200).json({
+      error: `An error occurred while getting all reviews: ${error.message}`,
+    });
   }
 });
 
@@ -74,11 +72,9 @@ router.get('/:unit', async function (req, res) {
   } catch (error) {
     // Handle any errors that occur during the process
     console.error(`An error occurred: ${error.message}`);
-    return res
-      .status(500)
-      .json({
-        error: `An error occurred while fetching reviews: ${error.message}`,
-      });
+    return res.status(500).json({
+      error: `An error occurred while fetching reviews: ${error.message}`,
+    });
   }
 });
 
@@ -104,11 +100,9 @@ router.get('/user/:userId', async function (req, res) {
     return res.status(200).json(reviews);
   } catch (error) {
     // Handle any errors that occur during the process
-    return res
-      .status(500)
-      .json({
-        error: `An error occurred while fetching reviews: ${error.message}`,
-      });
+    return res.status(500).json({
+      error: `An error occurred while fetching reviews: ${error.message}`,
+    });
   }
 });
 
@@ -127,11 +121,9 @@ router.post('/:unit/create', verifyToken, async function (req, res) {
   try {
     // Verify that the author in the request body matches the authenticated user
     if (req.body.review_author.toString() !== req.user.id.toString()) {
-      return res
-        .status(403)
-        .json({
-          error: 'You are not authorized to created a review for this unit',
-        });
+      return res.status(403).json({
+        error: 'You are not authorized to created a review for this unit',
+      });
     }
 
     // Get the unit code from parameter
@@ -218,11 +210,9 @@ router.post('/:unit/create', verifyToken, async function (req, res) {
     return res.status(201).json(review);
   } catch (error) {
     // Handle general errors 500
-    return res
-      .status(500)
-      .json({
-        error: `An error occured while creating the Review: ${error.message}`,
-      });
+    return res.status(500).json({
+      error: `An error occured while creating the Review: ${error.message}`,
+    });
   }
 });
 
@@ -412,11 +402,9 @@ router.patch(
 
       // Validate reaction type
       if (!['like', 'dislike'].includes(reactionType)) {
-        return res
-          .status(400)
-          .json({
-            error: 'Invalid reaction type. Must be "like" or "dislike"',
-          });
+        return res.status(400).json({
+          error: 'Invalid reaction type. Must be "like" or "dislike"',
+        });
       }
 
       // Fetch all required documents in parallel for better performance
@@ -613,11 +601,9 @@ router.post('/send-report', verifyToken, async function (req, res) {
 
     return res.status(201).json({ message: 'Report email sent' });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        error: `An error occured while sending report email: ${error.message}`,
-      });
+    return res.status(500).json({
+      error: `An error occured while sending report email: ${error.message}`,
+    });
   }
 });
 

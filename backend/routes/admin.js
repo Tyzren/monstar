@@ -1,7 +1,8 @@
 const express = require('express');
-const CacheService = require('../services/redis.service.js');
-const AiOverviewService = require('../services/aiOverview.service.js');
-const Unit = require('../models/unit');
+
+const AiOverviewService = require('@infra/providers/aiOverview.provider');
+const CacheService = require('@infra/providers/cache.provider');
+const Unit = require('@models/unit');
 const router = express.Router();
 
 router.get('/invalidate-cache', async (req, res) => {
@@ -34,8 +35,15 @@ router.post('/ai-overview/regenerate', async function (req, res) {
 
   try {
     const { force = false, delayMs } = req.body || {};
-    console.log('[Admin Route] Parsed params - force:', force, 'delayMs:', delayMs);
-    console.log('[Admin Route] Calling AiOverviewService.generateOverviewsForAllUnits...');
+    console.log(
+      '[Admin Route] Parsed params - force:',
+      force,
+      'delayMs:',
+      delayMs
+    );
+    console.log(
+      '[Admin Route] Calling AiOverviewService.generateOverviewsForAllUnits...'
+    );
 
     const result = await AiOverviewService.generateOverviewsForAllUnits({
       force: Boolean(force),

@@ -1,6 +1,6 @@
-const Unit = require('../models/unit');
-const Review = require('../models/review');
-const SETU = require('../models/setu');
+const Review = require('@models/review');
+const SETU = require('@models/setu');
+const Unit = require('@models/unit');
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 console.log(
@@ -11,7 +11,7 @@ const MAX_REVIEW_TEXT_LENGTH = 800;
 const MAX_SETU_SEASONS = 4;
 const MIN_REGENERATION_DAYS = 120; // roughly every semester
 
-class AiOverviewService {
+class AiOverviewProvider {
   static geminiClientPromise = null;
 
   /**
@@ -156,7 +156,9 @@ class AiOverviewService {
         `\n[AIOverview] ========== Processing ${processed}/${units.length}: ${unit.unitCode} ==========`
       );
 
-      const { status, reason } = await this.generateOverviewForUnit(unit, { force });
+      const { status, reason } = await this.generateOverviewForUnit(unit, {
+        force,
+      });
 
       if (status === 'updated') {
         updated += 1;
@@ -178,9 +180,7 @@ class AiOverviewService {
       }
     }
 
-    console.log(
-      `\n[AIOverview] ========== Completed generation ==========`
-    );
+    console.log(`\n[AIOverview] ========== Completed generation ==========`);
     console.log(
       `[AIOverview] Processed: ${units.length}, Updated: ${updated}, Skipped: ${processed - updated}`
     );
@@ -221,7 +221,7 @@ const buildPrompt = ({ unit, setuEntries, reviews, totalReviewCount }) => {
 
   const task = `${instructions}\n\nUse the XML below as your only source. Produce a concise (3-4 sentences) overview.`;
   return `${task}\n\n${unitMeta}`;
-}
+};
 
 const buildReviewsXml = (reviews) => {
   if (!reviews.length) return '<reviews />';
@@ -240,7 +240,7 @@ const buildReviewsXml = (reviews) => {
   });
 
   return `<reviews>\n${rows.join('\n')}\n  </reviews>`;
-}
+};
 
 const formatRatings = (review) => {
   const parts = [];
@@ -257,7 +257,7 @@ const formatRatings = (review) => {
     parts.push(`<usefulness>${review.relevancyRating}</usefulness>`);
   }
   return parts.length > 0 ? parts.join('\n      ') : '';
-}
+};
 
 const buildSetuXml = (entries) => {
   if (!entries.length) return '<setu />';
@@ -287,7 +287,7 @@ const buildSetuXml = (entries) => {
   });
 
   return `<setu>\n${rows.join('\n')}\n  </setu>`;
-}
+};
 
 /**
  * Normalise review text to reduce token usage while keeping salient details.
@@ -300,7 +300,7 @@ const sanitiseReviewBody = (body = '') => {
       : raw;
 
   return escapeXml(truncated.replace(/\s+/g, ' ').trim());
-}
+};
 
 /**
  * Helper to pause between API calls to respect quotas/rate limits.
@@ -319,8 +319,6 @@ const escapeXml = (value = '') => {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
-}
+};
 
-
-
-module.exports = AiOverviewService;
+module.exports = AiOverviewProvider;

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { CreateError } = require('./error.js');
+
+const { CreateError } = require('@infra/utilities/error.js');
 
 /**
  * * Middleware to verify the JWT token from cookies.
@@ -38,7 +39,7 @@ const verifyUser = (req, res, next) => {
     }
 
     return next(
-      createError(403, 'You are not authorized! You are not a user nor admin.')
+      CreateError(403, 'You are not authorized! You are not a user nor admin.')
     );
   });
 };

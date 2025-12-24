@@ -1,7 +1,8 @@
 const express = require('express');
-const Unit = require('../../models/unit');
+
+const CacheService = require('@infra/providers/cache.provider');
+const Unit = require('@models/unit');
 const router = express.Router();
-const CacheService = require('../../services/redis.service');
 
 router.get('/popular', async (req, res) => {
   // #swagger.tags = ['Units V2']

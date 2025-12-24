@@ -1,6 +1,7 @@
 const fs = require('fs');
-const mongoose = require('mongoose');
 const path = require('path');
+
+const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const MONGODB_URI = process.env.MONGODB_CONN_STRING;
@@ -23,8 +24,8 @@ async function generateSitemaps() {
     console.log('Connected to MongoDB');
 
     // Import Unit Model
-    const Unit = require('../models/unit');
-    const SETU = require('../models/setu');
+    const Unit = require('@models/unit');
+    const SETU = require('@models/setu');
 
     const staticUrls = [
       {

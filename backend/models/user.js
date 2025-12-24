@@ -1,12 +1,10 @@
-// Module Imports
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const { cloudinary } = require('../utils/cloudinary');
 
-// Model imports
-const Review = require('./review.js');
-const Unit = require('./unit.js');
-const Notification = require('./notification.js');
+const { cloudinary } = require('@infra/providers/cloudinary.provider');
+const Notification = require('@models/notification');
+const Review = require('@models/review');
+const Unit = require('@models/unit');
 
 // User Schema
 const userSchema = new Schema({

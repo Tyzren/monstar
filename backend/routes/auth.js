@@ -1,22 +1,21 @@
-// Module imports
-const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { storage, cloudinary } = require('../utils/cloudinary');
-const multer = require('multer');
-const upload = multer({ storage });
-const { verifyToken, verifyAdmin } = require('../utils/verify_token.js');
-const TokenService = require('../services/token.service.js');
+const express = require('express');
 const { OAuth2Client } = require('google-auth-library');
+const jwt = require('jsonwebtoken');
+const multer = require('multer');
+
+const {
+  storage,
+  cloudinary,
+} = require('@infra/providers/cloudinary.provider.js');
+const upload = multer({ storage });
+const TokenService = require('@infra/providers/token.provider.js');
+const { verifyToken, verifyAdmin } = require('@infra/utilities/verifyToken.js');
+const User = require('@models/user');
+
 require('dotenv').config();
 
-// Model imports
-const User = require('../models/user');
-
-// Router instance
 const router = express.Router();
-
-// Google OAuth client instance
 const client = new OAuth2Client();
 
 /**
@@ -41,7 +40,7 @@ router.post('/google/authenticate', async function (req, res) {
 
     const payload = ticket.getPayload();
     // sub is the unique Google ID assigned to the user
-    const { email, name, picture, sub } = payload;
+    const { email, name, picture, sub } = payload; // eslint-disable-line
 
     // Regular expression to validate authcate and email
     const studentEmailRegex = /^[a-zA-Z]{4}\d{4}@student\.monash\.edu$/;
@@ -137,7 +136,10 @@ router.post('/refresh', async function (req, res) {
         .json({ error: 'Invalid or expired refresh token' });
     }
 
-    const newAccessToken = TokenService.generateAccessToken(user._id, user.admin);
+    const newAccessToken = TokenService.generateAccessToken(
+      user._id,
+      user.admin
+    );
     const newRefreshToken = TokenService.generateRefreshToken();
     user.refreshToken = TokenService.hashRefreshToken(newRefreshToken);
     user.refreshTokenExpires = new Date(
@@ -248,7 +250,7 @@ router.post('/logout', verifyToken, async function (req, res) {
   try {
     // Invalidate refresh token in database to prevent token reuse
     await User.findByIdAndUpdate(req.user.id, {
-      $unset: { refreshToken: 1, refreshTokenExpires: 1 }
+      $unset: { refreshToken: 1, refreshTokenExpires: 1 },
     });
 
     // Clear cookies
@@ -368,8 +370,8 @@ router.get('/validate', async function (req, res) {
 
     // Return status 200 success with decoded user data
     return res.status(200).json({ message: 'Authenticated', data: user });
-  } catch (error) {
-    // Invalid access token error
+  } catch (err) {
+    console.error('Invalid token:', err);
     return res.status(403).json({ message: 'Invalid token' });
   }
 });
