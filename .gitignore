@@ -144,3 +144,8 @@ backend/scrapers/
 
 # Vercel
 .vercel
+
+# Claude
+backend/.claude/
+frontend/.claude/
+.claude/

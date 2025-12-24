@@ -1,0 +1,9 @@
+# ESLint config file (uses ES6 modules)
+eslint.config.mjs
+
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/

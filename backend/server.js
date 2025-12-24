@@ -1,28 +1,29 @@
 /* ----------------------- Load environment variables ----------------------- */
 require('dotenv').config();
+require('module-alias/register');
 
 /* ----------------------------- Module imports ----------------------------- */
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const cookieParser = require('cookie-parser');
-const csrf = require('csurf');
 const path = require('path');
 
-/* ------------------------- Project module imports ------------------------- */
-const tagManager = require('./services/tagManager.service');
-const { setupSwagger } = require('./docs/swagger');
-const { dbConnect } = require('./services/mongodb.service');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const csrf = require('csurf');
+const express = require('express');
 
-/* ----------------------------- Router imports ----------------------------- */
-const UnitRouter = require('./routes/units');
-const UnitsV2Router = require('./routes/v2/units');
-const ReviewRouter = require('./routes/reviews');
-const AuthRouter = require('./routes/auth');
-const NotificationRouter = require('./routes/notifications');
-const GitHubRouter = require('./routes/github');
-const SetuRouter = require('./routes/setus');
-const AdminRouter = require('./routes/admin');
+const { setupSwagger } = require('@docs/swagger');
+const { dbConnect } = require('@infra/providers/mongodb.provider');
+const tagManager = require('@infra/providers/tagManager.provider');
+const AdminRouter = require('@routes/admin');
+const AuthRouter = require('@routes/auth');
+const GitHubRouter = require('@routes/github');
+const NotificationRouter = require('@routes/notifications');
+const ReviewRouter = require('@routes/reviews');
+const SetuRouter = require('@routes/setus');
+const UnitRouter = require('@routes/units');
+const UnitsV2Router = require('@routes/v2/units');
+
+/* --------------------------- Initialize Express --------------------------- */
+const app = express();
 
 /* ------------------------ Environment configuration ----------------------- */
 const isDevelopment = process.env.DEVELOPMENT === 'true';
@@ -98,7 +99,7 @@ if (!isDevelopment) {
 }
 
 /* ------------------------ Error handling middleware ----------------------- */
-app.use((obj, req, res, next) => {
+app.use((obj, req, res) => {
   const statusCode = obj.status || 500;
   const message = obj.message || 'Internal server error';
   return res.status(statusCode, {
