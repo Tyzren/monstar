@@ -1,0 +1,849 @@
+[{
+  "_id": {
+    "$oid": "67563e80b190a208ec3b5388"
+  },
+  "unitCode": "acb2420",
+  "name": "Accounting information systems",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "6767b52d58c0b5f554e080e7"
+    },
+    {
+      "$oid": "676cd1cbef6b7873299d52f8"
+    },
+    {
+      "$oid": "67ace2823004f1f8e6d8f6be"
+    }
+  ],
+  "avgOverallRating": 2,
+  "avgRelevancyRating": 2.5,
+  "avgFacultyRating": 1.5,
+  "avgContentRating": 1.5,
+  "level": 2,
+  "creditPoints": 6,
+  "school": "Faculty of Business and Economics",
+  "academicOrg": "Department of Accounting",
+  "scaBand": "4",
+  "requisites": {
+    "permission": false,
+    "prohibitions": [],
+    "corequisites": [],
+    "prerequisites": [
+      {
+        "NumReq": 1,
+        "units": [
+          "ACB1000",
+          "ACB1020",
+          "ACB1100",
+          "ACB1120",
+          "ACB1200",
+          "ACC1000",
+          "ACC1030",
+          "ACC1100",
+          "ACC1200",
+          "ACF1000",
+          "ACF1100",
+          "ACF1200",
+          "ACG1000",
+          "ACG1002",
+          "ACP1000",
+          "ACP1100",
+          "ACP1200",
+          "ACW1000",
+          "ACW1002",
+          "ACW1020",
+          "ACW1100",
+          "ACW1120",
+          "ACW1200",
+          "ACX1100",
+          "ACX1200",
+          "AFC1000",
+          "AFC1021",
+          "AFC1022",
+          "AFC1030",
+          "AFF1000",
+          "AFF1110",
+          "AFF1121",
+          "AFG1002",
+          "AFP1000",
+          "AFW1000",
+          "AFW1001",
+          "AFW1002"
+        ],
+        "_id": {
+          "$oid": "67563e80b190a208ec3b5389"
+        }
+      }
+    ],
+    "cpRequired": 0
+  },
+  "offerings": [
+    {
+      "location": "Peninsula",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S2-01-PENINSULA-ON-CAMPUS",
+      "period": "Second semester",
+      "_id": {
+        "$oid": "67563e80b190a208ec3b538a"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [],
+  "aiOverview": {
+    "summary": "Based on the limited feedback available, students report highly conflicting experiences in Accounting information systems. One student provided extremely low ratings across all categories, while another gave a positive overall score and found the unit highly relevant. This disagreement results in low average ratings for the unit's content and faculty, with a moderate rating for its relevancy.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:29:24.907Z"
+    },
+    "model": "gemini-2.5-pro",
+    "totalReviewsConsidered": 2,
+    "reviewSampleSize": 2,
+    "setuSeasons": [
+      "2023_S2",
+      "2022_S2",
+      "2021_S2",
+      "2020_S2"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "67563e80b190a208ec3b538d"
+  },
+  "unitCode": "acb3120",
+  "name": "Financial accounting 3",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "679304b10983749bc7ee4619"
+    }
+  ],
+  "avgOverallRating": 2,
+  "avgRelevancyRating": 1,
+  "avgFacultyRating": 5,
+  "avgContentRating": 1,
+  "level": 3,
+  "creditPoints": 6,
+  "school": "Faculty of Business and Economics",
+  "academicOrg": "Department of Accounting",
+  "scaBand": "4",
+  "requisites": {
+    "permission": false,
+    "prohibitions": [],
+    "corequisites": [],
+    "prerequisites": [
+      {
+        "NumReq": 1,
+        "units": [
+          "ACB2120",
+          "ACB2491",
+          "ACC2100",
+          "ACC2120",
+          "ACF2100",
+          "ACF2491",
+          "ACG2491",
+          "ACW2120",
+          "ACW2491",
+          "ACX2100",
+          "AFC2120",
+          "AFF2491",
+          "AFG2491",
+          "AFW2491"
+        ],
+        "_id": {
+          "$oid": "67563e80b190a208ec3b538e"
+        }
+      }
+    ],
+    "cpRequired": 0
+  },
+  "offerings": [
+    {
+      "location": "Peninsula",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S2-01-PENINSULA-ON-CAMPUS",
+      "period": "Second semester",
+      "_id": {
+        "$oid": "67563e80b190a208ec3b538f"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [],
+  "aiOverview": {
+    "summary": "Based on the data provided, students report high satisfaction with the faculty. Official university evaluations from recent semesters show positive to very positive overall satisfaction with the unit. However, a single student review contrasts this, rating the unit's content and relevancy as very poor, which resulted in a low overall score from that individual.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:30:01.659Z"
+    },
+    "model": "gemini-2.5-pro",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": [
+      "2022_S2",
+      "2020_S2"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "67563e80b190a208ec3b53a1"
+  },
+  "unitCode": "acc1100",
+  "name": "Introduction to financial accounting",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "679243fe9ec01364d82a99a3"
+    }
+  ],
+  "avgOverallRating": 4,
+  "avgRelevancyRating": 5,
+  "avgFacultyRating": 5,
+  "avgContentRating": 2,
+  "level": 1,
+  "creditPoints": 6,
+  "school": "Faculty of Business and Economics",
+  "academicOrg": "Department of Accounting",
+  "scaBand": "4",
+  "requisites": null,
+  "offerings": [
+    {
+      "location": "Clayton",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S2-01-CLAYTON-ON-CAMPUS",
+      "period": "Second semester",
+      "_id": {
+        "$oid": "67563e80b190a208ec3b53a2"
+      }
+    },
+    {
+      "location": "Clayton",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S1-01-CLAYTON-ON-CAMPUS",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563e80b190a208ec3b53a3"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [],
+  "aiOverview": {
+    "summary": "Students report a positive overall experience, particularly praising the excellent teaching faculty and the high relevance of the unit. There is a strong consensus on these positive aspects, which receive the highest possible ratings. In contrast, feedback indicates significant dissatisfaction with the unit's content, which is identified as an area for improvement.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:30:28.519Z"
+    },
+    "model": "gemini-2.5-pro",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": [
+      "2024_S1",
+      "2023_S2",
+      "2023_S1",
+      "2022_S2"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "67563e7fb190a208ec3b5376"
+  },
+  "unitCode": "acb1020",
+  "name": "Accounting in business",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "67d0173e12b83f8663c2a2f9"
+    }
+  ],
+  "avgOverallRating": 1.7,
+  "avgRelevancyRating": 1,
+  "avgFacultyRating": 1.5,
+  "avgContentRating": 2.5,
+  "level": 1,
+  "creditPoints": 6,
+  "school": "Faculty of Business and Economics",
+  "academicOrg": "Department of Accounting",
+  "scaBand": "4",
+  "requisites": null,
+  "offerings": [
+    {
+      "location": "Peninsula",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S1-01-PENINSULA-ON-CAMPUS",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563e7fb190a208ec3b5377"
+      }
+    }
+  ],
+  "__v": 1,
+  "aiOverview": {
+    "summary": "Students report consistently high overall satisfaction with ACCT1020 (\"Accounting in Business\"), with aggregate mean scores ranging from 4.00 to 4.49 across different semesters.  One single review, however, gives a significantly lower overall rating of 1.7, contrasting sharply with the other data.  This single review also provides lower ratings for content, faculty, and relevancy.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:26:51.901Z"
+    },
+    "model": "gemini-1.5-flash",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": [
+      "2024_S1",
+      "2023_S1",
+      "2022_S1",
+      "2021_S1"
+    ]
+  },
+  "tags": []
+},
+{
+  "_id": {
+    "$oid": "67563e7fb190a208ec3b537e"
+  },
+  "unitCode": "acb2120",
+  "name": "Financial accounting 2",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "67ea84fb34a5858bfaa67b47"
+    }
+  ],
+  "avgOverallRating": 0,
+  "avgRelevancyRating": 0,
+  "avgFacultyRating": 0,
+  "avgContentRating": 0,
+  "level": 2,
+  "creditPoints": 6,
+  "school": "Faculty of Business and Economics",
+  "academicOrg": "Department of Accounting",
+  "scaBand": "4",
+  "requisites": {
+    "permission": false,
+    "prohibitions": [],
+    "corequisites": [],
+    "prerequisites": [
+      {
+        "NumReq": 1,
+        "units": [
+          "ACB1000",
+          "ACB1100",
+          "ACB1120",
+          "ACC1000",
+          "ACC1030",
+          "ACC1100",
+          "ACF1000",
+          "ACF1100",
+          "ACG1000",
+          "ACG1002",
+          "ACP1000",
+          "ACP1100",
+          "ACW1000",
+          "ACW1002",
+          "ACW1100",
+          "ACW1120",
+          "ACX1100",
+          "AFC1000",
+          "AFC1021",
+          "AFC1022",
+          "AFC1030",
+          "AFF1000",
+          "AFF1110",
+          "AFF1121",
+          "AFG1002",
+          "AFP1000",
+          "AFW1000",
+          "AFW1001",
+          "AFW1002"
+        ],
+        "_id": {
+          "$oid": "67563e7fb190a208ec3b537f"
+        }
+      }
+    ],
+    "cpRequired": 0
+  },
+  "offerings": [
+    {
+      "location": "Peninsula",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S1-01-PENINSULA-ON-CAMPUS",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563e7fb190a208ec3b5380"
+      }
+    }
+  ],
+  "__v": 1,
+  "aiOverview": {
+    "summary": "Students report consistently high overall satisfaction with AC2120 Financial Accounting 2, with aggregate mean scores ranging from 3.93 to 4.64 across different semesters.  While most semesters show means above 4.4,  the 2021 S1 semester exhibits a lower mean score of 3.93.  There is a slight discrepancy between mean and median scores in some semesters, suggesting some variation in individual student experiences.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:26:53.615Z"
+    },
+    "model": "gemini-1.5-flash",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": [
+      "2024_S1",
+      "2023_S1",
+      "2022_S1",
+      "2021_S1"
+    ]
+  },
+  "tags": []
+},
+{
+  "_id": {
+    "$oid": "67563e80b190a208ec3b5383"
+  },
+  "unitCode": "acb2220",
+  "name": "Management accounting 1",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "68036b9b433032434e9386b3"
+    }
+  ],
+  "avgOverallRating": 0,
+  "avgRelevancyRating": 0,
+  "avgFacultyRating": 0,
+  "avgContentRating": 0,
+  "level": 2,
+  "creditPoints": 6,
+  "school": "Faculty of Business and Economics",
+  "academicOrg": "Department of Accounting",
+  "scaBand": "4",
+  "requisites": {
+    "permission": false,
+    "prohibitions": [],
+    "corequisites": [],
+    "prerequisites": [
+      {
+        "NumReq": 1,
+        "units": [
+          "ACB1000",
+          "ACB1100",
+          "ACB1120",
+          "ACC1000",
+          "ACC1030",
+          "ACC1100",
+          "ACF1000",
+          "ACF1100",
+          "ACG1000",
+          "ACG1002",
+          "ACP1000",
+          "ACP1100",
+          "ACW1000",
+          "ACW1002",
+          "ACW1100",
+          "ACW1120",
+          "ACX1100",
+          "AFC1000",
+          "AFC1021",
+          "AFC1022",
+          "AFC1030",
+          "AFF1000",
+          "AFF1110",
+          "AFF1121",
+          "AFG1002",
+          "AFP1000",
+          "AFW1000",
+          "AFW1001",
+          "AFW1002"
+        ],
+        "_id": {
+          "$oid": "67563e80b190a208ec3b5384"
+        }
+      }
+    ],
+    "cpRequired": 0
+  },
+  "offerings": [
+    {
+      "location": "Peninsula",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S1-01-PENINSULA-ON-CAMPUS",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563e80b190a208ec3b5385"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [],
+  "aiOverview": {
+    "summary": "Students report generally positive experiences in Management Accounting 1 (ACB2220), with aggregate mean satisfaction scores ranging from 4.15 to 4.57 across different semesters.  While overall satisfaction is consistently high, there is some variation between semesters, with scores showing a slight downward trend from 2023 S1 to 2022 S1.  One review provided unrelated information and did not contribute to the overall assessment.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:26:55.318Z"
+    },
+    "model": "gemini-1.5-flash",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": [
+      "2024_S1",
+      "2023_S1",
+      "2022_S1",
+      "2021_S1"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "67563e7fb190a208ec3b537a"
+  },
+  "unitCode": "acb1120",
+  "name": "Financial accounting 1",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "67ab315583656a75c19b183d"
+    },
+    {
+      "$oid": "67ab352483656a75c19b1853"
+    },
+    {
+      "$oid": "67ab846083656a75c19b1a0f"
+    },
+    {
+      "$oid": "67af635ad2224dbd4b0016b5"
+    },
+    {
+      "$oid": "67bc7c034e9f1329f06f6eea"
+    },
+    {
+      "$oid": "67cbb639ee007b67842ae861"
+    },
+    {
+      "$oid": "67cc1e227351236e854ab598"
+    }
+  ],
+  "avgOverallRating": 2.4333333333333336,
+  "avgRelevancyRating": 3.0833333333333335,
+  "avgFacultyRating": 1.8333333333333333,
+  "avgContentRating": 2.3333333333333335,
+  "level": 1,
+  "creditPoints": 6,
+  "school": "Faculty of Business and Economics",
+  "academicOrg": "Department of Accounting",
+  "scaBand": "4",
+  "requisites": null,
+  "offerings": [
+    {
+      "location": "Peninsula",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S1-01-PENINSULA-ON-CAMPUS",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563e7fb190a208ec3b537b"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [
+    "most-reviews"
+  ],
+  "aiOverview": {
+    "summary": "Based on the data provided for Financial accounting 1 (acb1120), student feedback is highly varied. While official university surveys indicate high and improving overall satisfaction, the average of informal student reviews is low. Students generally report the unit's content is relevant, as this is the most positively rated aspect. There is significant disagreement regarding faculty, however, with teaching staff receiving the lowest average rating.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:31:24.670Z"
+    },
+    "model": "gemini-2.5-pro",
+    "totalReviewsConsidered": 6,
+    "reviewSampleSize": 6,
+    "setuSeasons": [
+      "2024_S1",
+      "2023_S1",
+      "2022_S1",
+      "2021_S1"
+    ]
+  },
+  "updatedAt": {
+    "$date": "2025-11-18T01:38:58.963Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67563f3db190a208ec3ba3db"
+  },
+  "unitCode": "fit2095",
+  "name": "Full stack development",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "67a6c3221a125d802d337ba8"
+    },
+    {
+      "$oid": "67cd89dcbca7eb46bf18d714"
+    }
+  ],
+  "avgOverallRating": 1.25,
+  "avgRelevancyRating": 1.25,
+  "avgFacultyRating": 1.25,
+  "avgContentRating": 1.25,
+  "level": 2,
+  "creditPoints": 6,
+  "school": "Faculty of Information Technology",
+  "academicOrg": "Faculty of Information Technology",
+  "scaBand": "2",
+  "requisites": {
+    "permission": false,
+    "prohibitions": [],
+    "corequisites": [],
+    "prerequisites": [
+      {
+        "NumReq": 1,
+        "units": [
+          "FIT1045",
+          "FIT1048",
+          "FIT1051",
+          "FIT1053"
+        ],
+        "_id": {
+          "$oid": "67563f3db190a208ec3ba3dc"
+        }
+      }
+    ],
+    "cpRequired": 0
+  },
+  "offerings": [
+    {
+      "location": "Clayton",
+      "mode": "A combination of on-campus and online teaching (FLEXIBLE)",
+      "name": "S2-01-CLAYTON-FLEXIBLE",
+      "period": "Second semester",
+      "_id": {
+        "$oid": "67563f3db190a208ec3ba3dd"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [
+    "wam-booster"
+  ],
+  "aiOverview": {
+    "summary": "Based on the available feedback, students present a mixed view. One student reports the content was very valuable and impactful for their learning, though they also note that the teaching team was sometimes difficult to reach. In contrast, a second review provides no substantive feedback and assigns the lowest possible rating. Official university surveys from 2020-2023 consistently indicate high aggregate satisfaction scores for the unit.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:31:36.224Z"
+    },
+    "model": "gemini-2.5-pro",
+    "totalReviewsConsidered": 2,
+    "reviewSampleSize": 2,
+    "setuSeasons": [
+      "2023_S2",
+      "2022_S2",
+      "2021_S2",
+      "2020_S2"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "67563f3bb190a208ec3ba34e"
+  },
+  "unitCode": "fit1049",
+  "name": "IT professional practice",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "67a1b5c4d1bbd8aefbe3aba9"
+    }
+  ],
+  "avgOverallRating": 2,
+  "avgRelevancyRating": 3.5,
+  "avgFacultyRating": 0.5,
+  "avgContentRating": 2,
+  "level": 1,
+  "creditPoints": 6,
+  "school": "Faculty of Information Technology",
+  "academicOrg": "Faculty of Information Technology",
+  "scaBand": "2",
+  "requisites": {
+    "permission": false,
+    "prohibitions": [],
+    "corequisites": [],
+    "prerequisites": [],
+    "cpRequired": 0
+  },
+  "offerings": [
+    {
+      "location": "Clayton",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S1-01-CLAYTON-ON-CAMPUS",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563f3bb190a208ec3ba34f"
+      }
+    },
+    {
+      "location": "Clayton",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S2-01-CLAYTON-ON-CAMPUS",
+      "period": "Second semester",
+      "_id": {
+        "$oid": "67563f3bb190a208ec3ba350"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [
+    "controversial"
+  ],
+  "aiOverview": {
+    "summary": "Students report conflicting views on this unit. A detailed review expresses very low satisfaction with the teaching faculty, while still rating the unit's professional relevancy moderately well. In contrast, official university surveys from the last four semesters, representing a large number of students, show overall satisfaction levels in a more moderate range.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:31:54.285Z"
+    },
+    "model": "gemini-2.5-pro",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": [
+      "2024_S1",
+      "2023_S2",
+      "2023_S1",
+      "2022_S2"
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "67563f43b190a208ec3ba61c"
+  },
+  "unitCode": "fit5145",
+  "name": "Foundations of data science",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "68a294acf0220330059c88ac"
+    }
+  ],
+  "avgOverallRating": 3.3,
+  "avgRelevancyRating": 3.5,
+  "avgFacultyRating": 3,
+  "avgContentRating": 3.5,
+  "level": 5,
+  "creditPoints": 6,
+  "school": "Faculty of Information Technology",
+  "academicOrg": "Faculty of Information Technology",
+  "scaBand": "2",
+  "requisites": {
+    "permission": false,
+    "prohibitions": [],
+    "corequisites": [],
+    "prerequisites": [
+      {
+        "NumReq": 1,
+        "units": [
+          "FIT9131",
+          "FIT9133",
+          "FIT9136"
+        ],
+        "_id": {
+          "$oid": "67563f43b190a208ec3ba61d"
+        }
+      }
+    ],
+    "cpRequired": 0
+  },
+  "offerings": [
+    {
+      "location": "Malaysia",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S1-01-MALAYSIA-ON-CAMPUS",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563f43b190a208ec3ba61e"
+      }
+    },
+    {
+      "location": "Clayton",
+      "mode": "A combination of on-campus and online teaching (FLEXIBLE)",
+      "name": "S1-01-CLAYTON-FLEXIBLE",
+      "period": "First semester",
+      "_id": {
+        "$oid": "67563f43b190a208ec3ba61f"
+      }
+    },
+    {
+      "location": "Clayton",
+      "mode": "A combination of on-campus and online teaching (FLEXIBLE)",
+      "name": "S2-01-CLAYTON-FLEXIBLE",
+      "period": "Second semester",
+      "_id": {
+        "$oid": "67563f43b190a208ec3ba620"
+      }
+    },
+    {
+      "location": "Malaysia",
+      "mode": "Teaching activities are on-campus (ON-CAMPUS)",
+      "name": "S2-01-MALAYSIA-ON-CAMPUS",
+      "period": "Second semester",
+      "_id": {
+        "$oid": "67563f43b190a208ec3ba621"
+      }
+    }
+  ],
+  "__v": 1,
+  "aiOverview": {
+    "summary": "Students consistently report high overall satisfaction with FIT5145, with SETU data indicating aggregate means ranging from 4.17 to 4.48 across multiple semesters.  While one individual review gave a lower overall rating of 3.3,  this contrasts sharply with the overwhelmingly positive SETU feedback.  The single review praised the course content's thoroughness and helpfulness for beginners.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:27:01.670Z"
+    },
+    "model": "gemini-1.5-flash",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": [
+      "2024_S1",
+      "2023_S2",
+      "2023_S1",
+      "2022_S2"
+    ]
+  },
+  "tags": []
+},
+{
+  "_id": {
+    "$oid": "67563f9bb190a208ec3bdbbd"
+  },
+  "unitCode": "mon2750",
+  "name": "Monash innovation guarantee",
+  "description": "",
+  "reviews": [
+    {
+      "$oid": "679850ee8806e92bccd557ba"
+    }
+  ],
+  "avgOverallRating": 4,
+  "avgRelevancyRating": 3,
+  "avgFacultyRating": 5,
+  "avgContentRating": 5,
+  "level": 2,
+  "creditPoints": 6,
+  "school": "Office of the DVC Education and Senior VP",
+  "academicOrg": "Office of the DVC Education and Senior VP",
+  "scaBand": "4",
+  "requisites": null,
+  "offerings": [
+    {
+      "location": "City (Melbourne)",
+      "mode": "On-campus block of classes (BLOCK-ON)",
+      "name": "SSB-01-CITY-BLOCK-ON",
+      "period": "Summer semester B",
+      "_id": {
+        "$oid": "67563f9bb190a208ec3bdbbe"
+      }
+    }
+  ],
+  "__v": 0,
+  "tags": [
+    "wam-booster"
+  ],
+  "aiOverview": {
+    "summary": "Based on student feedback, the teaching team and coaches are reported to be highly supportive. The unit is also described as a good opportunity to earn credit points. While faculty receives high praise, feedback on the unit's content and its overall experience is mixed.",
+    "generatedAt": {
+      "$date": "2025-09-22T11:32:37.085Z"
+    },
+    "model": "gemini-2.5-pro",
+    "totalReviewsConsidered": 1,
+    "reviewSampleSize": 1,
+    "setuSeasons": []
+  }
+}]
