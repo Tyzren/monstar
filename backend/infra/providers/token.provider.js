@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 class TokenProvider {
+  static REFRESH_TOKEN_BYTE_LENGTH = 40;
+
   static ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000; // 15 minutes
   static REFRESH_TOKEN_EXPIRY = 180 * 24 * 60 * 60 * 1000; // 180 days
 
@@ -13,7 +15,7 @@ class TokenProvider {
   }
 
   static generateRefreshToken() {
-    return crypto.randomBytes(40).toString('hex');
+    return crypto.randomBytes(this.REFRESH_TOKEN_SIZE).toString('hex');
   }
 
   static hashRefreshToken(token) {
