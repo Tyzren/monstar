@@ -5,13 +5,13 @@ require('module-alias/register');
 /* ----------------------------- Module imports ----------------------------- */
 const path = require('path');
 
+const errorMiddleware = require('@middleware/error.middleware');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const csrf = require('csurf');
 const express = require('express');
 
 const { setupSwagger } = require('@docs/swagger');
-const errorMiddleware = require('@infra/middleware/errorMiddleware');
 const { dbConnect } = require('@infra/providers/mongodb.provider');
 const tagManager = require('@infra/providers/tagManager.provider');
 const AdminRouter = require('@routes/admin');
