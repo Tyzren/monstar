@@ -11,6 +11,7 @@ const csrf = require('csurf');
 const express = require('express');
 
 const { setupSwagger } = require('@docs/swagger');
+const errorMiddleware = require('@infra/middleware/errorMiddleware');
 const { dbConnect } = require('@infra/providers/mongodb.provider');
 const tagManager = require('@infra/providers/tagManager.provider');
 const AdminRouter = require('@routes/admin');
@@ -99,16 +100,7 @@ if (!isDevelopment) {
 }
 
 /* ------------------------ Error handling middleware ----------------------- */
-app.use((obj, req, res) => {
-  const statusCode = obj.status || 500;
-  const message = obj.message || 'Internal server error';
-  return res.status(statusCode, {
-    success: [200, 201, 204].some((a) => a === obj.status) ? true : false,
-    status: statusCode,
-    message: message,
-    data: obj.data,
-  });
-});
+app.use(errorMiddleware);
 
 /* -------------------------------- Services -------------------------------- */
 // TODO: Use vercel-cron for jobs, node-cron doesn't work on vercel.
