@@ -5,6 +5,16 @@ import prettierConfig from 'eslint-config-prettier';
 
 export default [
   js.configs.recommended,
+  // Global ignores
+  {
+    ignores: [
+      'eslint.config.mjs',
+      'node_modules/',
+      'dist/',
+      'build/',
+      'tests/',
+    ],
+  },
   // Configuration for CommonJS files (.js, .cjs)
   {
     files: ['**/*.js', '**/*.cjs'],
