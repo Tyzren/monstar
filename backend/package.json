@@ -43,6 +43,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "globals": "^16.5.0",
+    "jest": "^30.2.0",
     "nodemon": "3.1.11",
     "prettier": "3.7.3",
     "swagger-autogen": "2.23.7",
@@ -51,9 +52,10 @@
   },
   "_moduleAliases": {
     "@models": "./models",
-    "@routes": "./routes",
+    "@routes": "./infra/routes",
+    "@middleware": "./infra/middleware",
     "@infra": "./infra",
-    "@services": "./services",
+    "@services": "./infra/services",
     "@constants": "./constants",
     "@docs": "./docs"
   }
