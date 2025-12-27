@@ -5,7 +5,6 @@ require('module-alias/register');
 /* ----------------------------- Module imports ----------------------------- */
 const path = require('path');
 
-const errorMiddleware = require('@middleware/error.middleware');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const csrf = require('csurf');
@@ -14,14 +13,7 @@ const express = require('express');
 const { setupSwagger } = require('@docs/swagger');
 const { dbConnect } = require('@infra/providers/mongodb.provider');
 const tagManager = require('@infra/providers/tagManager.provider');
-const AdminRouter = require('@routes/admin');
-const AuthRouter = require('@routes/auth');
-const GitHubRouter = require('@routes/github');
-const NotificationRouter = require('@routes/notifications');
-const ReviewRouter = require('@routes/reviews');
-const SetuRouter = require('@routes/setus');
-const UnitRouter = require('@routes/units');
-const UnitsV2Router = require('@routes/v2/units');
+const errorMiddleware = require('@middleware/error.middleware');
 
 /* --------------------------- Initialize Express --------------------------- */
 const app = express();
@@ -78,15 +70,15 @@ app.use(async (req, res, next) => {
 });
 
 /* --------------------------------- Routes --------------------------------- */
-app.use('/api/v1/units', UnitRouter);
-app.use('/api/v2/units', UnitsV2Router);
-app.use('/api/v1/reviews', ReviewRouter);
-app.use('/api/v1/auth', AuthRouter);
-app.use('/api/v1/notifications', NotificationRouter);
-app.use('/api/v1/github', GitHubRouter);
-app.use('/api/v1/setus', SetuRouter);
+app.use('/api/v1/units', require('./infra/routes/units'));
+app.use('/api/v2/units', require('./infra/routes/v2/units'));
+app.use('/api/v1/reviews', require('./infra/routes/reviews'));
+app.use('/api/v1/auth', require('./infra/routes/auth'));
+app.use('/api/v1/notifications', require('./infra/routes/notifications'));
+app.use('/api/v1/github', require('./infra/routes/github'));
+app.use('/api/v1/setus', require('./infra/routes/setus'));
 if (isDevelopment && !isProductionMachine) {
-  app.use('/api/admin', AdminRouter);
+  app.use('/api/admin', require('./infra/routes/admin'));
 }
 
 /* ---------------------------- Swagger ui setup ---------------------------- */
