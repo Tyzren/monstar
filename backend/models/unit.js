@@ -165,6 +165,5 @@ function arrayLimit(val) {
   return val.length <= 2;
 }
 
-// Export the Unit model
 const Unit = mongoose.model('Unit', UnitSchema);
 module.exports = Unit;

@@ -62,6 +62,5 @@ reviewSchema.pre('save', function (next) {
   next();
 });
 
-// Export the Review model
 const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;

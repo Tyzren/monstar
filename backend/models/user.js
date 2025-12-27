@@ -188,6 +188,5 @@ async function handleUserDeletion(user) {
   }
 }
 
-// Export User model
 const User = mongoose.model('User', userSchema);
 module.exports = User;
