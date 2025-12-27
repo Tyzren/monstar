@@ -21,8 +21,8 @@ class UnitRepository {
       ...pipeline,
       { $sort: { ...sortCriteria, _id: 1 } },
       { $skip: Number(skip) },
-      { $limit: Number(limit) }
-    ]
+      { $limit: Number(limit) },
+    ];
 
     const [units, countResult] = await Promise.all([
       Unit.aggregate(paginatedPipeline),
@@ -32,6 +32,23 @@ class UnitRepository {
     const total = countResult.length > 0 ? countResult[0].total : 0;
 
     return { units, total };
+  }
+
+  /**
+   *
+   */
+  static async queryMostReviewedUnits(n) {
+    return await Unit.aggregate([
+      { $addFields: { reviewCount: { $size: '$reviews' } } },
+      { $sort: { reviewCount: -1 } },
+      { $limit: n },
+    ]).then((units) =>
+      Unit.populate(units, {
+        path: 'reviews',
+        select:
+          'title description overallRating relevancyRating facultyRating contentRating likes dislikes',
+      })
+    );
   }
 }
 
