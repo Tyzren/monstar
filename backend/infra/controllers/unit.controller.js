@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 
 const UnitService = require('@infra/services/unit.service');
+const CacheProvider = require('@providers/cache.provider');
 
 const { isValidSortOption } = require('../../constants/sortOptions');
 
@@ -36,7 +37,13 @@ class UnitController {
    * List most reviewed units
    */
   static listMostReviewed = asyncHandler(async (req, res) => {
-    const mostReviewedUnits = await UnitService.getMostReviewedUnits(10);
+    const mostReviewedUnits = await CacheProvider.getOrSet(
+      'units:popular',
+      async () => {
+        return await UnitService.getMostReviewedUnits(10);
+      },
+      CacheProvider.POPULAR_UNITS_TTL
+    );
     return res.status(200).json(mostReviewedUnits);
   });
 }
