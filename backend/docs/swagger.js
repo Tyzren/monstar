@@ -221,20 +221,15 @@ const setupSwagger = async (app) => {
           customCss: '.swagger-ui .topbar { display: none }',
           customSiteTitle: 'MonSTAR API Documentation',
           swaggerOptions: {
-            docExpansion: 'none', // Collapse all tags by default
-            requestInterceptor: async (req) => {
-              // Fetch CSRF token and add it to requests
-              try {
-                const response = await fetch('/api/v1/csrf-token', {
-                  credentials: 'include'
-                });
-                const data = await response.json();
-                req.headers['X-CSRF-Token'] = data.csrfToken;
-              } catch (err) {
-                console.error('Failed to fetch CSRF token:', err);
-              }
+            docExpansion: 'none',
+            requestInterceptor: asyncHandler(async (req) => {
+              const response = await fetch('/api/v1/csrf-token', {
+                credentials: 'include',
+              });
+              const data = await response.json();
+              req.headers['X-CSRF-Token'] = data.csrfToken;
               return req;
-            },
+            }),
           },
         })
       );
