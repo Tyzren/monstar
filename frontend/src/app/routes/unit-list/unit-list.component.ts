@@ -131,15 +131,15 @@ export class UnitListComponent implements OnInit, OnDestroy {
   ) { }
 
 
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | LIFECYCLE HOOKS                                                            
+   *  ! | LIFECYCLE HOOKS
    *  ! |======================================================================|
    */
 
   /**
    * * Angular lifecycle hook called after the component has been initalised.
-   * 
+   *
    * This method is used to trigger data fetching when the component loads.
    */
   ngOnInit(): void {
@@ -292,7 +292,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
   /**
    * * Updates the filteredUnits array based on the current search query
-   * 
+   *
    * - Updates the URL with the current search
    * - Removes old local storage items
    * - Saves current filters to local storage
@@ -314,7 +314,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
   /**
    * * Handle paginator page change.
-   * 
+   *
    * @param event Paginator event containing the new `first` and `rows` values
    */
   onPageChange(event: any) {
@@ -327,7 +327,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
   /**
    * * Handles changes on sortBy dropdown change
-   * 
+   *
    * - Saves the sortBy option to localStorage
    * - Fetches paginated units again to refresh
    */
@@ -337,21 +337,21 @@ export class UnitListComponent implements OnInit, OnDestroy {
   }
 
 
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | KEYBOARD SHORTCUTS                                                            
+   *  ! | KEYBOARD SHORTCUTS
    *  ! |======================================================================|
    */
 
   /**
    * * Handles focusing via keybinds
-   * 
+   *
    * - CTRL + K: Focuses on search bar
    * - CTRL + F: Focuses on sort by dropdown
    * - Escape: Unfocuses all elements
-   * - Enter: Searches if focused on search bar 
-   * 
-   * @HostListener 
+   * - Enter: Searches if focused on search bar
+   *
+   * @HostListener
    * @param event Keyboard event
    */
   @HostListener('window:keydown', ['$event'])
@@ -405,9 +405,9 @@ export class UnitListComponent implements OnInit, OnDestroy {
   }
 
 
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | META TAGS                                                            
+   *  ! | META TAGS
    *  ! |======================================================================|
    */
 
