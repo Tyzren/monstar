@@ -2,7 +2,7 @@ const Unit = require('@models/unit');
 
 class UnitRepository {
   /**
-   *
+   * Query for units with pagination, filtering, and sorting
    */
   static async queryPaginatedUnits(query, sortCriteria, skip, limit) {
     const pipeline = [
@@ -35,7 +35,7 @@ class UnitRepository {
   }
 
   /**
-   *
+   * Query for N most reviewed units
    */
   static async queryMostReviewedUnits(n) {
     return await Unit.aggregate([
