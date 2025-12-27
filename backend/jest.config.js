@@ -21,7 +21,22 @@ const makeModuleNameMapper = (aliases) => {
 };
 
 module.exports = {
+  preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: makeModuleNameMapper(_moduleAliases),
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.js'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.js$': 'ts-jest',
+  },
+  moduleFileExtensions: ['ts', 'js', 'json', 'node'],
+  testMatch: ['**/tests/**/*.test.[jt]s'],
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        allowJs: true,
+        checkJs: false,
+      },
+    },
+  },
 };

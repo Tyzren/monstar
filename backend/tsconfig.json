@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    // Target & Module
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022"],
+
+    // Output
+    "outDir": "./dist",
+    "rootDir": ".",
+
+    // Module Resolution
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@models/*": ["models/*"],
+      "@routes/*": ["infra/routes/*"],
+      "@middleware/*": ["infra/middleware/*"],
+      "@infra/*": ["infra/*"],
+      "@services/*": ["infra/services/*"],
+      "@constants/*": ["constants/*"],
+      "@docs/*": ["docs/*"]
+    },
+
+    // Type Checking (Start lenient, tighten later)
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+
+    // JavaScript Compatibility
+    "allowJs": true,
+    "checkJs": false,
+
+    // Other Important Options
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage"
+  ]
+}
