@@ -7,16 +7,6 @@ class UnitRepository {
   static async queryPaginatedUnits(query, sortCriteria, skip, limit) {
     const pipeline = [
       { $match: query },
-      // Populate the reviews field for each unit
-      {
-        $lookup: {
-          from: 'reviews',
-          localField: 'reviews',
-          foreignField: '_id',
-          as: 'reviews',
-        },
-      },
-      // Compute the number of reviews for each unit and whether it has reviews
       {
         $addFields: {
           reviewCount: { $size: '$reviews' },
