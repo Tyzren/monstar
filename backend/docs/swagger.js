@@ -234,9 +234,14 @@ const setupSwagger = async (app) => {
         })
       );
 
-      console.log('📚 Swagger UI available at http://localhost:8080/docs');
+      console.log(
+        '[Swagger UI] 📚 Documentation available at http://localhost:8080/docs'
+      );
     } catch (error) {
-      console.warn('⚠️  Failed to setup Swagger documentation:', error.message);
+      console.warn(
+        '[Swagger UI] ⚠️ Failed to setup Swagger documentation:',
+        error.message
+      );
     }
   }
 };
