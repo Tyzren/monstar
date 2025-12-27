@@ -1,43 +1,21 @@
 const express = require('express');
 
-const CacheService = require('@infra/providers/cache.provider');
-const Unit = require('@models/unit');
+const UnitController = require('@controllers/unit.controller');
+
 const router = express.Router();
 
-router.get('/popular', async (req, res) => {
+router.get(
+  '/',
+  // #swagger.tags = ['Units V2']
+  // #swagger.summary = 'Get all units'
+  UnitController.listAll
+);
+
+router.get(
+  '/popular',
   // #swagger.tags = ['Units V2']
   // #swagger.summary = 'Get 10 most popular units'
-
-  try {
-    const popularUnits = await CacheService.getOrSet(
-      'units:popular',
-      async () => {
-        const aggResults = await Unit.aggregate([
-          {
-            $addFields: {
-              reviewCount: { $size: '$reviews' },
-            },
-          },
-          {
-            $sort: { reviewCount: -1 },
-          },
-          {
-            $limit: 10,
-          },
-        ]);
-
-        return aggResults;
-      },
-      CacheService.POPULAR_UNITS_TTL
-    );
-
-    return res.status(200).json(popularUnits);
-  } catch (err) {
-    console.error('Error fetching popular units:', err);
-    return res
-      .status(500)
-      .json({ message: 'An error occurred while fetching popular units.' });
-  }
-});
+  UnitController.listMostReviewed
+);
 
 module.exports = router;
