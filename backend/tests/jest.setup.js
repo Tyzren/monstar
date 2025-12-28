@@ -37,9 +37,12 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  const users = loadJson('./fixtures/users.json');
   const units = loadJson('./fixtures/units.json');
   const reviews = loadJson('./fixtures/reviews.json');
 
+  if (users.length)
+    await mongoose.connection.collection('users').insertMany(users);
   if (units.length)
     await mongoose.connection.collection('units').insertMany(units);
   if (reviews.length)
