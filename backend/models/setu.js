@@ -3,45 +3,20 @@ const { Schema } = mongoose;
 
 const setuSchema = new Schema(
   {
-    // Unit code, e.g., "FIT1008"
-    unit_code: {
-      type: String,
-      required: true,
-      index: true,
-    },
-    // Unit name, e.g., "Introduction to Computer Science"
-    unit_name: {
-      type: String,
-      required: true,
-    },
+    unit_code: { type: String, required: true, index: true },
+    unit_name: { type: String, required: true },
     // Extended code with location and delivery info
-    code: {
-      type: String,
-      required: true,
-    },
+    code: { type: String, required: true },
     // Season of the SETU, e.g. "2019_S1" for Semester 1, 2019
-    Season: {
-      type: String, // e.g. "2019_S1"
-      required: true,
-    },
+    Season: { type: String, required: true },
     // Number of students who completed the SETU
-    Responses: {
-      type: Number,
-      required: true,
-    },
+    Responses: { type: Number, required: true },
     // Total students invited to complete the SETU
-    Invited: {
-      type: Number,
-      required: true,
-    },
+    Invited: { type: Number, required: true },
     // Percentage of invited students who completed the SETU
-    Response_Rate: {
-      type: Number,
-    },
+    Response_Rate: { type: Number },
     // Unit level, e.g., 1 for first year, 2 for second year
-    Level: {
-      type: Number,
-    },
+    Level: { type: Number },
     /**
      * Evaluation metrics for SETU (I1 - I13)
      *
