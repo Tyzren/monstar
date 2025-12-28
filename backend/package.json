@@ -60,6 +60,7 @@
     "@providers": "./infra/providers",
     "@middleware": "./infra/middleware",
     "@services": "./infra/services",
+    "@utilities": "./infra/utilities",
     "@constants": "./constants",
     "@docs": "./docs"
   }
