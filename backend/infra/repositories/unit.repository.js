@@ -1,6 +1,8 @@
 const Unit = require('@models/unit');
 
 class UnitRepository {
+  static UNIT_CODE_PATTERN = /^[a-zA-Z]{3}\d{4}$/;
+
   /**
    * Find all units
    */
@@ -10,9 +12,20 @@ class UnitRepository {
 
   /**
    * Find unit by unitcode
+   *
+   * @param {String} unitcode
    */
   static async findOneByUnitcode(unitcode) {
     return await Unit.findOne({ unitCode: unitcode.toLowerCase() });
+  }
+
+  /**
+   * Find unit by id
+   *
+   * @param {String} unitId
+   */
+  static async findById(unitId) {
+    return await Unit.findById(unitId);
   }
 
   /**
@@ -73,10 +86,16 @@ class UnitRepository {
   }
 
   /**
-   * Update a unit by unitcode
+   * Update a unit by unitcode or unitId
+   *
+   * @param {String|ObjectId} identifier - Either a unitCode (CCCDDDD format) or MongoDB ObjectId
+   * @param {Object} updateData
    */
-  static async updateOneByUnitcode(unitCode, updateData) {
-    return await Unit.findOneAndUpdate({ unitCode: unitCode }, updateData, {
+  static async updateOneByUnitcode(identifier, updateData) {
+    identifier = identifier.toString()
+    const isUnitCode = this.UNIT_CODE_PATTERN.test(identifier);
+    const query = isUnitCode ? { unitCode: identifier } : { _id: identifier };
+    return await Unit.findOneAndUpdate(query, updateData, {
       new: true,
       runValidators: true,
     });
