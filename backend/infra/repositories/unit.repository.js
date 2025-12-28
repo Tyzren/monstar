@@ -8,12 +8,20 @@ class UnitRepository {
     return await Unit.find({}).populate('reviews');
   }
 
+  /**
+   * Find unit by unitcode
+   */
   static async findOneByUnitcode(unitcode) {
     return await Unit.findOne({ unitCode: unitcode.toLowerCase() });
   }
 
   /**
    * Query for units with pagination, filtering, and sorting
+   *
+   * @param {Object} query
+   * @param {Object} sortCriteria
+   * @param {Number} skip
+   * @param {Number} limit
    */
   static async findWithPagination(query, sortCriteria, skip, limit) {
     const pipeline = [
@@ -47,6 +55,8 @@ class UnitRepository {
 
   /**
    * Query for N most reviewed units
+   *
+   * @param {Number} n
    */
   static async findMostReviewedUnits(n) {
     return await Unit.aggregate([
@@ -62,6 +72,9 @@ class UnitRepository {
     );
   }
 
+  /**
+   * Update a unit by unitcode
+   */
   static async updateOneByUnitcode(unitCode, updateData) {
     return await Unit.findOneAndUpdate({ unitCode: unitCode }, updateData, {
       new: true,
@@ -73,6 +86,8 @@ class UnitRepository {
    * Finds units that have the given unit as a prerequisite
    *
    * E.g., (given) FIT1045 -> FIT1008 (find these ones)
+   *
+   * @param {String} unitCode
    */
   static async findRequiredBy(unitCode) {
     return await Unit.find({
