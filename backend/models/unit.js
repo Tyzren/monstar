@@ -1,23 +1,18 @@
-// Module Imports
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-// Unit Tags
 const UnitTags = {
   MOST_REVIEWS: 'most-reviews',
   CONTROVERSIAL: 'controversial',
   WAM_BOOSTER: 'wam-booster',
 };
 
-// Nested requisites schema
 const RequisiteSchema = new Schema({
   NumReq: { type: Number, required: false },
   units: { type: [String], required: false },
 });
 
-// Unit Schema
 const UnitSchema = new Schema({
-  // Unit code
   unitCode: {
     type: String,
     required: true,
