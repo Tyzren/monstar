@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 
-const UnitService = require('@infra/services/unit.service');
-const CacheProvider = require('@providers/cache.provider');
+const CacheProvider = require('@providers/cache.provider'); // TODO: Move caching logic to the service layer
+const UnitService = require('@services/unit.service');
 
 const { isValidSortOption } = require('../../constants/sortOptions');
 

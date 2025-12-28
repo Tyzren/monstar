@@ -1,7 +1,7 @@
 const express = require('express');
 
 const UnitController = require('@controllers/unit.controller');
-const adminMiddleware = require('@infra/middleware/admin.middleware');
+const adminMiddleware = require('@middleware/admin.middleware');
 
 const router = express.Router();
 

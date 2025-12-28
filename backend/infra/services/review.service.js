@@ -1,9 +1,8 @@
+const Notification = require('@models/notification');
+const Unit = require('@models/unit');
 const ReviewRepository = require('@repositories/review.repository');
 const UnitRepository = require('@repositories/unit.repository');
 const UserRepository = require('@repositories/user.repository');
-
-const Notification = require('@models/notification');
-const Unit = require('@models/unit');
 
 class ReviewService {
   /**

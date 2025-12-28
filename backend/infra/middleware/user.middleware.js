@@ -1,5 +1,6 @@
-const { CreateError } = require('@utilities/error');
 const jwt = require('jsonwebtoken');
+
+const { CreateError } = require('@utilities/error');
 
 const userMiddleware = (err, req, res, next) => {
   const token = req.cookies.access_token;
@@ -13,4 +14,4 @@ const userMiddleware = (err, req, res, next) => {
   });
 };
 
-module.exports = userMiddleware
+module.exports = userMiddleware;

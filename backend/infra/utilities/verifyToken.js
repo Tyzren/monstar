@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { CreateError } = require('@infra/utilities/error.js');
+const { CreateError } = require('@utilities/error.js');
 
 /**
  * * Middleware to verify the JWT token from cookies.

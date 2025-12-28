@@ -11,9 +11,9 @@ const csrf = require('csurf');
 const express = require('express');
 
 const { setupSwagger } = require('@docs/swagger');
-const { dbConnect } = require('@infra/providers/mongodb.provider');
-const tagManager = require('@infra/providers/tagManager.provider');
 const errorMiddleware = require('@middleware/error.middleware');
+const { dbConnect } = require('@providers/mongodb.provider');
+const tagManager = require('@providers/tagManager.provider');
 
 /* --------------------------- Initialize Express --------------------------- */
 const app = express();

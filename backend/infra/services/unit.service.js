@@ -1,6 +1,6 @@
 const { getSortCriteria } = require('@constants/sortOptions');
-const UnitRepository = require('@infra/repositories/unit.repository');
-const { buildFilterQuery } = require('@infra/utilities/unitFilterHelpers');
+const UnitRepository = require('@repositories/unit.repository');
+const { buildFilterQuery } = require('@utilities/unitFilterHelpers');
 
 class UnitService {
   /**
