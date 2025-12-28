@@ -1,5 +1,4 @@
 const Notification = require('@models/notification');
-const Unit = require('@models/unit');
 const ReviewRepository = require('@repositories/review.repository');
 const UnitRepository = require('@repositories/unit.repository');
 const UserRepository = require('@repositories/user.repository');
@@ -152,6 +151,7 @@ class ReviewService {
    * @param {String} reactionType - 'like' or 'dislike'
    */
   static toggleReaction = async (reviewId, userId, reactionType) => {
+    //TODO: We can't have these database operations done here, find out a way to use repos only.
     // Fetch all required documents in parallel
     const [review, user] = await Promise.all([
       ReviewRepository.findById(reviewId),
@@ -163,7 +163,7 @@ class ReviewService {
 
     // Fetch additional required documents
     const [unit, author] = await Promise.all([
-      Unit.findById(review.unit),
+      UnitRepository.findById(review.unit),
       UserRepository.findById(review.author),
     ]);
 
