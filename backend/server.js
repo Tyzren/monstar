@@ -70,15 +70,15 @@ app.use(async (req, res, next) => {
 });
 
 /* --------------------------------- Routes --------------------------------- */
-app.use('/api/v1/units', require('./infra/routes/units'));
+app.use('/api/v1/units', require('./infra/routes/v1/units'));
 app.use('/api/v2/units', require('./infra/routes/v2/units'));
-app.use('/api/v1/reviews', require('./infra/routes/reviews'));
-app.use('/api/v1/auth', require('./infra/routes/auth'));
-app.use('/api/v1/notifications', require('./infra/routes/notifications'));
-app.use('/api/v1/github', require('./infra/routes/github'));
-app.use('/api/v1/setus', require('./infra/routes/setus'));
+app.use('/api/v1/reviews', require('./infra/routes/v1/reviews'));
+app.use('/api/v1/auth', require('./infra/routes/v1/auth'));
+app.use('/api/v1/notifications', require('./infra/routes/v1/notifications'));
+app.use('/api/v1/github', require('./infra/routes/v1/github'));
+app.use('/api/v1/setus', require('./infra/routes/v1/setus'));
 if (isDevelopment && !isProductionMachine) {
-  app.use('/api/admin', require('./infra/routes/admin'));
+  app.use('/api/admin', require('./infra/routes/v1/admin'));
 }
 
 /* ---------------------------- Swagger ui setup ---------------------------- */
