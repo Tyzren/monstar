@@ -52,7 +52,7 @@ export default [
         },
       },
       'import/internal-regex':
-        '^@(models|routes|utils|infra|controllers|providers|middleware|services|constants|docs)/',
+        '^@(models|routes|utilities|infra|controllers|providers|repositories|middleware|services|constants|docs)/',
     },
   },
   prettierConfig,
