@@ -11,14 +11,8 @@ const UnitTags = {
 
 // Nested requisites schema
 const RequisiteSchema = new Schema({
-  NumReq: {
-    type: Number,
-    required: false,
-  },
-  units: {
-    type: [String],
-    required: false,
-  },
+  NumReq: { type: Number, required: false },
+  units: { type: [String], required: false },
 });
 
 // Unit Schema
