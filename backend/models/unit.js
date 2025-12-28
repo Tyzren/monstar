@@ -31,104 +31,27 @@ const UnitSchema = new Schema({
     index: true,
     set: (value) => value.toLowerCase(),
   },
+  name: { type: String, required: true },
+  description: { type: String },
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
 
-  // Name of the unit
-  name: {
-    type: String,
-    required: true,
-  },
+  avgOverallRating: { type: Number, default: 0, min: 0, max: 5 },
+  avgRelevancyRating: { type: Number, default: 0, min: 0, max: 5 },
+  avgFacultyRating: { type: Number, default: 0, min: 0, max: 5 },
+  avgContentRating: { type: Number, default: 0, min: 0, max: 5 },
 
-  // Description of the unit
-  description: {
-    type: String,
-  },
-
-  // List of reviews for the unit
-  reviews: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Review',
-    },
-  ],
-
-  // Average overall rating
-  avgOverallRating: {
-    type: Number,
-    default: 0,
-    min: 0,
-    max: 5,
-  },
-
-  // Average relevancy rating
-  avgRelevancyRating: {
-    type: Number,
-    default: 0,
-    min: 0,
-    max: 5,
-  },
-
-  // Average faculty rating
-  avgFacultyRating: {
-    type: Number,
-    default: 0,
-    min: 0,
-    max: 5,
-  },
-
-  // Average content rating
-  avgContentRating: {
-    type: Number,
-    default: 0,
-    min: 0,
-    max: 5,
-  },
-
-  level: {
-    type: Number,
-    required: true,
-  },
-
-  creditPoints: {
-    type: Number,
-    required: true,
-  },
-
-  school: {
-    type: String,
-    required: true,
-  },
-
-  academicOrg: {
-    type: String,
-    required: true,
-  },
-
-  scaBand: {
-    type: String,
-    required: true,
-  },
+  level: { type: Number, required: true },
+  creditPoints: { type: Number, required: true },
+  school: { type: String, required: true },
+  academicOrg: { type: String, required: true },
+  scaBand: { type: String, required: true },
 
   requisites: {
-    permission: {
-      type: Boolean,
-      default: false,
-    },
-    prohibitions: {
-      type: [String],
-      required: false,
-    },
-    corequisites: {
-      type: [RequisiteSchema],
-      required: false,
-    },
-    prerequisites: {
-      type: [RequisiteSchema],
-      required: false,
-    },
-    cpRequired: {
-      type: Number,
-      default: 0,
-    },
+    permission: { type: Boolean, default: false },
+    prohibitions: { type: [String], required: false },
+    corequisites: { type: [RequisiteSchema], required: false },
+    prerequisites: { type: [RequisiteSchema], required: false },
+    cpRequired: { type: Number, default: 0 },
   },
 
   offerings: [
@@ -141,13 +64,11 @@ const UnitSchema = new Schema({
   ],
 
   tags: {
-    type: [
-      {
-        type: String,
-        enum: Object.values(UnitTags),
-      },
-    ],
-    validate: [arrayLimit, 'Unit can only have up to 2 tags'],
+    type: [{ type: String, enum: Object.values(UnitTags) }],
+    validate: {
+      validator: (val) => val.length <= 2,
+      message: 'Unit can only have up to 2 tags',
+    },
   },
 
   aiOverview: {
@@ -159,11 +80,6 @@ const UnitSchema = new Schema({
     setuSeasons: { type: [String], default: [] },
   },
 });
-
-// Validator function for max tags
-function arrayLimit(val) {
-  return val.length <= 2;
-}
 
 const Unit = mongoose.model('Unit', UnitSchema);
 module.exports = Unit;
