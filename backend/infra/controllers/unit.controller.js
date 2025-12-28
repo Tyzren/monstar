@@ -9,15 +9,15 @@ class UnitController {
   /**
    * List all units
    */
-  static listAll = asyncHandler(async (req, res) => {
-    const units = UnitService.getAllUnits();
+  static getAll = asyncHandler(async (req, res) => {
+    const units = UnitService.fetchAll();
     return res.status(201).json(units);
   });
 
   /**
    * List units filtered
    */
-  static listFiltered = asyncHandler(async (req, res) => {
+  static getPaginated = asyncHandler(async (req, res) => {
     const { sort = 'Alphabetic' } = req.query;
     if (!isValidSortOption(sort)) {
       return res.status(400).json({
@@ -25,7 +25,7 @@ class UnitController {
       });
     }
 
-    const { units, total } = await UnitService.getFilteredUnits(req.query);
+    const { units, total } = await UnitService.fetchPaginated(req.query);
     if (!units.length) {
       return res.status(404).json({ error: 'No units match the given query' });
     }
@@ -36,15 +36,37 @@ class UnitController {
   /**
    * List most reviewed units
    */
-  static listMostReviewed = asyncHandler(async (req, res) => {
+  static getMostReviewed = asyncHandler(async (req, res) => {
     const mostReviewedUnits = await CacheProvider.getOrSet(
       'units:popular',
       async () => {
-        return await UnitService.getMostReviewedUnits(10);
+        return await UnitService.fetchMostReviewed(10);
       },
       CacheProvider.POPULAR_UNITS_TTL
     );
     return res.status(200).json(mostReviewedUnits);
+  });
+
+  /**
+   * Update unit by unitcode
+   */
+  static updateByUnitcode = asyncHandler(async (req, res) => {
+    const updatedUnit = await UnitService.modifyByUnitcode(
+      req.params.unitcode,
+      req.body
+    );
+    return res.status(204).json({
+      msg: `Sucessfully updated ${req.params.unitcode}`,
+      unit: updatedUnit,
+    });
+  });
+
+  /**
+   * Get all units that have the given unit as a prerequisite
+   */
+  static getRequiredBy = asyncHandler(async (req, res) => {
+    const units = await UnitService.fetchUnitsRequiredBy(req.params.unitCode);
+    return res.status(200).json(units);
   });
 }
 
