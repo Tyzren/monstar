@@ -12,6 +12,8 @@ class UnitService {
 
   /**
    * Get units filtered
+   *
+   * @param {Object} filterOptions
    */
   static fetchPaginated = async (filterOptions) => {
     const { offset = 0, limit = 10, sort = 'Alphabetic' } = filterOptions;
@@ -29,6 +31,8 @@ class UnitService {
 
   /**
    * Get N most reviewed units
+   *
+   * @param {Number} n
    */
   static fetchMostReviewed = async (n = 10) => {
     return await UnitRepository.findMostReviewedUnits(n);
@@ -36,6 +40,8 @@ class UnitService {
 
   /**
    * Get a unit by unitcode
+   *
+   * @param {String} unitCode
    */
   static fetchByCode = async (unitCode) => {
     return await UnitRepository.findOneByUnitcode(unitCode);
@@ -43,6 +49,9 @@ class UnitService {
 
   /**
    * Modify a unit
+   *
+   * @param {String} unitCode
+   * @param {Object} updateData
    */
   static modifyByUnitcode = async (unitCode, updateData) => {
     const allowedFields = [
@@ -65,6 +74,8 @@ class UnitService {
 
   /**
    * Fetch all units that have the given unit as a prerequisite
+   *
+   * @param {String} unitCode
    */
   static fetchUnitsRequiredBy = async (unitCode) => {
     const unit = await UnitRepository.findOneByUnitCode(unitCode);
