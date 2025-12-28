@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@models/*": ["./models/*"],
+      "@routes/*": ["./infra/routes/*"],
+      "@infra/*": ["./infra/*"],
+      "@controllers/*": ["./infra/controllers/*"],
+      "@providers/*": ["./infra/providers/*"],
+      "@middleware/*": ["./infra/middleware/*"],
+      "@services/*": ["./infra/services/*"],
+      "@utilities/*": ["./infra/utilities/*"],
+      "@constants/*": ["./constants/*"],
+      "@docs/*": ["./docs/*"]
+    }
+  }
+}
