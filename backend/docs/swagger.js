@@ -41,6 +41,10 @@ const setupSwagger = async (app) => {
         description: 'Reviews for units',
       },
       {
+        name: 'Reviews V2',
+        description: 'Reviews for units V2',
+      },
+      {
         name: 'Auth',
         description: 'Authentication and user management',
       },
