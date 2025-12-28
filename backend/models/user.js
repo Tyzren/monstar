@@ -6,7 +6,6 @@ const Notification = require('@models/notification');
 const Review = require('@models/review');
 const Unit = require('@models/unit');
 
-// User Schema
 const userSchema = new Schema({
   email: { type: String, required: true },
   username: { type: String, required: false },
@@ -48,7 +47,7 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-// * Middleware for findOneAndDelete
+// Middleware for findOneAndDelete
 userSchema.pre('findOneAndDelete', async function (next) {
   try {
     const user = await this.model.findOne(this.getFilter());
@@ -59,7 +58,7 @@ userSchema.pre('findOneAndDelete', async function (next) {
   }
 });
 
-// * Middleware for remove
+// Middleware for remove
 userSchema.pre('remove', async function (next) {
   try {
     await handleUserDeletion(this);
