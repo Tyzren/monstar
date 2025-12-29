@@ -3,6 +3,9 @@ const User = require('@models/user');
 const Review = require('@models/review');
 const ReviewService = require('@services/review.service');
 
+jest.mock('@services/notification.service');
+const NotificationService = require('@services/notification.service');
+
 describe(ReviewService.name, () => {
   afterEach(() => jest.clearAllMocks());
 
@@ -99,15 +102,14 @@ describe(ReviewService.name, () => {
       const reactionType = 'like';
       // act
       const reviewBefore = await Review.findOne({ _id: reviewId });
-      const { review: reviewAfter, reactions } = await ReviewService.toggleReaction(
-        reviewId,
-        userId,
-        reactionType
-      );
+      const { review: reviewAfter, reactions } =
+        await ReviewService.toggleReaction(reviewId, userId, reactionType);
       // assert
       expect(reviewBefore.likes).toBeLessThan(reviewAfter.likes);
       expect(reactions.liked).toBeTruthy();
       expect(reactions.disliked).not.toBeTruthy();
+
+      expect(NotificationService.createLike).toHaveBeenCalledTimes(1);
     });
 
     it('should give a dislike reaction to a review', async () => {
@@ -117,11 +119,8 @@ describe(ReviewService.name, () => {
       const reactionType = 'dislike';
       // act
       const reviewBefore = await Review.findOne({ _id: reviewId });
-      const { review: reviewAfter, reactions } = await ReviewService.toggleReaction(
-        reviewId,
-        userId,
-        reactionType
-      );
+      const { review: reviewAfter, reactions } =
+        await ReviewService.toggleReaction(reviewId, userId, reactionType);
       // assert
       expect(reviewBefore.dislikes).toBeLessThan(reviewAfter.dislikes);
       expect(reactions.disliked).toBeTruthy();
@@ -153,8 +152,8 @@ describe(ReviewService.name, () => {
       expect(reviewBefore.likes).not.toBeLessThan(review.likes); // like should've been removed
       expect(reactions2.disliked).toBeTruthy();
       expect(reactions2.liked).not.toBeTruthy();
+
+      expect(NotificationService.delete).toHaveBeenCalledTimes(1);
     });
   });
-
-
 });
