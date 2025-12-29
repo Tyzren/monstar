@@ -9,7 +9,7 @@ const {
   cloudinary,
 } = require('@infra/providers/cloudinary.provider.js');
 const upload = multer({ storage });
-const TokenService = require('@infra/providers/token.provider.js');
+const TokenProvider = require('@infra/providers/token.provider.js');
 const { verifyToken, verifyAdmin } = require('@infra/utilities/verifyToken.js');
 const User = require('@models/user');
 
@@ -88,11 +88,11 @@ router.post('/google/authenticate', async function (req, res) {
         .json({ message: 'Account already exists as non-Google account.' });
     }
 
-    const accessToken = TokenService.generateAccessToken(user._id, user.admin);
-    const refreshToken = TokenService.generateRefreshToken();
-    user.refreshToken = TokenService.hashRefreshToken(refreshToken);
+    const accessToken = TokenProvider.generateAccessToken(user._id, user.admin);
+    const refreshToken = TokenProvider.generateRefreshToken();
+    user.refreshToken = TokenProvider.hashRefreshToken(refreshToken);
     user.refreshTokenExpires = new Date(
-      Date.now() + TokenService.REFRESH_TOKEN_EXPIRY
+      Date.now() + TokenProvider.REFRESH_TOKEN_EXPIRY
     );
     await user.save();
 
@@ -101,12 +101,12 @@ router.post('/google/authenticate', async function (req, res) {
       .cookie('access_token', accessToken, {
         httpOnly: true,
         sameSite: 'strict',
-        maxAge: TokenService.ACCESS_TOKEN_EXPIRY,
+        maxAge: TokenProvider.ACCESS_TOKEN_EXPIRY,
       })
       .cookie('refresh_token', refreshToken, {
         httpOnly: true,
         sameSite: 'strict',
-        maxAge: TokenService.REFRESH_TOKEN_EXPIRY,
+        maxAge: TokenProvider.REFRESH_TOKEN_EXPIRY,
       })
       .status(200)
       .json({ message: 'Login successful', data: user });
@@ -125,7 +125,7 @@ router.post('/refresh', async function (req, res) {
   }
 
   try {
-    const hashedToken = TokenService.hashRefreshToken(refresh_token);
+    const hashedToken = TokenProvider.hashRefreshToken(refresh_token);
     const user = await User.findOne({
       refreshToken: hashedToken,
       refreshTokenExpires: { $gt: Date.now() },
@@ -136,14 +136,14 @@ router.post('/refresh', async function (req, res) {
         .json({ error: 'Invalid or expired refresh token' });
     }
 
-    const newAccessToken = TokenService.generateAccessToken(
+    const newAccessToken = TokenProvider.generateAccessToken(
       user._id,
       user.admin
     );
-    const newRefreshToken = TokenService.generateRefreshToken();
-    user.refreshToken = TokenService.hashRefreshToken(newRefreshToken);
+    const newRefreshToken = TokenProvider.generateRefreshToken();
+    user.refreshToken = TokenProvider.hashRefreshToken(newRefreshToken);
     user.refreshTokenExpires = new Date(
-      Date.now() + TokenService.REFRESH_TOKEN_EXPIRY
+      Date.now() + TokenProvider.REFRESH_TOKEN_EXPIRY
     );
     await user.save();
 
@@ -151,12 +151,12 @@ router.post('/refresh', async function (req, res) {
       .cookie('access_token', newAccessToken, {
         httpOnly: true,
         sameSite: 'strict',
-        maxAge: TokenService.ACCESS_TOKEN_EXPIRY,
+        maxAge: TokenProvider.ACCESS_TOKEN_EXPIRY,
       })
       .cookie('refresh_token', newRefreshToken, {
         httpOnly: true,
         sameSite: 'strict',
-        maxAge: TokenService.REFRESH_TOKEN_EXPIRY,
+        maxAge: TokenProvider.REFRESH_TOKEN_EXPIRY,
       })
       .status(200)
       .json({ message: 'Token refreshed successfully' });
