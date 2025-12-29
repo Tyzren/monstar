@@ -30,6 +30,13 @@ router.post(
   UserController.logout
 );
 
+router.get(
+  '/validate',
+  // #swagger.tags = ['User V2']
+  // #swagger.summary = 'Check if the user has the access_token in their cookies to keep session'
+  UserController.validate
+);
+
 router.post(
   '/upload-avatar',
   userMiddleware,
