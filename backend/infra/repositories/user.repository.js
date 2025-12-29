@@ -35,14 +35,19 @@ class UserRepository {
   /**
    * Update the refresh token of a user
    *
-   * @param {User} user
+   * @param {String|import('mongoose').ObjectId} userId
    * @param {String} hashedToken
    * @param {Date} expiry
    */
-  static async updateRefreshToken(user, hashedToken, expiry) {
-    user.refreshToken = hashedToken;
-    user.refreshTokenExpires = expiry;
-    return await user.save();
+  static async updateRefreshToken(userId, hashedToken, expiry) {
+    return await User.findByIdAndUpdate(
+      userId,
+      {
+        refreshToken: hashedToken,
+        refreshTokenExpires: expiry,
+      },
+      { new: true }
+    );
   }
 
   /**
