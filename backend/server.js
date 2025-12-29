@@ -108,10 +108,12 @@ if (require.main === module) {
 
   dbConnect()
     .then(async () => {
-      try {
-        await tagManager.updateMostReviewsTag(1);
-      } catch (e) {
-        console.error('Initial tag update failed', e);
+      if (!isDevelopment && isProductionMachine) {
+        try {
+          await tagManager.updateMostReviewsTag(1);
+        } catch (e) {
+          console.error('Initial tag update failed', e);
+        }
       }
 
       app.listen(PORT, (err) => {
