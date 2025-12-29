@@ -2,7 +2,7 @@ const UnitService = require('@services/unit.service');
 const Unit = require('@models/unit');
 const Review = require('@models/review');
 
-describe('UnitService', () => {
+describe(UnitService.name, () => {
   afterEach(() => jest.clearAllMocks());
 
   describe(UnitService.fetchPaginated.name, () => {
