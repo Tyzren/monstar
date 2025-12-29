@@ -3,8 +3,10 @@ const User = require('@models/user');
 const Review = require('@models/review');
 const ReviewService = require('@services/review.service');
 
-describe('ReviewService', () => {
+describe(ReviewService.name, () => {
   afterEach(() => jest.clearAllMocks());
+
+  /* -------------------------------- Retrieval ------------------------------- */
 
   describe(ReviewService.fetchByUnit.name, () => {
     it('should return correct reviews from the chosen unit', async () => {
@@ -30,6 +32,8 @@ describe('ReviewService', () => {
       expect(controlReviews).toEqual(reviews);
     });
   });
+
+  /* -------------------------------- Creation -------------------------------- */
 
   describe(ReviewService.createReview.name, () => {
     it('should create a new review in the database', async () => {
@@ -82,6 +86,8 @@ describe('ReviewService', () => {
     });
   });
 
+  /* -------------------------------- Reactions ------------------------------- */
+
   describe(ReviewService.toggleReaction.name, () => {
     const TEST_REVIEW = '67ace2823004f1f8e6d8f6be';
     const TEST_USER = '679196d09f43c367d007afad';
@@ -93,13 +99,13 @@ describe('ReviewService', () => {
       const reactionType = 'like';
       // act
       const reviewBefore = await Review.findOne({ _id: reviewId });
-      const { review, reactions } = await ReviewService.toggleReaction(
+      const { review: reviewAfter, reactions } = await ReviewService.toggleReaction(
         reviewId,
         userId,
         reactionType
       );
       // assert
-      expect(reviewBefore.likes).toBeLessThan(review.likes);
+      expect(reviewBefore.likes).toBeLessThan(reviewAfter.likes);
       expect(reactions.liked).toBeTruthy();
       expect(reactions.disliked).not.toBeTruthy();
     });
@@ -111,13 +117,13 @@ describe('ReviewService', () => {
       const reactionType = 'dislike';
       // act
       const reviewBefore = await Review.findOne({ _id: reviewId });
-      const { review, reactions } = await ReviewService.toggleReaction(
+      const { review: reviewAfter, reactions } = await ReviewService.toggleReaction(
         reviewId,
         userId,
         reactionType
       );
       // assert
-      expect(reviewBefore.dislikes).toBeLessThan(review.dislikes);
+      expect(reviewBefore.dislikes).toBeLessThan(reviewAfter.dislikes);
       expect(reactions.disliked).toBeTruthy();
       expect(reactions.liked).not.toBeTruthy();
     });
@@ -144,8 +150,11 @@ describe('ReviewService', () => {
         await ReviewService.toggleReaction(reviewId, userId, reactionFlow[1]);
       // assert
       expect(reviewBefore.dislikes).toBeLessThan(review2.dislikes);
+      expect(reviewBefore.likes).not.toBeLessThan(review.likes); // like should've been removed
       expect(reactions2.disliked).toBeTruthy();
       expect(reactions2.liked).not.toBeTruthy();
     });
   });
+
+
 });
