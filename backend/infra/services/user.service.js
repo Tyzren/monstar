@@ -71,7 +71,32 @@ class UserService {
     return { accessToken, refreshToken, user };
   };
 
-  
+  /**
+   * Rotate and create new access token and refresh token for a user
+   *
+   * @param {String} refreshToken
+   */
+  static refreshUserToken = async (refreshToken) => {
+    const hashedRefreshToken = TokenProvider.hashRefreshToken(refreshToken);
+    const user = await UserRepository.findByHashedRefreshToken(hashedRefreshToken);
+    if (!user) {
+      throw new DomainValidationError('Invalid or expired refresh token');
+    }
+
+    const newAccessToken = TokenProvider.generateAccessToken(user._id, user.admin);
+    const newRefreshToken = TokenProvider.generateRefreshToken();
+    const newHashedRefreshToken = TokenProvider.hashRefreshToken(newRefreshToken);
+    const newRefreshTokenExpiry = new Date(
+      Date.now() + TokenProvider.REFRESH_TOKEN_EXPIRY
+    )
+    await UserRepository.updateRefreshToken(
+      user,
+      newHashedRefreshToken,
+      newRefreshTokenExpiry,
+    );
+
+    return { newAccessToken, newRefreshToken }
+  }
 }
 
 module.exports = UserService;

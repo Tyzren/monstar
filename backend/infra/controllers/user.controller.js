@@ -24,6 +24,26 @@ class UserController {
       .status(200)
       .json({ message: 'Login successful', data: user });
   });
+
+  static refresh = asyncHandler(async (req, res) => {
+    const { refresh_token } = req.cookies;
+    const { newAccessToken, newRefreshToken } =
+      await UserService.refreshUserToken(refresh_token);
+
+    res
+      .cookie('access_token', newAccessToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: TokenProvider.ACCESS_TOKEN_EXPIRY,
+      })
+      .cookie('refresh_token', newRefreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: TokenProvider.REFRESH_TOKEN_EXPIRY,
+      })
+      .status(200)
+      .json({ message: 'Token refreshed successfully' });
+  });
 }
 
 module.exports = UserController;
