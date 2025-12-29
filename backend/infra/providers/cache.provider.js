@@ -21,7 +21,8 @@ class CacheProvider {
    */
   static async getOrSet(key, fetchFn, ttl = 3600) {
     if (!redis) {
-      console.warn('Redis not configured, fetching directly');
+      if (process.env.NODE_ENV !== 'test')
+        console.warn('Redis not configured, fetching directly');
       return await fetchFn();
     }
 
