@@ -20,7 +20,7 @@ import { inject as injectAnalytics } from '@vercel/analytics';
   imports: [RouterOutlet, NavbarComponent, FooterComponent, ToastModule],
   providers: [ApiService, MessageService],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'] // Fixed the typo from 'styleUrl' to 'styleUrls'
+  styleUrls: ['./app.component.scss'], // Fixed the typo from 'styleUrl' to 'styleUrls'
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // Subscribe to footer visibility changes
-    this.footerService.showFooter$.subscribe(show => {
+    this.footerService.showFooter$.subscribe((show) => {
       this.showFooter = show;
     });
 

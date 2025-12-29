@@ -1,4 +1,4 @@
-@import "../../_variables.scss";
+@import '../../_variables.scss';
 
 .changelog-container {
   display: flex;
@@ -109,7 +109,7 @@
 
   // Vertical line on the left
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 1rem;
     top: 0;
@@ -200,7 +200,7 @@
   position: relative;
 
   &::before {
-    content: "*";
+    content: '*';
     position: absolute;
     left: 0;
     color: var(--primary-color);
@@ -226,7 +226,7 @@
       color: var(--primary-color);
       padding: 0.05rem 0.35rem;
       border-radius: 3px;
-      font-family: "Courier New", monospace;
+      font-family: 'Courier New', monospace;
       font-size: 0.85em;
       font-weight: 500;
       text-decoration: none;
@@ -253,7 +253,7 @@
     color: var(--primary-color);
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
-    font-family: "Courier New", monospace;
+    font-family: 'Courier New', monospace;
     font-size: 0.9em;
   }
 }

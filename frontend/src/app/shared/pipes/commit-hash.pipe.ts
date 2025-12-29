@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Pipe({
   name: 'commitHash',
-  standalone: true
+  standalone: true,
 })
 export class CommitHashPipe implements PipeTransform {
   private readonly GITHUB_REPO = 'https://github.com/wiredmonash/monstar';

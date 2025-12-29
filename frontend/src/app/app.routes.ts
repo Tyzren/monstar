@@ -24,7 +24,9 @@ export const routes: Routes = [
   // Unit Map
   { path: 'map/:unitcode', component: UnitMapComponent },
   // SETU Data
-  ...(environment.enableSetuCards ? [{ path: 'setu/:unitCode', component: SetuOverviewComponent }] : []),
+  ...(environment.enableSetuCards
+    ? [{ path: 'setu/:unitCode', component: SetuOverviewComponent }]
+    : []),
   // Email Verification
   { path: 'verify-email/:token', component: VerifiedComponent },
   // Reset Password

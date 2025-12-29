@@ -2,19 +2,19 @@ import { AiOverview } from '../ai-overview.model';
 import { Review } from '../review.model';
 
 export interface FilteredUnitsResponse {
-  units: Array<UnitData>,
-  total: number
+  units: Array<UnitData>;
+  total: number;
 }
 
 export enum UnitTag {
   MOST_REVIEWS = 'most-reviews',
   CONTROVERSIAL = 'controversial',
-  WAM_BOOSTER = 'wam-booster'
+  WAM_BOOSTER = 'wam-booster',
 }
 
 export interface Requisites {
   permission: boolean;
-  prerequisites: { NumReq: number, units: string[] }[];
+  prerequisites: { NumReq: number; units: string[] }[];
   corequisites: string[];
   prohibitions: string[];
   cpRequired: number;

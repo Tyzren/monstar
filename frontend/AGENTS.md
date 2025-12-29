@@ -1,29 +1,36 @@
 # MonSTAR Frontend AI Engineering Guide (Monash University Students)
+
 This project is a frontend Angular SPA that powers MonSTAR, the student-built platform for browsing, reviewing, and analysing Monash University units.
 
-##  Core Principles
+## Core Principles
+
 **IMPORTANT: You MUST follow these principles in all code changes and PR generations:**
 
 ### KISS (Keep It Simple, Stupid)
+
 - Prefer straightforward solutions over complex ones
 - Simpler code is easier to read, test, and maintain
 
 ### YAGNI (You Aren't Gonna Need It)
+
 - Only implement functionality when the product already needs it
 - Avoid speculative features or premature abstractions
 
 ### Open/Closed Principle
+
 - Open for extension, closed for modification
 - Extend features via new components/services instead of rewriting stable logic
 
 ---
 
 ## MCP servers available to you
+
 - `chrome-devtools`: This will allow you to test your changes.
 
 ---
 
-##  Development Setup
+## Development Setup
+
 ```bash
 # Clone repository
 git clone <repo-url>
@@ -46,7 +53,8 @@ To proxy API traffic to the local backend, the dev server already uses src/proxy
 
 ---
 
-##  Essential npm Commands
+## Essential npm Commands
+
 ```bash
 npm install                # Install dependencies
 npm install <pkg>          # Add a dependency
@@ -59,6 +67,7 @@ npm run <script>           # Run package.json script
 ---
 
 ### 🔧 Essential Angular CLI Commands
+
 ```bash
 # Components
 ng g c routes/unit-overview --standalone
@@ -92,7 +101,9 @@ ng g environments
 ---
 
 ## Current Project Structure:
+
 This project uses Angular 18 with standalone components.
+
 ```
 frontend/
 +-- angular.json
@@ -140,6 +151,7 @@ frontend/
 You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA development. You write maintainable, performant, and accessible code that fits MonSTAR's existing patterns.
 
 ## TypeScript Best Practices
+
 - Keep strict typing; prefer interface/type aliases over any
 - Let the compiler infer when it's obvious, but annotate public APIs
 - Reuse shared models in shared/models for consistency with backend DTOs
@@ -147,7 +159,8 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 
 ---
 
-##  Naming Conventions
+## Naming Conventions
+
 - **Folders**: kebab-case → unit-overview/
 - **Components**: feature-name.component.ts
 - **Services**: feature.service.ts
@@ -158,7 +171,8 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 
 ---
 
-##  Angular Best Practices (MonSTAR)
+## Angular Best Practices (MonSTAR)
+
 - Continue using standalone components (standalone: true) with focused imports
 - Leverage Angular's native control flow (@if, @for) as already used
 - Prefer service singletons with providedIn: 'root'
@@ -170,6 +184,7 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 ---
 
 ## 🧩 Components
+
 - Single responsibility: keep data fetching in containers (routes) and rendering in shared components
 - Stick with ChangeDetectionStrategy.OnPush for new components to reduce change detection cost
 - Use @Input/@Output for component APIs; follow existing event emitter patterns
@@ -186,7 +201,8 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 
 ---
 
-##  State Management
+## State Management
+
 - Global auth/user context lives in AuthService.currentUser
 - Route-level state typically lives in the route component (UnitOverviewComponent, SetuOverviewComponent)
 - For simple component-local state, plain class properties remain the pattern; introduce Angular signals only if they improve clarity/perf
@@ -194,7 +210,8 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 
 ---
 
-##  Templates
+## Templates
+
 - Keep markup declarative: use @if, @for, @switch instead of *ngIf/*ngFor
 - Avoid heavy logic in bindings; compute in TS and expose primitives/arrays
 - Ensure interactive elements have accessible labels (tooltips + aria-labels for icon buttons)
@@ -203,6 +220,7 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 ---
 
 ## ♿ Accessibility
+
 - Maintain ARIA labels on icon-only buttons (navbar, notifications)
 - PrimeNG dialogs already modalise focus—double-check copy when adding new ones
 - Preserve keyboard shortcuts (CTRL+P / CTRL+S) but document them in UI help text where possible
@@ -211,6 +229,7 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 ---
 
 ## Services
+
 - Single responsibility (ApiService for REST, AuthService for sessions, FooterService for layout toggles)
 - Provide helpful logging during development; be ready to gate behind environment flags for production
 - When adding endpoints, mirror existing naming (getUnitsFilteredGET, toggleReactionPATCH)
@@ -219,28 +238,34 @@ You are an expert in TypeScript, Angular, and data-visualisation-heavy SPA devel
 ---
 
 ## PrimeNG Usage Strategy
+
 MonSTAR already standardises on PrimeNG Aura Noir + PrimeFlex for layout utilities.
 
 ### 🎯 Goals
+
 - Import only the modules/components actually used per feature (standalone imports)
 - Maintain ripple configuration via PrimeNGConfig in AppComponent
-- Match existing dark theme defined in styles.scss / _variables.scss
+- Match existing dark theme defined in styles.scss / \_variables.scss
 - Use p-toast (single host at root) for notifications triggered from services/components
 
 ### 🎨 Styling & Theming
+
 styles.scss layers Bootstrap → PrimeNG → PrimeFlex → custom variables. Keep additions in component styles; avoid ::ng-deep unless absolutely necessary.
 
 ### 📱 Dialogs & Overlays
+
 - p-dialog powers profile, review composer, report review; ensure new dialogs follow the same structure (header, [modal]="true", [maximizable] where needed)
 - Use OverlayPanel for lightweight dropdowns/menus (notifications, sort controls)
 
 ### ⚡ Performance
+
 - Heavy views (unit list, review feed) already handle pagination/filters server-side—maintain server-driven pagination when adding capabilities
 - For dense node graphs (unit map), keep using @swimlane/ngx-graph with zoomToFit helpers; avoid duplicating graph libraries
 
 ---
 
-##  Observed Feature Highlights (for future reference)
+## Observed Feature Highlights (for future reference)
+
 - Home: rotating subheaders, emote preload, popular units carousel
 - Unit List: debounced search, persistent filters in localStorage, keyboard shortcuts
 - Unit Overview: review sorting, SETU card embed, footer suppression via FooterService
@@ -254,6 +279,7 @@ Keep these flows consistent when extending functionality.
 ---
 
 ## What Not To Do
+
 - ❌ Don't bypass shared services—add API helpers there
 - ❌ Don't introduce alternative UI kits or CSS frameworks
 - ❌ Don't remove existing keyboard accessibility without replacement
@@ -263,6 +289,7 @@ Keep these flows consistent when extending functionality.
 ---
 
 ## Git & PR Guidelines
+
 - Stick with concise, conventional commit prefixes (feat:, fix:, chore:, docs:)
 - Run `npm run build` (and relevant tests) before pushing significant changes
 - Provide screenshots or short clips for UI-visible adjustments (home, unit overview, etc.)
@@ -271,6 +298,7 @@ Keep these flows consistent when extending functionality.
 ---
 
 ## 🔧 Tooling
+
 - ESLint + Angular recommended config (already in place)
 - EditorConfig governs indentation/formatting
 - Use Prettier-compatible formatting in editors; run `npm run lint -- --fix` before large PRs when possible
@@ -278,14 +306,17 @@ Keep these flows consistent when extending functionality.
 ---
 
 ## Documentation Assets
+
 - public/llms.txt lists crawlable routes
-- Multiple sitemaps (sitemap-index.xml, sitemap-units-*.xml, sitemap-setu-*.xml) keep search engines in sync—update if new static routes arrive
+- Multiple sitemaps (sitemap-index.xml, sitemap-units-_.xml, sitemap-setu-_.xml) keep search engines in sync—update if new static routes arrive
 - Keep this guide (AGENTS.md) current when architecture decisions change (e.g., adopting signals broadly, swapping PrimeNG theme, etc.)
 
 ---
 
 ## Quick Visual Checks
+
 When modifying UI-heavy screens:
+
 1. Identify impacted routes/components (home, unit list, profile dialogs, etc.)
 2. Navigate locally to each screen and verify data loads (popular units, reviews, maps)
 3. Confirm PrimeNG overlays/dialogs open/close correctly and keyboard shortcuts still work
@@ -295,4 +326,5 @@ When modifying UI-heavy screens:
 ---
 
 ### In Summary
+
 This guide preserves MonSTAR's Angular 18 architecture: standalone components, PrimeNG-based UI, REST-driven data, and accessibility-friendly interactions. Optimise for clarity, reuse existing shared components/services, and keep student-facing experiences polished and consistent.

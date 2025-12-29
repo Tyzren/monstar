@@ -1,4 +1,13 @@
-import { Component, Input, OnChanges, SimpleChanges, OnInit, OnDestroy, HostListener, HostBinding } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  HostBinding,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -29,10 +38,10 @@ import { Setu } from '../../models/setu.model';
     SplitButtonModule,
     ProgressSpinnerModule,
     TooltipModule,
-    SkeletonModule
+    SkeletonModule,
   ],
   templateUrl: './setu-card.component.html',
-  styleUrl: './setu-card.component.scss'
+  styleUrl: './setu-card.component.scss',
 })
 export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
   @Input() unitCode: string | null = null;
@@ -64,15 +73,17 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
     private setuService: SetuService,
     private authService: AuthService,
     private profileDialogService: ProfileDialogService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.checkViewportSize();
 
     // Subscribe to auth state
-    this.authSubscription = this.authService.getCurrentUser().subscribe(user => {
-      this.isAuthenticated = user !== null;
-    });
+    this.authSubscription = this.authService
+      .getCurrentUser()
+      .subscribe((user) => {
+        this.isAuthenticated = user !== null;
+      });
   }
 
   ngOnDestroy(): void {
@@ -103,17 +114,16 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
 
     // ? Only set accordion state on initial load or when data changes
     // ? Don't override user's manual state when just resizing between mobile/desktop
-    
+
     // Transitioning from mobile to desktop for first time - expand if we have data
     if (this.isDesktopView && !wasDesktop && this.activeIndex === null) {
       this.activeIndex = this.hasSetuData() ? 0 : null;
-    } 
+    }
     // Already in desktop view - ensure it's expanded if we have data
     else if (this.isDesktopView && wasDesktop) {
       this.activeIndex = this.hasSetuData() ? 0 : null;
     }
     // In mobile view, let user control the accordion state via two-way binding
-
   }
 
   /**
@@ -131,14 +141,14 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
 
     this.loading = true;
     this.error = null;
-    this.headerTooltip = undefined;  // Reset tooltip on new load
+    this.headerTooltip = undefined; // Reset tooltip on new load
 
     this.setuService.getSetuByUnitCode(this.unitCode).subscribe({
       next: (data) => {
         if (data && data.length > 0) {
           this.setuData = data;
           this.selectSetu(data[0]); // Select the most recent one by default
-          this.headerTooltip = undefined;  // No tooltip needed if data exists
+          this.headerTooltip = undefined; // No tooltip needed if data exists
         } else {
           this.setuData = [];
           this.selectedSetu = null;
@@ -154,7 +164,7 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
         console.error('Error loading SETU data for card:', err);
         this.loading = false;
         this.checkViewportSize(); // Update accordion state after error
-      }
+      },
     });
   }
 
@@ -176,10 +186,10 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
       return;
     }
     this.semesterMenuItems = this.setuData
-      .filter(s => s._id !== this.selectedSetu?._id)
-      .map(s => ({
+      .filter((s) => s._id !== this.selectedSetu?._id)
+      .map((s) => ({
         label: this.getSeasonDisplay(s.Season),
-        command: () => this.selectSetu(s)
+        command: () => this.selectSetu(s),
       }));
   }
 

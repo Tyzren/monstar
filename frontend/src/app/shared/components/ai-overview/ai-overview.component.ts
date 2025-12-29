@@ -14,14 +14,9 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-ai-overview',
   standalone: true,
-  imports: [
-    CommonModule,
-    CardModule,
-    TooltipModule,
-    SkeletonModule
-  ],
+  imports: [CommonModule, CardModule, TooltipModule, SkeletonModule],
   templateUrl: './ai-overview.component.html',
-  styleUrl: './ai-overview.component.scss'
+  styleUrl: './ai-overview.component.scss',
 })
 export class AiOverviewComponent implements OnInit, OnDestroy {
   @Input() unit: any = null;
@@ -39,9 +34,7 @@ export class AiOverviewComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private viewportService: ViewportService
-  ) { }
+  constructor(private viewportService: ViewportService) {}
 
   ngOnInit(): void {
     // Subscribe to viewport service
@@ -50,7 +43,6 @@ export class AiOverviewComponent implements OnInit, OnDestroy {
       .subscribe((type) => {
         this.viewportType = type;
       });
-
   }
 
   ngOnDestroy(): void {
@@ -72,14 +64,20 @@ export class AiOverviewComponent implements OnInit, OnDestroy {
       const dd = date.getDay();
 
       let ddStr, mmStr;
-      if (dd < 10) { ddStr = '0' + dd; }
-      if (mm < 10) { mmStr = '0' + mm; }
+      if (dd < 10) {
+        ddStr = '0' + dd;
+      }
+      if (mm < 10) {
+        mmStr = '0' + mm;
+      }
 
       return ddStr + '/' + mmStr + '/' + yyyy;
     }
 
     return date.toLocaleDateString('en-AU', {
-      year: 'numeric', month: 'long', day: 'numeric'
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   }
 

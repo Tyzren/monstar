@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChangelogData, ChangelogYear, ChangelogEntry } from '../../shared/models/changelog';
+import {
+  ChangelogData,
+  ChangelogYear,
+  ChangelogEntry,
+} from '../../shared/models/changelog';
 import { CommitHashPipe } from '../../shared/pipes/commit-hash.pipe';
 import * as changelogJson from '../../../../public/changelog.json';
 
@@ -9,7 +13,7 @@ import * as changelogJson from '../../../../public/changelog.json';
   standalone: true,
   imports: [CommonModule, CommitHashPipe],
   templateUrl: './changelog.component.html',
-  styleUrl: './changelog.component.scss'
+  styleUrl: './changelog.component.scss',
 })
 export class ChangelogComponent implements OnInit {
   changelogData: ChangelogData = changelogJson as ChangelogData;
@@ -34,8 +38,18 @@ export class ChangelogComponent implements OnInit {
    */
   getMonthName(monthNum: number): string {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     return months[monthNum - 1];
   }

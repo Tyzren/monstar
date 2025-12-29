@@ -24,7 +24,10 @@ export default [
     },
     rules: {
       ...eslint.configs.recommended.rules,
-      ...tseslint.configs.recommended.reduce((acc, config) => ({ ...acc, ...config.rules }), {}),
+      ...tseslint.configs.recommended.reduce(
+        (acc, config) => ({ ...acc, ...config.rules }),
+        {}
+      ),
       '@angular-eslint/directive-selector': [
         'error',
         {

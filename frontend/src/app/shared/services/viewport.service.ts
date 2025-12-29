@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 export type ViewportType = 'desktop' | 'laptop' | 'tablet' | 'mobile';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ViewportService {
   // Breakpoints for different viewport types
@@ -14,13 +14,15 @@ export class ViewportService {
   private mobileLimit = 400;
 
   // BehaviorSubject to store the current viewport type
-  private viewportSubject = new BehaviorSubject<ViewportType>(this.getCurrentViewportType());
+  private viewportSubject = new BehaviorSubject<ViewportType>(
+    this.getCurrentViewportType()
+  );
   // Expose as observable if needed
   viewport$ = this.viewportSubject.asObservable();
 
   /**
    * ! Constructor
-   * 
+   *
    * Detects the current viewport and listens for window resize events
    */
   constructor() {

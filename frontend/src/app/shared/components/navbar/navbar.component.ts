@@ -1,4 +1,11 @@
-import { Component, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
@@ -33,13 +40,11 @@ import { NotificationsPopupComponent } from '../notifications/notifications-popu
     ToastModule,
     TooltipModule,
     BadgeModule,
-    NotificationsPopupComponent
+    NotificationsPopupComponent,
   ],
-  providers: [
-    MessageService
-  ],
+  providers: [MessageService],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
   // Reference to the sidebar child
@@ -59,7 +64,12 @@ export class NavbarComponent implements OnInit {
   username: string | undefined = '';
 
   // Saves the profile state
-  profileState: 'logged out' | 'logged in' | 'signed out' | 'signed up' | 'forgot password' = 'signed out';
+  profileState:
+    | 'logged out'
+    | 'logged in'
+    | 'signed out'
+    | 'signed up'
+    | 'forgot password' = 'signed out';
   // Title of the profile dialog
   profileDialogTitle: string = 'Sign Up';
   // Visibility state of the profile dialog
@@ -79,17 +89,17 @@ export class NavbarComponent implements OnInit {
 
   // Viewport type
   viewportType: ViewportType = 'desktop';
-  
+
   /**
    * ! Constructor
-   * 
+   *
    * Navigation event listener to update the navbar colour
-   * 
+   *
    * @param messageService The message service
    * @param router The router service
-   * @param viewportService The viewport service  
+   * @param viewportService The viewport service
    */
-  constructor (
+  constructor(
     private messageService: MessageService,
     private router: Router,
     private viewportService: ViewportService,
@@ -97,17 +107,17 @@ export class NavbarComponent implements OnInit {
     private profileDialogService: ProfileDialogService
   ) {
     // Subscribes to changes in navigation
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      // Update the navbar color
-      this.updateNavbarColor();
-    });
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        // Update the navbar color
+        this.updateNavbarColor();
+      });
   }
 
   /**
    * * On Initalisation
-   * 
+   *
    * - Updates the navbar color
    * - Subcribes to viewport changes
    */
@@ -115,12 +125,12 @@ export class NavbarComponent implements OnInit {
     this.updateNavbarColor();
 
     // Subscribe to viewport changes
-    this.viewportService.viewport$.subscribe(type => {
+    this.viewportService.viewport$.subscribe((type) => {
       this.viewportType = type;
     });
 
     // Subscribe to profile dialog open requests
-    this.profileDialogService.openDialog$.subscribe(shouldOpen => {
+    this.profileDialogService.openDialog$.subscribe((shouldOpen) => {
       if (shouldOpen && !this.profileDialogVisible) {
         this.showProfileDialog();
       }
@@ -129,24 +139,26 @@ export class NavbarComponent implements OnInit {
 
   /**
    * * Updates the navbar color
-   * 
+   *
    * This method updates the navbar color based no the current route.
    */
   private updateNavbarColor(): void {
-    this.navbarColor = this.router.url === '/' ? 'var(--primary-color)' : 'var(--fg-dark-color)';
-    this.titleColor = this.router.url === '/' ? 'black' : 'var(--primary-color)';
+    this.navbarColor =
+      this.router.url === '/' ? 'var(--primary-color)' : 'var(--fg-dark-color)';
+    this.titleColor =
+      this.router.url === '/' ? 'black' : 'var(--primary-color)';
     this.hamburgColor = this.router.url === '/' ? 'black' : 'white';
     this.profileColor = this.router.url === '/' ? 'black' : 'white';
   }
 
-  /** 
+  /**
    * * Keybinds
-   * 
+   *
    * This method listens for key presses and performs actions based on the key press.
-   * 
+   *
    * - Open and close the profile dialog with CTRL + P
    * - Open and close the sidebar with CTRL + S
-   * 
+   *
    * @param event The keyboard event
    */
   @HostListener('document:keydown', ['$event'])
@@ -209,22 +221,32 @@ export class NavbarComponent implements OnInit {
 
   /**
    * * Called when the dialog is opened
-   * 
+   *
    * This will set the confirm the profile dialog reference and maximise the dialog
    * if the user is not logged in and the viewport is mobile. Also maximises the dialog
    * if the user is logged in and the viewport is laptop, tablet, or mobile.
-   * 
+   *
    * @event dialogOpenedEvent Event emitter for when the dialog is opened.
    * @param dialog The dialog that was opened.
    */
   onDialogOpen(dialog: Dialog) {
     this.profileDialog = dialog;
 
-    if (dialog && this.profileState !== 'logged in' && this.viewportType === 'mobile') { 
-      dialog.maximize(); 
+    if (
+      dialog &&
+      this.profileState !== 'logged in' &&
+      this.viewportType === 'mobile'
+    ) {
+      dialog.maximize();
     }
 
-    if (dialog && this.profileState === 'logged in' && (this.viewportType === 'laptop' || this.viewportType === 'tablet' || this.viewportType === 'mobile')) {
+    if (
+      dialog &&
+      this.profileState === 'logged in' &&
+      (this.viewportType === 'laptop' ||
+        this.viewportType === 'tablet' ||
+        this.viewportType === 'mobile')
+    ) {
       dialog.maximize();
     }
 
@@ -240,10 +262,17 @@ export class NavbarComponent implements OnInit {
 
   /**
    * * Called when the profile auth state is changed.
-   * 
+   *
    * This method updates the username in the sidebar based on the auth state.
    */
-  authStateChange(state: 'logged out' | 'logged in' | 'signed out' | 'signed up' | 'forgot password') {
+  authStateChange(
+    state:
+      | 'logged out'
+      | 'logged in'
+      | 'signed out'
+      | 'signed up'
+      | 'forgot password'
+  ) {
     this.profileState = state;
 
     switch (state) {
@@ -259,16 +288,23 @@ export class NavbarComponent implements OnInit {
 
   /**
    * * Method to create a toast
-   * 
+   *
    * This method creates a toast with the provided event data.
-   * 
+   *
    * @param event The event data for the toast
    * @event messageService The message service will display the toast.
    */
-  handleToastEvent(event: { severity: string, summary: string, detail: string }) {
-    this.messageService.add({ severity: event.severity, summary: event.summary, detail: event.detail });
+  handleToastEvent(event: {
+    severity: string;
+    summary: string;
+    detail: string;
+  }) {
+    this.messageService.add({
+      severity: event.severity,
+      summary: event.summary,
+      detail: event.detail,
+    });
   }
-
 
   /**
    * * Navigates to a page (but scrolls to top)

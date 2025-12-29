@@ -188,9 +188,7 @@
               "Advanced filtering with local storage persistence (`45aa097`, `f71622c`).",
               "Added ‘Friends’ prototype setup (`3b1fcf3`)."
             ],
-            "Auth Updates": [
-              "Integrated Google One-Tap and JWT login system."
-            ],
+            "Auth Updates": ["Integrated Google One-Tap and JWT login system."],
             "UI": [
               "Implemented ‘Forgot Password’ reset flow (`32d5fd4`).",
               "Added profile review section (`be37ff0`)."

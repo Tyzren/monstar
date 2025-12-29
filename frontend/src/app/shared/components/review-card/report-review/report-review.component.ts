@@ -21,27 +21,22 @@ import { ApiService } from '../../../services/api.service';
     ButtonModule,
     DropdownModule,
     InputTextareaModule,
-    FormsModule
+    FormsModule,
   ],
-  providers: [
-    MessageService
-  ],
+  providers: [MessageService],
   templateUrl: './report-review.component.html',
   styleUrl: './report-review.component.scss',
-    animations: [
-      trigger('fadeAnimation', [
-        transition(':enter', [
-          style({ opacity: 0 }),
-          animate('300ms ease-in', style({ opacity: 1 }))
-        ]),
-        transition(':leave', [
-          animate('300ms ease-out', style({ opacity: 0 }))
-        ])
-      ])
-    ]
+  animations: [
+    trigger('fadeAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [animate('300ms ease-out', style({ opacity: 0 }))]),
+    ]),
+  ],
 })
 export class ReportReviewComponent {
-
   // * Input property of current user
   @Input() currentUser: User | null = null;
 
@@ -55,42 +50,42 @@ export class ReportReviewComponent {
   reportDescription: string | null = null;
 
   // * Report options
-  reportOptions =[
+  reportOptions = [
     {
       label: 'Hate Speech',
-      value: 'Hate Speech'
+      value: 'Hate Speech',
     },
     {
       label: 'Trolling / Spam',
-      value: 'Trolling / Spam'
+      value: 'Trolling / Spam',
     },
     {
       label: 'Harassment / Bullying',
-      value: 'Harassment / Bullying'
+      value: 'Harassment / Bullying',
     },
     {
       label: 'False and/or Misleading Information',
-      value: 'False and/or Misleading Information'
+      value: 'False and/or Misleading Information',
     },
     {
       label: 'Inappropriate Content',
-      value: 'Inappropriate Content'
+      value: 'Inappropriate Content',
     },
     {
       label: 'Private / Confidential Information',
-      value: 'Private / Confidential Information'
+      value: 'Private / Confidential Information',
     },
     {
       label: 'Biased / Unfair Review',
-      value: 'Biased / Unfair Review'
+      value: 'Biased / Unfair Review',
     },
     {
       label: 'Duplicate Review',
-      value: 'Duplicate Review'
-    }
-  ]
+      value: 'Duplicate Review',
+    },
+  ];
 
-  constructor (
+  constructor(
     private messageService: MessageService,
     private apiService: ApiService
   ) {}
@@ -119,13 +114,18 @@ export class ReportReviewComponent {
       reportReason: this.reportReason,
       reportDescription: this.reportDescription,
       reporterName: this.currentUser?.username,
-      review: this.review
-    }
+      review: this.review,
+    };
 
     this.apiService.sendReviewReportPOST(reportPayload);
     this.closeDialog();
     this.reportReason = null;
     this.reportDescription = null;
-    this.messageService.add({ key: 'success-toast', severity: 'success', summary: 'Report submitted!', detail: 'Your report has been sent to the admin team.' });
+    this.messageService.add({
+      key: 'success-toast',
+      severity: 'success',
+      summary: 'Report submitted!',
+      detail: 'Your report has been sent to the admin team.',
+    });
   }
 }

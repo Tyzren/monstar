@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap, catchError, of, throwError, map } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  tap,
+  catchError,
+  of,
+  throwError,
+  map,
+} from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CsrfService {
   private url = environment.apiUrl;
@@ -37,39 +45,46 @@ export class CsrfService {
 
     if (this.tokenFetchInProgress) {
       if (!environment.production) {
-        console.log('CsrfService | Token fetch already in progress, waiting...');
+        console.log(
+          'CsrfService | Token fetch already in progress, waiting...'
+        );
       }
       return this.csrfToken.asObservable().pipe(
-        tap(token => {
+        tap((token) => {
           if (!token) {
             throw new Error('CSRF token fetch failed');
           }
         }),
-        map(token => token!)
+        map((token) => token!)
       ) as Observable<string>;
     }
 
     this.tokenFetchInProgress = true;
 
-    return this.http.get<{ csrfToken: string }>(`${this.url}/csrf-token`, {
-      withCredentials: true
-    }).pipe(
-      tap(response => {
-        if (!environment.production) {
-          console.log('CsrfService | Successfully fetched CSRF token:', response.csrfToken);
-        }
-        this.csrfToken.next(response.csrfToken);
-        this.tokenFetchInProgress = false;
-      }),
-      catchError(error => {
-        this.tokenFetchInProgress = false;
-        if (!environment.production) {
-          console.error('CsrfService | Error fetching CSRF token:', error);
-        }
-        return throwError(() => error);
-      }),
-      map(response => response.csrfToken)
-    );
+    return this.http
+      .get<{ csrfToken: string }>(`${this.url}/csrf-token`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((response) => {
+          if (!environment.production) {
+            console.log(
+              'CsrfService | Successfully fetched CSRF token:',
+              response.csrfToken
+            );
+          }
+          this.csrfToken.next(response.csrfToken);
+          this.tokenFetchInProgress = false;
+        }),
+        catchError((error) => {
+          this.tokenFetchInProgress = false;
+          if (!environment.production) {
+            console.error('CsrfService | Error fetching CSRF token:', error);
+          }
+          return throwError(() => error);
+        }),
+        map((response) => response.csrfToken)
+      );
   }
 
   /**
@@ -103,7 +118,7 @@ export class CsrfService {
           console.warn('Failed to initialize CSRF token:', error);
         }
         // This is not critical for app startup, so we just log the warning
-      }
+      },
     });
   }
 

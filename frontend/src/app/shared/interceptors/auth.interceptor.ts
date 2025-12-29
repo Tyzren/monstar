@@ -15,7 +15,7 @@ let isRefreshing = false;
  * 2. Automatically calling the /auth/refresh endpoint using the long-lived refresh token
  * 3. Retrying the original failed request with the new access token
  * 4. Logging out the user if the refresh token is also expired (403 from /refresh)
- * 
+ *
  * @param req - The outgoing HTTP request
  * @param next - The next handler in the interceptor chain
  * @returns Observable of the HTTP response, with automatic retry on 401 errors
@@ -28,7 +28,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
    * Skip interceptor logic for authentication endpoints to prevent infinite loops.
    * These endpoints manage tokens themselves and should not trigger refresh attempts.
    */
-  const isAuthEndpoint = req.url.includes('/auth/google/authenticate') ||
+  const isAuthEndpoint =
+    req.url.includes('/auth/google/authenticate') ||
     req.url.includes('/auth/refresh') ||
     req.url.includes('/auth/logout');
   if (isAuthEndpoint) {
@@ -55,7 +56,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             // Refresh failed - log out user and redirect to home
             isRefreshing = false;
             authService.logout();
-            return throwError(() => refreshError)
+            return throwError(() => refreshError);
           })
         );
       }

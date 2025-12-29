@@ -20,11 +20,9 @@ import { ToastModule } from 'primeng/toast';
     PasswordModule,
     ToastModule,
   ],
-  providers: [
-    MessageService
-  ],
+  providers: [MessageService],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
+  styleUrl: './reset-password.component.scss',
 })
 export class ResetPasswordComponent implements OnInit {
   // The new password for the user
@@ -45,11 +43,11 @@ export class ResetPasswordComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private messageService: MessageService
-  ) { }
+  ) {}
 
   /**
    * * On Initialisation
-   * 
+   *
    * - Gets the token from the route parameters.
    * - TODO: Checks if the token is valid
    * - Resets the state back to 'resetting'
@@ -61,18 +59,26 @@ export class ResetPasswordComponent implements OnInit {
 
   /**
    * * Reset Password
-   * 
+   *
    * Resets the password for the user.
    */
   resetPassword() {
     if (this.password1 !== this.password2)
-      return this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Passwords do not match' });
+      return this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Passwords do not match',
+      });
 
     // Reset the password
     this.authService.resetPassword(this.token, this.password1).subscribe({
       next: (response: any) => {
         // Show a toast
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password reset successfully' });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Password reset successfully',
+        });
 
         // Change the state to password has been reset
         this.state = 'reset';
@@ -86,20 +92,28 @@ export class ResetPasswordComponent implements OnInit {
             }, 2000); // 2 seconds
           },
           error: (error: any) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to log you in automatically' });
-          }
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to log you in automatically',
+            });
+          },
         });
       },
       error: (error: any) => {
         // Show error toast
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to reset password' });
-      }
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to reset password',
+        });
+      },
     });
   }
 
   /**
    * * Go Home and Login
-   * 
+   *
    * - Navigates to the home page
    * - Automatically logs the user in
    */

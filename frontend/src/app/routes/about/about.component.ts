@@ -18,7 +18,7 @@ export class AboutComponent implements OnInit {
   error: string = '';
   totalContributions: number = 0;
 
-  constructor(private githubService: GitHubService) { }
+  constructor(private githubService: GitHubService) {}
 
   ngOnInit(): void {
     this.loadContributors();

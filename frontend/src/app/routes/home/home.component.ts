@@ -1,10 +1,32 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 import { DomSanitizer, Meta, SafeHtml, Title } from '@angular/platform-browser';
 
 // Constants
-import { BASE_URL, META_AUTHOR, META_BASIC_TITLE, META_BASIC_TWITTER_TITLE, META_HOME_DESCRIPTION, META_HOME_KEYWORDS, META_HOME_OPEN_GRAPH_DESCRIPTION, META_HOME_TWITTER_DESCRIPTION, META_SITENAME } from '../../shared/constants';
+import {
+  BASE_URL,
+  META_AUTHOR,
+  META_BASIC_TITLE,
+  META_BASIC_TWITTER_TITLE,
+  META_HOME_DESCRIPTION,
+  META_HOME_KEYWORDS,
+  META_HOME_OPEN_GRAPH_DESCRIPTION,
+  META_HOME_TWITTER_DESCRIPTION,
+  META_SITENAME,
+} from '../../shared/constants';
 
 // Models
 import { Unit } from '../../shared/models/unit.model';
@@ -41,8 +63,8 @@ import { ApiService } from '../../shared/services/api.service';
       state('in', style({ opacity: 1 })),
       state('out', style({ opacity: 0 })),
       transition('in => out', animate('500ms ease-out')),
-      transition('out => in', animate('500ms ease-in'))
-    ])
+      transition('out => in', animate('500ms ease-in')),
+    ]),
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -76,7 +98,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     'Discover units with highest satisfaction',
     'Find units that align with your interests',
     'Your one-stop shop for unit reviews',
-    'Learn from others\' experiences',
+    "Learn from others' experiences",
     'Honest reviews from real students',
     'Plan your degree path with confidence',
     'Stay ahead with student recommendations',
@@ -93,7 +115,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     'Make informed choices for your degree',
     'Time to level up your unit game!',
     'The units students actually recommend',
-    'Find your next favorite unit here'
+    'Find your next favorite unit here',
   ];
   subheaderCurrentIndex: number = 0;
   subheaderPreviousIndex: number = 0;
@@ -113,13 +135,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     {
       breakpoint: '1400px',
       numVisible: 2,
-      numScroll: 1
+      numScroll: 1,
     },
     {
       breakpoint: '990px',
       numVisible: 1,
-      numScroll: 1
-    }
+      numScroll: 1,
+    },
   ];
 
   // Sponsors data
@@ -128,34 +150,33 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       name: 'Jane Street',
       url: 'https://www.janestreet.com/',
       logoType: 'image' as const,
-      imagePath: 'sponsors/jane-street.svg'
+      imagePath: 'sponsors/jane-street.svg',
     },
     {
       name: 'Faculty of IT - Monash University',
       url: 'https://www.monash.edu/it',
       logoType: 'image' as const,
-      imagePath: 'sponsors/monash.svg'
+      imagePath: 'sponsors/monash.svg',
     },
     {
       name: 'WIRED Monash',
       url: 'https://wired.org.au/',
       logoType: 'image' as const,
-      imagePath: 'sponsors/wired.svg'
+      imagePath: 'sponsors/wired.svg',
     },
     {
       name: 'Honeywell',
       url: 'https://www.honeywell.com/',
       logoType: 'image' as const,
-      imagePath: 'sponsors/honeywell.svg'
+      imagePath: 'sponsors/honeywell.svg',
     },
     {
       name: 'Record Point',
       url: 'https://www.recordpoint.com/',
       logoType: 'image' as const,
-      imagePath: 'sponsors/record-point.svg'
-    }
+      imagePath: 'sponsors/record-point.svg',
+    },
   ];
-
 
   /**
    * ! Constructor
@@ -167,18 +188,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private navigationService: NavigationService,
     private meta: Meta,
     private titleService: Title
-  ) { }
+  ) {}
 
-
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | LIFECYCLE HOOKS                                                            
+   *  ! | LIFECYCLE HOOKS
    *  ! |======================================================================|
    */
 
   /**
    * * Runs on init
-   * 
+   *
    * Fetches popular units and starts the subheader rotation
    */
   ngOnInit() {
@@ -191,7 +211,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * * Runs after view has initialised
-   * 
+   *
    * Gets the popular units
    */
   ngAfterViewInit() {
@@ -200,12 +220,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * * Runs on destroy
-   * 
+   *
    * Clear the interval for the subheader rotation
    */
   ngOnDestroy(): void {
-    if (this.intervalId)
-      clearInterval(this.intervalId);
+    if (this.intervalId) clearInterval(this.intervalId);
 
     // Remove meta tags when navigating away from home
     this.meta.removeTag("name='description'");
@@ -222,19 +241,20 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.meta.removeTag("name='twitter:description'");
 
     // Reset title to default
-    this.titleService.setTitle('MonSTAR | Browse and Review Monash University Units');
+    this.titleService.setTitle(
+      'MonSTAR | Browse and Review Monash University Units'
+    );
   }
 
-
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | API CALLS     
+   *  ! | API CALLS
    *  ! |======================================================================|
    */
 
   /**
    * * Fetches popular units from the API
-   * 
+   *
    * Makes a GET request to the API to fetch popular units and stores them in the popularUnits array.
    */
   getPopularUnits() {
@@ -242,7 +262,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.apiService.getPopularUnitsGET().subscribe({
       next: (unitData) => {
         // Map the response data to Unit objects
-        this.popularUnits = unitData.map(data => new Unit(data));
+        this.popularUnits = unitData.map((data) => new Unit(data));
 
         this.loading = false;
 
@@ -252,14 +272,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       error: (error) => {
         // ? Debug log error
         // console.log('Home | Error getting popular units:', error.error);
-      }
-    })
+      },
+    });
   }
 
-
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | HELPERS                                                            
+   *  ! | HELPERS
    *  ! |======================================================================|
    */
 
@@ -269,17 +288,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private preloadEmotes(): void {
     const emoteList = [
       'emotes/emote-angry.webp',
-      "emotes/emote-cool.webp",
-      "emotes/emote-default.webp",
-      "emotes/emote-fine.webp",
-      "emotes/emote-nerd.webp",
-      "emotes/emote-study.webp",
+      'emotes/emote-cool.webp',
+      'emotes/emote-default.webp',
+      'emotes/emote-fine.webp',
+      'emotes/emote-nerd.webp',
+      'emotes/emote-study.webp',
     ];
 
     this.totalEmotes = emoteList.length;
 
     // Only populate emotes array after all images are loaded
-    emoteList.forEach(emotePath => {
+    emoteList.forEach((emotePath) => {
       const img = new Image();
       img.onload = () => {
         this.loadedEmotes++;
@@ -291,7 +310,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       img.onerror = () => {
         // Still count errors to avoid hanging if images fail to load
         this.loadedEmotes++;
-      }
+      };
       img.src = emotePath;
     });
   }
@@ -312,7 +331,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         const availableIndices = Array.from(
           { length: this.subheaders.length },
           (_, i) => i
-        ).filter(i => i !== prevIndex);
+        ).filter((i) => i !== prevIndex);
 
         // Get a random index
         const randomIndex = Math.floor(Math.random() * availableIndices.length);
@@ -326,7 +345,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * * Safely renders HTML content
-   * 
+   *
    * @param html The HTML string to sanitize
    * @returns SafeHtml that can be rendered with innerHTML
    */
@@ -334,15 +353,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | NAVIGATION HELPERS                                                            
+   *  ! | NAVIGATION HELPERS
    *  ! |======================================================================|
    */
 
   /**
    * * Navigates to the unit list page
-   * 
+   *
    * This is used for the explore units button on the home page.
    */
   exploreUnits() {
@@ -356,10 +375,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.navigationService.navigateTo([nav]);
   }
 
-
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | META TAGS                                                            
+   *  ! | META TAGS
    *  ! |======================================================================|
    */
 
@@ -373,25 +391,43 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.titleService.setTitle(META_BASIC_TITLE);
 
     // Core meta tags
-    this.meta.updateTag({ name: 'viewport', content: 'width=device-width, initial-scale=1' });
+    this.meta.updateTag({
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1',
+    });
     this.meta.updateTag({ name: 'robots', content: 'index, follow' });
 
     // Basic meta tags
-    this.meta.updateTag({ name: 'description', content: META_HOME_DESCRIPTION });
+    this.meta.updateTag({
+      name: 'description',
+      content: META_HOME_DESCRIPTION,
+    });
     this.meta.updateTag({ name: 'keywords', content: META_HOME_KEYWORDS });
     this.meta.updateTag({ name: 'author', content: META_AUTHOR });
 
     // Open Graph tags for social sharing
     this.meta.updateTag({ property: 'og:site_name', content: META_SITENAME });
     this.meta.updateTag({ property: 'og:title', content: META_BASIC_TITLE });
-    this.meta.updateTag({ property: 'og:description', content: META_HOME_OPEN_GRAPH_DESCRIPTION });
+    this.meta.updateTag({
+      property: 'og:description',
+      content: META_HOME_OPEN_GRAPH_DESCRIPTION,
+    });
     this.meta.updateTag({ property: 'og:url', content: pageUrl });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
     this.meta.updateTag({ property: 'og:locale', content: 'en_AU' });
 
     // Twitter Card tags
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-    this.meta.updateTag({ name: 'twitter:title', content: META_BASIC_TWITTER_TITLE });
-    this.meta.updateTag({ name: 'twitter:description', content: META_HOME_TWITTER_DESCRIPTION });
+    this.meta.updateTag({
+      name: 'twitter:card',
+      content: 'summary_large_image',
+    });
+    this.meta.updateTag({
+      name: 'twitter:title',
+      content: META_BASIC_TWITTER_TITLE,
+    });
+    this.meta.updateTag({
+      name: 'twitter:description',
+      content: META_HOME_TWITTER_DESCRIPTION,
+    });
   }
 }

@@ -1,6 +1,13 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { UnitCardComponent } from "@components/unit-card/unit-card.component";
+import { UnitCardComponent } from '@components/unit-card/unit-card.component';
 import { ApiService } from '@services/api.service';
 import { UnitService } from '@services/api/unit.service';
 import { FilteredUnitsResponse } from '../../shared/models/v2/unit.model';
@@ -24,9 +31,20 @@ import { ViewportService } from '@services/viewport.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { BASE_URL, META_BASIC_DESCRIPTION, META_BASIC_KEYWORDS, META_BASIC_OPEN_GRAPH_DESCRIPTION, META_BASIC_TITLE, META_BASIC_TWITTER_TITLE, META_UNIT_LIST_TITLE } from '../../shared/constants';
+import {
+  BASE_URL,
+  META_BASIC_DESCRIPTION,
+  META_BASIC_KEYWORDS,
+  META_BASIC_OPEN_GRAPH_DESCRIPTION,
+  META_BASIC_TITLE,
+  META_BASIC_TWITTER_TITLE,
+  META_UNIT_LIST_TITLE,
+} from '../../shared/constants';
 import { scrollToTop } from '../../shared/helpers';
-import { SortOptions, SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
+import {
+  SortOptions,
+  SORT_OPTIONS_LIST,
+} from '../../shared/constants/sort-options';
 
 @Component({
   selector: 'app-unit-list',
@@ -70,9 +88,63 @@ export class UnitListComponent implements OnInit, OnDestroy {
   @ViewChild('op') overlayPanel!: OverlayPanel;
   @ViewChild('filterButton', { read: ElementRef }) filterButton!: ElementRef;
 
-  faculties: string[] = ['Art, Design and Architecture', 'Arts', 'Business and Economics', 'Education', 'Engineering', 'Information Technology', 'Law', 'Medicine, Nursing and Health Sciences', 'Pharmacy and Pharmaceutical Sciences', 'Science'];
-  semesters: string[] = ['First semester', 'Second semester', 'Summer semester A', 'Summer semester B', 'Research quarter 1', 'Research quarter 2', 'Research quarter 3', 'Research quarter 4', 'Winter semester', 'Full year', 'First semester (Northern)', 'Trimester 2', 'Second semester to First semester', 'Term 1', 'Term 2', 'Term 3', 'Trimester 3', 'Teaching period 3', 'Teaching period 4', 'Teaching period 5'];
-  campuses: string[] = ['Clayton', 'Caulfield', 'Malaysia', 'Overseas', 'Peninsula', 'City (Melbourne)', 'Alfred Hospital', 'Monash Online', 'Monash Medical Centre', 'Monash Law Chambers', 'Notting Hill', 'Parkville', 'Hudson Institute of Medical Research', 'Gippsland', 'Indonesia', 'Box Hill', 'Warragul', 'Prato', 'Suzhou (SEU)', 'Southbank', 'Moe'];
+  faculties: string[] = [
+    'Art, Design and Architecture',
+    'Arts',
+    'Business and Economics',
+    'Education',
+    'Engineering',
+    'Information Technology',
+    'Law',
+    'Medicine, Nursing and Health Sciences',
+    'Pharmacy and Pharmaceutical Sciences',
+    'Science',
+  ];
+  semesters: string[] = [
+    'First semester',
+    'Second semester',
+    'Summer semester A',
+    'Summer semester B',
+    'Research quarter 1',
+    'Research quarter 2',
+    'Research quarter 3',
+    'Research quarter 4',
+    'Winter semester',
+    'Full year',
+    'First semester (Northern)',
+    'Trimester 2',
+    'Second semester to First semester',
+    'Term 1',
+    'Term 2',
+    'Term 3',
+    'Trimester 3',
+    'Teaching period 3',
+    'Teaching period 4',
+    'Teaching period 5',
+  ];
+  campuses: string[] = [
+    'Clayton',
+    'Caulfield',
+    'Malaysia',
+    'Overseas',
+    'Peninsula',
+    'City (Melbourne)',
+    'Alfred Hospital',
+    'Monash Online',
+    'Monash Medical Centre',
+    'Monash Law Chambers',
+    'Notting Hill',
+    'Parkville',
+    'Hudson Institute of Medical Research',
+    'Gippsland',
+    'Indonesia',
+    'Box Hill',
+    'Warragul',
+    'Prato',
+    'Suzhou (SEU)',
+    'Southbank',
+    'Moe',
+  ];
 
   // Prerequisites
   hasPrerequisites: boolean = false;
@@ -87,14 +159,14 @@ export class UnitListComponent implements OnInit, OnDestroy {
     offset: 0,
     limit: 24,
     search: '',
-    sort: "Most Reviews",
+    sort: 'Most Reviews',
     showReviewed: false,
     showUnreviewed: false,
     hideNoOfferings: false,
     selectedFaculties: [],
     selectedSemesters: [],
     selectedCampuses: [],
-  }
+  };
 
   /**
    * ! Constructor
@@ -106,9 +178,8 @@ export class UnitListComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private viewportService: ViewportService,
     private route: ActivatedRoute,
-    private router: Router,
-  ) { }
-
+    private router: Router
+  ) {}
 
   /**
    *  ! |======================================================================|
@@ -126,16 +197,18 @@ export class UnitListComponent implements OnInit, OnDestroy {
     this.updateMetaTags();
 
     // Setup the debounced search
-    this.searchSubject.pipe(
-      debounceTime(400), // Wait 400ms after the user stops typing
-      distinctUntilChanged() // Only emit if the search string changed
-    ).subscribe(searchTerm => {
-      this.updateSearchQueryParams(searchTerm);
-      this.filterUnits();
-    });
+    this.searchSubject
+      .pipe(
+        debounceTime(400), // Wait 400ms after the user stops typing
+        distinctUntilChanged() // Only emit if the search string changed
+      )
+      .subscribe((searchTerm) => {
+        this.updateSearchQueryParams(searchTerm);
+        this.filterUnits();
+      });
 
     // Subscribe to route parameter changes
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['search']) {
         if (this.filterData.search !== params['search']) {
           this.filterData.search = params['search'];
@@ -148,13 +221,11 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
     // Retrieve the sortBy state from local storage
     const savedSortBy = localStorage.getItem('sortBy');
-    if (savedSortBy)
-      this.filterData.sort = savedSortBy;
+    if (savedSortBy) this.filterData.sort = savedSortBy;
 
     // Retrieve the rows per page state from local storage
     const savedRowsPerPage = localStorage.getItem('rowsPerPage');
-    if (savedRowsPerPage)
-      this.filterData.limit = JSON.parse(savedRowsPerPage);
+    if (savedRowsPerPage) this.filterData.limit = JSON.parse(savedRowsPerPage);
 
     // Retrieve the selected faculty from local storage
     const savedFaculty = localStorage.getItem('selectedFaculty');
@@ -175,7 +246,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
     this.fetchPaginatedUnits();
 
     // Subscribe to the viewport service and get the viewport type
-    this.viewportService.viewport$.subscribe(type => {
+    this.viewportService.viewport$.subscribe((type) => {
       this.viewportType = type;
     });
   }
@@ -185,7 +256,9 @@ export class UnitListComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     // Reset title
-    this.titleService.setTitle('MonSTAR | Browse and Review Monash University Units');
+    this.titleService.setTitle(
+      'MonSTAR | Browse and Review Monash University Units'
+    );
 
     // Remove all custom meta tags
     this.meta.removeTag("name='description'");
@@ -202,7 +275,6 @@ export class UnitListComponent implements OnInit, OnDestroy {
     this.searchSubject.complete();
   }
 
-
   /**
    *  ! |======================================================================|
    *  ! | PAGINATION & UNITS RETRIEVAL
@@ -215,7 +287,9 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
     this.unitService.getUnitsFiltered(this.filterData).subscribe({
       next: (response: FilteredUnitsResponse) => {
-        this.filteredUnits = response.units.map((unitData: UnitData) => new Unit(unitData));
+        this.filteredUnits = response.units.map(
+          (unitData: UnitData) => new Unit(unitData)
+        );
         this.totalRecords = response.total;
         this.loading = false;
       },
@@ -225,8 +299,8 @@ export class UnitListComponent implements OnInit, OnDestroy {
           this.totalRecords = 0;
         }
         this.loading = false;
-      }
-    })
+      },
+    });
   }
 
   onSearchInput() {
@@ -238,13 +312,13 @@ export class UnitListComponent implements OnInit, OnDestroy {
       this.router.navigate([], {
         relativeTo: this.route,
         queryParams: { search: searchTerm },
-        queryParamsHandling: 'merge'
+        queryParamsHandling: 'merge',
       });
     } else {
       this.router.navigate([], {
         relativeTo: this.route,
         queryParams: { search: null },
-        queryParamsHandling: 'merge'
+        queryParamsHandling: 'merge',
       });
     }
   }
@@ -263,9 +337,21 @@ export class UnitListComponent implements OnInit, OnDestroy {
     localStorage.removeItem('selectedSemesters');
     localStorage.removeItem('selectedCampuses');
     // Save filters to local storage
-    if (this.filterData.selectedFaculties) localStorage.setItem('selectedFaculty', JSON.stringify(this.filterData.selectedFaculties));
-    if (this.filterData.selectedSemesters) localStorage.setItem('selectedSemesters', JSON.stringify(this.filterData.selectedSemesters));
-    if (this.filterData.selectedCampuses) localStorage.setItem('selectedCampuses', JSON.stringify(this.filterData.selectedCampuses));
+    if (this.filterData.selectedFaculties)
+      localStorage.setItem(
+        'selectedFaculty',
+        JSON.stringify(this.filterData.selectedFaculties)
+      );
+    if (this.filterData.selectedSemesters)
+      localStorage.setItem(
+        'selectedSemesters',
+        JSON.stringify(this.filterData.selectedSemesters)
+      );
+    if (this.filterData.selectedCampuses)
+      localStorage.setItem(
+        'selectedCampuses',
+        JSON.stringify(this.filterData.selectedCampuses)
+      );
 
     this.filterData.offset = 0;
     this.fetchPaginatedUnits();
@@ -295,7 +381,6 @@ export class UnitListComponent implements OnInit, OnDestroy {
     this.fetchPaginatedUnits();
   }
 
-
   /**
    *  ! |======================================================================|
    *  ! | KEYBOARD SHORTCUTS
@@ -316,7 +401,9 @@ export class UnitListComponent implements OnInit, OnDestroy {
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     // Search bar html element
-    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    const searchInput = document.getElementById(
+      'searchInput'
+    ) as HTMLInputElement;
 
     // Focuses on search bar
     if (event.ctrlKey && event.key === 'k') {
@@ -353,8 +440,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
     if (event.key === 'Escape') {
       event.preventDefault();
       const activeElement = document.activeElement as HTMLElement;
-      if (activeElement)
-        activeElement.blur();
+      if (activeElement) activeElement.blur();
     }
     if (event.key == 'Enter') {
       if (this.isSearchFocused && this.filterData.search) {
@@ -362,7 +448,6 @@ export class UnitListComponent implements OnInit, OnDestroy {
       }
     }
   }
-
 
   /**
    *  ! |======================================================================|
@@ -378,19 +463,34 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
     // Basic meta tags
     this.titleService.setTitle(META_UNIT_LIST_TITLE);
-    this.meta.updateTag({ name: 'description', content: META_BASIC_DESCRIPTION });
+    this.meta.updateTag({
+      name: 'description',
+      content: META_BASIC_DESCRIPTION,
+    });
     this.meta.updateTag({ name: 'keywords', content: META_BASIC_KEYWORDS });
 
     // Open Graph tags for social sharing
-    this.meta.updateTag({ property: 'og:title', content: META_UNIT_LIST_TITLE });
-    this.meta.updateTag({ property: 'og:description', content: META_BASIC_OPEN_GRAPH_DESCRIPTION });
+    this.meta.updateTag({
+      property: 'og:title',
+      content: META_UNIT_LIST_TITLE,
+    });
+    this.meta.updateTag({
+      property: 'og:description',
+      content: META_BASIC_OPEN_GRAPH_DESCRIPTION,
+    });
     this.meta.updateTag({ property: 'og:url', content: pageUrl });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
 
     // Twitter Card tags
     this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
-    this.meta.updateTag({ name: 'twitter:title', content: META_BASIC_TWITTER_TITLE });
-    this.meta.updateTag({ name: 'twitter:description', content: META_BASIC_DESCRIPTION });
+    this.meta.updateTag({
+      name: 'twitter:title',
+      content: META_BASIC_TWITTER_TITLE,
+    });
+    this.meta.updateTag({
+      name: 'twitter:description',
+      content: META_BASIC_DESCRIPTION,
+    });
 
     // Canonical URLs
     const canonicalUrl = this.filterData.search
@@ -399,7 +499,9 @@ export class UnitListComponent implements OnInit, OnDestroy {
 
     // Remove previous canonical if it exists
     const existingCanonical = document.querySelector('link[rel="canonical"]');
-    if (existingCanonical) { existingCanonical.remove(); }
+    if (existingCanonical) {
+      existingCanonical.remove();
+    }
 
     // Add new canonical
     const canonicalLink = document.createElement('link');

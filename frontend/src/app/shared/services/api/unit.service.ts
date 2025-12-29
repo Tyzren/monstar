@@ -6,14 +6,12 @@ import { Unit } from '../../models/unit.model';
 import { FilteredUnitsResponse } from '../../models/v2/unit.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UnitService {
   private urlV2 = environment.apiV2Url;
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   getUnitsFiltered({
     offset = 0,
@@ -36,13 +34,18 @@ export class UnitService {
       .set('showUnreviewed', showUnreviewed ? 'true' : 'false')
       .set('hideNoOfferings', hideNoOfferings ? 'true' : 'false');
 
-    selectedFaculties.forEach(f => { params = params.append('faculty', f) });
-    selectedSemesters.forEach(s => { params = params.append('semesters', s) });
-    selectedCampuses.forEach(c => { params = params.append('campuses', c) });
+    selectedFaculties.forEach((f) => {
+      params = params.append('faculty', f);
+    });
+    selectedSemesters.forEach((s) => {
+      params = params.append('semesters', s);
+    });
+    selectedCampuses.forEach((c) => {
+      params = params.append('campuses', c);
+    });
 
-    return this.http.get<FilteredUnitsResponse>(
-      `${this.urlV2}/units/filter`,
-      { params }
-    );
+    return this.http.get<FilteredUnitsResponse>(`${this.urlV2}/units/filter`, {
+      params,
+    });
   }
 }

@@ -1,4 +1,8 @@
-import { HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
+import {
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpHandlerFn,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { switchMap, catchError, throwError, of } from 'rxjs';
 import { CsrfService } from '../services/csrf.service';
@@ -39,14 +43,19 @@ import { environment } from '../../../environments/environment';
  * @param next - The next handler in the interceptor chain
  * @returns Observable of the HTTP response, with CSRF token automatically attached
  */
-export const csrfInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
+export const csrfInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) => {
   const csrfService = inject(CsrfService);
 
   /**
    * Only state-changing requests require CSRF protection.
    * Read-only requests (GET, HEAD, OPTIONS) are safe from CSRF attacks.
    */
-  const requiresCsrfToken = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method.toUpperCase());
+  const requiresCsrfToken = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(
+    req.method.toUpperCase()
+  );
 
   /**
    * Skip the CSRF token endpoint itself to prevent infinite loops.
@@ -55,7 +64,9 @@ export const csrfInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
   const isCsrfTokenEndpoint = req.url.endsWith('/csrf-token');
 
   if (!environment.production) {
-    console.log(`CSRF Interceptor | ${req.method} ${req.url} - requiresCsrfToken: ${requiresCsrfToken}, isCsrfTokenEndpoint: ${isCsrfTokenEndpoint}`);
+    console.log(
+      `CSRF Interceptor | ${req.method} ${req.url} - requiresCsrfToken: ${requiresCsrfToken}, isCsrfTokenEndpoint: ${isCsrfTokenEndpoint}`
+    );
   }
 
   // Skip CSRF protection for read-only requests and the token endpoint
@@ -75,27 +86,30 @@ export const csrfInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
    * CsrfService handles caching and only fetches if needed.
    */
   return csrfService.ensureToken().pipe(
-    switchMap(token => {
+    switchMap((token) => {
       // Clone the request and add the CSRF token header
       const csrfRequest = req.clone({
         setHeaders: {
-          'X-CSRF-Token': token
-        }
+          'X-CSRF-Token': token,
+        },
       });
       return next(csrfRequest);
     }),
-    catchError(error => {
+    catchError((error) => {
       /**
        * Handle 403 CSRF validation errors
        * If the token is invalid or expired, fetch a new one and retry the request once.
        */
-      if (error.status === 403 && (
-          error.error?.message?.includes('CSRF') ||
+      if (
+        error.status === 403 &&
+        (error.error?.message?.includes('CSRF') ||
           error.error?.message?.includes('csrf') ||
-          error.error?.code === 'EBADCSRFTOKEN'
-        )) {
+          error.error?.code === 'EBADCSRFTOKEN')
+      ) {
         if (!environment.production) {
-          console.warn('CSRF token invalid, refreshing token and retrying request');
+          console.warn(
+            'CSRF token invalid, refreshing token and retrying request'
+          );
         }
 
         // Clear the invalid token from cache
@@ -103,15 +117,15 @@ export const csrfInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
 
         // Fetch a fresh token and retry the original request
         return csrfService.fetchToken().pipe(
-          switchMap(newToken => {
+          switchMap((newToken) => {
             const retryRequest = req.clone({
               setHeaders: {
-                'X-CSRF-Token': newToken
-              }
+                'X-CSRF-Token': newToken,
+              },
             });
             return next(retryRequest);
           }),
-          catchError(retryError => {
+          catchError((retryError) => {
             // If retry also fails, re-throw the error
             if (!environment.production) {
               console.error('CSRF retry failed:', retryError);

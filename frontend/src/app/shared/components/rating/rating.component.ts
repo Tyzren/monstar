@@ -5,9 +5,7 @@ import { ViewportService, ViewportType } from '../../services/viewport.service';
 @Component({
   selector: 'app-rating',
   standalone: true,
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   templateUrl: './rating.component.html',
   styleUrl: './rating.component.scss',
 })
@@ -25,11 +23,11 @@ export class RatingComponent implements OnInit {
   // Viewport type
   viewportType: ViewportType = 'desktop';
 
-  constructor(private viewportService: ViewportService) { }
+  constructor(private viewportService: ViewportService) {}
 
   /**
    * * Initialise the stars array
-   * 
+   *
    * - Create an array of length `stars` to loop over in the template
    * - Subscribes to viewport changes
    */
@@ -37,28 +35,32 @@ export class RatingComponent implements OnInit {
     this.starsArray = Array(this.stars).fill(0);
 
     // Subscribe to viewport changes
-    this.viewportService.viewport$.subscribe(type => {
+    this.viewportService.viewport$.subscribe((type) => {
       this.viewportType = type;
     });
   }
 
   /**
    * * Get the type of star to display
-   * 
+   *
    * Determine whether the star at index i should be "full", "half" or "empty"
    */
   getStarType(index: number): 'full' | 'half' | 'empty' {
     const starNumber = index + 1;
     const currentRating = this.hoverRating || this.rating;
-    
-    if (currentRating >= starNumber) { return 'full'; }
-    else if (currentRating >= starNumber - 0.5) { return 'half'; }
-    else { return 'empty'; }
+
+    if (currentRating >= starNumber) {
+      return 'full';
+    } else if (currentRating >= starNumber - 0.5) {
+      return 'half';
+    } else {
+      return 'empty';
+    }
   }
 
-  /** 
+  /**
    * * Handle touch end event
-   * 
+   *
    * Determines the horizontal touch position within the star element to decide
    * if the touch is in the left half (set rating to index + 0.5) or right half.
    */
@@ -71,7 +73,7 @@ export class RatingComponent implements OnInit {
     const rect = starElem.getBoundingClientRect();
     const touchX = touch.clientX - rect.left;
     const starWidth = rect.width;
-    const newRating = (touchX < starWidth / 2) ? index + 0.5 : index + 1;
+    const newRating = touchX < starWidth / 2 ? index + 0.5 : index + 1;
 
     // Reset rating if tapping the same value
     if (Math.abs(this.rating - newRating) < 0.1) {
@@ -83,9 +85,9 @@ export class RatingComponent implements OnInit {
     this.ratingChange.emit(newRating);
   }
 
-  /** 
+  /**
    * * Handle click event (for desktop only)
-   * 
+   *
    * Determines the horizontal mouse position within the star element to decide
    * whether the click is in the left half (set rating to index + 0.5) or right half.
    */
@@ -96,9 +98,9 @@ export class RatingComponent implements OnInit {
     const starElem = event.currentTarget as HTMLElement;
     const rect = starElem.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
-    
+
     const starWidth = rect.width;
-    const newRating = (clickX < starWidth / 2) ? index + 0.5 : index + 1;
+    const newRating = clickX < starWidth / 2 ? index + 0.5 : index + 1;
 
     if (Math.abs(this.rating - newRating) < 0.1) {
       this.resetRating(event);
@@ -108,10 +110,10 @@ export class RatingComponent implements OnInit {
     this.rating = newRating;
     this.ratingChange.emit(newRating);
   }
-  
+
   /**
    * * Reset the rating to 0
-   * 
+   *
    * Resets the rating to zero, emitting the change to the parent component.
    * This is used for the reset button.
    */
@@ -123,7 +125,7 @@ export class RatingComponent implements OnInit {
 
   /**
    * * Handle hover over the rating container
-   * 
+   *
    * Determine the horizontal mouse position within the container to decide
    * if the hover is in the left half (set hoverRating to index + 0.5) or right half
    * (index + 1)
@@ -136,14 +138,13 @@ export class RatingComponent implements OnInit {
     const starIndex = Math.floor(mouseX / starWidth);
     const positionInStar = mouseX % starWidth;
 
-    this.hoverRating = (positionInStar < starWidth / 2) 
-      ? starIndex + 0.5
-      : starIndex + 1;
+    this.hoverRating =
+      positionInStar < starWidth / 2 ? starIndex + 0.5 : starIndex + 1;
   }
 
   /**
    * * Handle leaving the rating container
-   * 
+   *
    * Reset the hover rating to 0 when the mouse leaves the container
    */
   onContainerLeave(): void {

@@ -1,13 +1,10 @@
 @if (loading) {
   <!-- Loading skeleton -->
-  <p-skeleton
-    height="4rem"
-    borderRadius="16px"
-  />
+  <p-skeleton height="4rem" borderRadius="16px" />
 } @else {
   <p-accordion
     [(activeIndex)]="activeIndex"
-    [ngClass]="{'locked': !isAuthenticated}"
+    [ngClass]="{ locked: !isAuthenticated }"
   >
     <p-accordionTab
       [pTooltip]="headerTooltip"
@@ -41,16 +38,21 @@
         <!-- Controls -->
         <div class="setu-controls">
           <!-- Choose SETU season -->
-          <p-splitButton 
-            [label]="getSeasonDisplay(selectedSetu.Season)" 
-            icon="pi pi-calendar" 
+          <p-splitButton
+            [label]="getSeasonDisplay(selectedSetu.Season)"
+            icon="pi pi-calendar"
             [model]="semesterMenuItems"
-            styleClass="semester-btn" [disabled]="semesterMenuItems.length === 0">
+            styleClass="semester-btn"
+            [disabled]="semesterMenuItems.length === 0"
+          >
           </p-splitButton>
 
           <!-- Quantities -->
           <div class="setu-footer">
-            Responses: {{selectedSetu.Responses}} / {{selectedSetu.Invited}} ({{getResponseRatePercent(selectedSetu)}}%)
+            Responses: {{ selectedSetu.Responses }} /
+            {{ selectedSetu.Invited }} ({{
+              getResponseRatePercent(selectedSetu)
+            }}%)
           </div>
         </div>
 
@@ -60,10 +62,16 @@
           <div class="card">
             <h3>Aggregate Score</h3>
             <div class="value-progress">
-              <div class="value">{{ selectedSetu.getAggregateScore().toFixed(1) }}</div>
+              <div class="value">
+                {{ selectedSetu.getAggregateScore().toFixed(1) }}
+              </div>
               <div class="bar">
-                <p-progressBar [value]="getScoreAsPercentage(selectedSetu.getAggregateScore())"
-                  [showValue]="false"></p-progressBar>
+                <p-progressBar
+                  [value]="
+                    getScoreAsPercentage(selectedSetu.getAggregateScore())
+                  "
+                  [showValue]="false"
+                ></p-progressBar>
               </div>
             </div>
           </div>
@@ -71,10 +79,18 @@
           <div class="card">
             <h3>University Wide Average</h3>
             <div class="value-progress">
-              <div class="value">{{ selectedSetu.getUniversityWideAverage().toFixed(1) }}</div>
+              <div class="value">
+                {{ selectedSetu.getUniversityWideAverage().toFixed(1) }}
+              </div>
               <div class="bar">
-                <p-progressBar [value]="getScoreAsPercentage(selectedSetu.getUniversityWideAverage())"
-                  [showValue]="false"></p-progressBar>
+                <p-progressBar
+                  [value]="
+                    getScoreAsPercentage(
+                      selectedSetu.getUniversityWideAverage()
+                    )
+                  "
+                  [showValue]="false"
+                ></p-progressBar>
               </div>
             </div>
           </div>
@@ -82,10 +98,16 @@
           <div class="card">
             <h3>Faculty Wide Average</h3>
             <div class="value-progress">
-              <div class="value">{{ selectedSetu.getFacultyWideAverage().toFixed(1) }}</div>
+              <div class="value">
+                {{ selectedSetu.getFacultyWideAverage().toFixed(1) }}
+              </div>
               <div class="bar">
-                <p-progressBar [value]="getScoreAsPercentage(selectedSetu.getFacultyWideAverage())"
-                  [showValue]="false"></p-progressBar>
+                <p-progressBar
+                  [value]="
+                    getScoreAsPercentage(selectedSetu.getFacultyWideAverage())
+                  "
+                  [showValue]="false"
+                ></p-progressBar>
               </div>
             </div>
           </div>
@@ -93,10 +115,10 @@
 
         <!-- Redirect to full SETU report button -->
         <div class="button-container">
-          <p-button 
-            icon="pi pi-eye" 
-            label="See full SETU Results" 
-            rounded="true" 
+          <p-button
+            icon="pi pi-eye"
+            label="See full SETU Results"
+            rounded="true"
             (onClick)="goToSetuOverview($event)"
           ></p-button>
         </div>
@@ -107,7 +129,9 @@
         <div class="auth-overlay">
           <div class="auth-overlay-content">
             <img src="/emojis/poop.svg" alt="Locked" class="poop-emoji" />
-            <p class="auth-message">Login with your student email to see SETU</p>
+            <p class="auth-message">
+              Login with your student email to see SETU
+            </p>
             <p-button
               class="mt-4"
               label="Login"
@@ -118,7 +142,6 @@
           </div>
         </div>
       }
-
     </p-accordionTab>
   </p-accordion>
 }

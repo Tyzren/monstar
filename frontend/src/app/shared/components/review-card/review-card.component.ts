@@ -1,7 +1,23 @@
 import { CommonModule, NgOptimizedImage, SlicePipe } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
 import { AvatarModule } from 'primeng/avatar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -14,7 +30,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ReportReviewComponent } from './report-review/report-review.component';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { BadgeModule } from 'primeng/badge';
-import { WriteReviewUnitComponent } from "../write-review-unit/write-review-unit.component";
+import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
 import { Review } from '../../models/review.model';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
@@ -35,11 +51,9 @@ import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
     ReportReviewComponent,
     BadgeModule,
     WriteReviewUnitComponent,
-    HighlightUnitPipe
+    HighlightUnitPipe,
   ],
-  providers: [
-    ConfirmationService,
-  ],
+  providers: [ConfirmationService],
   templateUrl: './review-card.component.html',
   styleUrl: './review-card.component.scss',
   animations: [
@@ -48,18 +62,18 @@ import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
       state(
         'hidden',
         style({
-          opacity: 0
+          opacity: 0,
         })
       ),
       state(
         'visible',
         style({
-          opacity: 1
+          opacity: 1,
         })
       ),
-      transition('hidden <=> visible', animate('300ms ease-in-out'))
-    ])
-  ]
+      transition('hidden <=> visible', animate('300ms ease-in-out')),
+    ]),
+  ],
 })
 export class ReviewCardComponent implements OnInit, OnDestroy {
   // Report dialog component
@@ -70,7 +84,7 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   console = console;
 
   // Accept review data from the parent component
-  @Input() review: any; 
+  @Input() review: any;
 
   // Event emitter for when the review is deleted (used in unit overview to refresh the reviews shown)
   @Output() reviewDeleted = new EventEmitter<void>();
@@ -93,8 +107,9 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   }
 
   // Child component: write review unit dialog
-  @ViewChild(WriteReviewUnitComponent) writeReviewDialog!: WriteReviewUnitComponent;
-  
+  @ViewChild(WriteReviewUnitComponent)
+  writeReviewDialog!: WriteReviewUnitComponent;
+
   items: MenuItem[] | undefined;
 
   // Expand state
@@ -136,7 +151,7 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
       relevancyRating: review.relevancyRating,
       facultyRating: review.facultyRating,
       contentRating: review.contentRating,
-      description: review.description
+      description: review.description,
     });
 
     this.unit = review.unit;
@@ -150,22 +165,18 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
     this.reviewEdited.emit();
   }
 
-
-
   /**
-   * ! Constructor 
+   * ! Constructor
    *
    */
-  constructor (
+  constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
     private viewportService: ViewportService
-  ) { }
+  ) {}
 
-
-
-  /** 
+  /**
    * ! |=======================================================================|
    * ! | LIFECYCLE HOOKS                                                       |
    * ! |=======================================================================|
@@ -173,7 +184,7 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
 
   /**
    * * Runs on initialisation
-   * 
+   *
    * - Sets the likes and dislikes count for the review
    */
   ngOnInit(): void {
@@ -188,16 +199,18 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
         this.currentUser = currentUser;
 
         // Set the liked and disliked state of the review
-        this.liked = this.currentUser?.likedReviews.includes(this.review._id) || false;
-        this.disliked = this.currentUser?.dislikedReviews.includes(this.review._id) || false;
+        this.liked =
+          this.currentUser?.likedReviews.includes(this.review._id) || false;
+        this.disliked =
+          this.currentUser?.dislikedReviews.includes(this.review._id) || false;
 
         // ? Debug log change of current user
         // console.log('ReviewCard | Current User:', this.currentUser);
-      }
+      },
     });
 
     // Subscribe to viewport changes
-    this.viewportService.viewport$.subscribe(type => {
+    this.viewportService.viewport$.subscribe((type) => {
       this.viewportType = type;
     });
 
@@ -208,40 +221,42 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
         icon: 'pi pi-pencil',
         command: () => {
           this.startEditReview(this.review);
-        }
+        },
       },
       {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => {
           this.deleteReview();
-        }
-      }
+        },
+      },
     ];
   }
 
   /**
    * * Runs on destroy
-   * 
+   *
    * Unsubscribes from the currentUser subscription
    */
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
   }
 
-
-
-  /** 
+  /**
    * ! |=======================================================================|
    * ! | REVIEW DELETION                                                       |
    * ! |=======================================================================|
    */
-  
-  /** 
+
+  /**
    * * Choices on confirmation popup (either delete or cancel)
    */
-  accept() { this.confirmPopup.accept(); }
-  reject() { this.confirmPopup.reject(); }
+  accept() {
+    this.confirmPopup.accept();
+  }
+  reject() {
+    this.confirmPopup.reject();
+  }
 
   /**
    * * Subscribes to the confirmation service on deletion
@@ -253,14 +268,14 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
       accept: () => {
         this.deleteReview();
       },
-      reject: () => { }
+      reject: () => {},
     });
   }
 
   /**
    * * Deletes a review from the DB using API Service Method
-   * 
-   * This deletes a review by it's MongoDB ID. If successful, it emits the 
+   *
+   * This deletes a review by it's MongoDB ID. If successful, it emits the
    * reviewDeleted event so that 'unit-overview' can refresh the reviews.
    */
   deleteReview() {
@@ -271,20 +286,22 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
         this.reviewDeleted.emit();
 
         // Remove this review from the current user's reviews array
-        this.currentUser?.reviews.splice(this.currentUser.reviews.indexOf(this.review._id), 1); 
+        this.currentUser?.reviews.splice(
+          this.currentUser.reviews.indexOf(this.review._id),
+          1
+        );
 
         // ? Debug log
         // console.log(message);
       },
       error: (error) => {
-        // ? Debug log 
+        // ? Debug log
         // console.log(error);
-      }
+      },
     });
   }
 
-
-  /** 
+  /**
    * ! |=======================================================================|
    * ! | LIKING AND DISLIKING                                                  |
    * ! |=======================================================================|
@@ -297,36 +314,38 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
     if (!this.currentUser) return;
     if (this.currentUser._id === this.review.author._id) return;
 
-    this.apiService.toggleReactionPATCH(
-      this.review._id, 
-      this.currentUser._id.toString(), 
-      'like'
-    ).subscribe({
-      next: (response: any) => {
-        this.review.likes = response.review.likes;
-        this.review.dislikes = response.review.dislikes;
-        
-        // Update reaction states based on server response
-        this.liked = response.reactions.liked;
-        this.disliked = response.reactions.disliked;
+    this.apiService
+      .toggleReactionPATCH(
+        this.review._id,
+        this.currentUser._id.toString(),
+        'like'
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.review.likes = response.review.likes;
+          this.review.dislikes = response.review.dislikes;
 
-        // Update the user's liked/disliked reviews lists
-        if (this.liked) {
-          this.currentUser?.addLikedReview(this.review._id);
-          
-          if (this.disliked) {
-            this.currentUser?.removeDislikedReview(this.review._id);
+          // Update reaction states based on server response
+          this.liked = response.reactions.liked;
+          this.disliked = response.reactions.disliked;
+
+          // Update the user's liked/disliked reviews lists
+          if (this.liked) {
+            this.currentUser?.addLikedReview(this.review._id);
+
+            if (this.disliked) {
+              this.currentUser?.removeDislikedReview(this.review._id);
+            }
+          } else {
+            this.currentUser?.removeLikedReview(this.review._id);
           }
-        } else {
-          this.currentUser?.removeLikedReview(this.review._id);
-        }
 
-        // console.log(`Review like toggled successfully:`, response);
-      },
-      error: (error) => {
-        // console.error('Error while toggling like:', error);
-      }
-    });
+          // console.log(`Review like toggled successfully:`, response);
+        },
+        error: (error) => {
+          // console.error('Error while toggling like:', error);
+        },
+      });
   }
 
   /**
@@ -336,40 +355,40 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
     if (!this.currentUser) return;
     if (this.currentUser._id === this.review.author._id) return;
 
-    this.apiService.toggleReactionPATCH(
-      this.review._id, 
-      this.currentUser._id.toString(), 
-      'dislike'
-    ).subscribe({
-      next: (response) => {
-        this.review.likes = response.review.likes;
-        this.review.dislikes = response.review.dislikes;
-        
-        // Update reaction states based on server response
-        this.liked = response.reactions.liked;
-        this.disliked = response.reactions.disliked;
-        
-        if (this.disliked) {
-          this.currentUser?.addDislikedReview(this.review._id);
-          
-          if (this.liked) {
-            this.currentUser?.removeLikedReview(this.review._id);
-          }
-        } else {
-          this.currentUser?.removeDislikedReview(this.review._id);
-        }
+    this.apiService
+      .toggleReactionPATCH(
+        this.review._id,
+        this.currentUser._id.toString(),
+        'dislike'
+      )
+      .subscribe({
+        next: (response) => {
+          this.review.likes = response.review.likes;
+          this.review.dislikes = response.review.dislikes;
 
-        // console.log(`Review dislike toggled successfully:`, response);
-      },
-      error: (error) => {
-        // console.error('Error while toggling dislike:', error);
-      }
-    });
+          // Update reaction states based on server response
+          this.liked = response.reactions.liked;
+          this.disliked = response.reactions.disliked;
+
+          if (this.disliked) {
+            this.currentUser?.addDislikedReview(this.review._id);
+
+            if (this.liked) {
+              this.currentUser?.removeLikedReview(this.review._id);
+            }
+          } else {
+            this.currentUser?.removeDislikedReview(this.review._id);
+          }
+
+          // console.log(`Review dislike toggled successfully:`, response);
+        },
+        error: (error) => {
+          // console.error('Error while toggling dislike:', error);
+        },
+      });
   }
 
-
-
-  /** 
+  /**
    * ! |=======================================================================|
    * ! | HELPER METHODS                                                        |
    * ! |=======================================================================|

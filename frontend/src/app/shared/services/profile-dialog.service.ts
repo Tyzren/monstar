@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileDialogService {
   private openDialogSubject = new BehaviorSubject<boolean>(false);
-  public openDialog$: Observable<boolean> = this.openDialogSubject.asObservable();
+  public openDialog$: Observable<boolean> =
+    this.openDialogSubject.asObservable();
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Opens the profile dialog

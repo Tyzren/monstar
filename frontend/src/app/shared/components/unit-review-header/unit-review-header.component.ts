@@ -57,7 +57,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     RippleModule,
     OverlayPanelModule,
     ListboxModule,
-    SkeletonModule
+    SkeletonModule,
   ],
   providers: [MessageService],
   templateUrl: './unit-review-header.component.html',
@@ -111,8 +111,8 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     mobile: '606px',
     tablet: '431.6px',
     laptop: '273.2px',
-    desktop: '438px'
-  }
+    desktop: '438px',
+  };
   skeletonHeight: string = this.SKELETON_HEIGHTS.desktop;
 
   // Resize handler for skeleton heights
@@ -182,7 +182,7 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    * ! Runs on changes
-   * 
+   *
    * Verifies the unit graph again on changes of the `unit` variable.
    */
   ngOnChanges(changes: SimpleChanges): void {
@@ -194,16 +194,20 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
      *  a. There was no previous value (first time the unit is set)
      *  b. OR the unit code has changed (it's a different unit)
      */
-    if (changes['unit'] && changes['unit'].currentValue &&
+    if (
+      changes['unit'] &&
+      changes['unit'].currentValue &&
       (!changes['unit'].previousValue ||
-        changes['unit'].currentValue.unitCode !== changes['unit'].previousValue.unitCode)) {
+        changes['unit'].currentValue.unitCode !==
+          changes['unit'].previousValue.unitCode)
+    ) {
       this.isUnitMapButtonEnabled = this.unitHasRequisites();
     }
   }
 
   /**
    * ! Runs on destroy
-   * 
+   *
    * - Removes the resize event listener to prevent memory leaks.
    * - Unsubscribes from the user subscription.
    */
@@ -241,7 +245,7 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.apiService.getUserReviewsGET(user._id.toString()).subscribe({
       next: (reviewsData: any) => {
         const reviews = reviewsData.map((data: ReviewData) => new Review(data));
-        
+
         // Check if user has reviewed this unit
         this.hasReviewed = reviews.some((userReview: Review) => {
           if (userReview.hasPopulatedUnit()) {
@@ -303,9 +307,12 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
         }
       },
       error: (error) => {
-        console.error('UnitReviewHeader | Error whilst fetching parent units:', error.error);
+        console.error(
+          'UnitReviewHeader | Error whilst fetching parent units:',
+          error.error
+        );
         this.isUnitMapButtonEnabled = false;
-      }
+      },
     });
 
     return false;
@@ -313,17 +320,21 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    *  ! |======================================================================|
-   *  ! | UI MANIPULATORS                                     
+   *  ! | UI MANIPULATORS
    *  ! |======================================================================|
    */
 
-  private updateSkeletonHeight() { 
+  private updateSkeletonHeight() {
     const width = window.innerWidth;
     let height = this.SKELETON_HEIGHTS.desktop;
 
-    if (width < 768) { height = this.SKELETON_HEIGHTS.mobile; }
-    else if (width < 976) { height = this.SKELETON_HEIGHTS.tablet; }
-    else if (width < 1414) { height = this.SKELETON_HEIGHTS.laptop; }
+    if (width < 768) {
+      height = this.SKELETON_HEIGHTS.mobile;
+    } else if (width < 976) {
+      height = this.SKELETON_HEIGHTS.tablet;
+    } else if (width < 1414) {
+      height = this.SKELETON_HEIGHTS.laptop;
+    }
 
     this.skeletonHeight = height;
   }
