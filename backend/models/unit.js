@@ -7,6 +7,61 @@ const UnitTags = {
   WAM_BOOSTER: 'wam-booster',
 };
 
+/**
+ * @typedef {Object} IRequisite
+ * @property {number} [NumReq] - Number of units required
+ * @property {import('mongoose').Types.Array<string>} [units] - Array of unit codes
+ */
+
+/**
+ * @typedef {Object} IRequisites
+ * @property {boolean} permission - Permission required
+ * @property {import('mongoose').Types.Array<string>} [prohibitions] - Prohibited units
+ * @property {import('mongoose').Types.DocumentArray<IRequisite>} [corequisites] - Corequisite requirements
+ * @property {import('mongoose').Types.DocumentArray<IRequisite>} [prerequisites] - Prerequisite requirements
+ * @property {number} cpRequired - Credit points required
+ */
+
+/**
+ * @typedef {Object} IOffering
+ * @property {string} location - Campus location
+ * @property {string} mode - Delivery mode
+ * @property {string} name - Teaching period name
+ * @property {string} period - Teaching period code
+ */
+
+/**
+ * @typedef {Object} IAIOverview
+ * @property {string} [summary] - AI-generated summary
+ * @property {Date} [generatedAt] - When the overview was generated
+ * @property {string} [model] - AI model used
+ * @property {number} [totalReviewsConsidered] - Total reviews analyzed
+ * @property {number} [reviewSampleSize] - Sample size used
+ * @property {import('mongoose').Types.Array<string>} setuSeasons - SETU seasons included
+ */
+
+/**
+ * @typedef {Object} IUnit
+ * @property {import('mongoose').Types.ObjectId} _id - Unit ID
+ * @property {string} unitCode - Unit code (lowercase)
+ * @property {string} name - Unit name
+ * @property {string} [description] - Unit description
+ * @property {import('mongoose').Types.Array<import('mongoose').Types.ObjectId>} reviews - Array of review IDs
+ * @property {number} avgOverallRating - Average overall rating (0-5)
+ * @property {number} avgRelevancyRating - Average relevancy rating (0-5)
+ * @property {number} avgFacultyRating - Average faculty rating (0-5)
+ * @property {number} avgContentRating - Average content rating (0-5)
+ * @property {number} level - Unit level (1-4)
+ * @property {number} creditPoints - Credit points
+ * @property {string} school - School name
+ * @property {string} academicOrg - Academic organization
+ * @property {string} scaBand - SCA band
+ * @property {IRequisites} requisites - Unit requisites
+ * @property {import('mongoose').Types.DocumentArray<IOffering>} offerings - Unit offerings
+ * @property {import('mongoose').Types.Array<string>} tags - Unit tags (max 2)
+ * @property {IAIOverview} [aiOverview] - AI-generated overview
+ */
+
 const RequisiteSchema = new Schema({
   NumReq: { type: Number, required: false },
   units: { type: [String], required: false },
