@@ -15,7 +15,7 @@ class TokenProvider {
   }
 
   static generateRefreshToken() {
-    return crypto.randomBytes(this.REFRESH_TOKEN_SIZE).toString('hex');
+    return crypto.randomBytes(this.REFRESH_TOKEN_BYTE_LENGTH).toString('hex');
   }
 
   static hashRefreshToken(token) {
