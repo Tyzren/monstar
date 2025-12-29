@@ -1,40 +1,40 @@
+import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
   ViewChild,
-  ElementRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { ApiService } from '../../services/api.service';
+import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { MenuModule } from 'primeng/menu';
-import { AvatarModule } from 'primeng/avatar';
-import { AuthService } from '../../services/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { CardModule } from 'primeng/card';
-import { Subscription } from 'rxjs';
-import { User } from '../../models/user.model';
+import { MenubarModule } from 'primeng/menubar';
+import { PasswordModule } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TooltipModule } from 'primeng/tooltip';
-import { TableModule } from 'primeng/table';
-import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
 import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { MenubarModule } from 'primeng/menubar';
-import { ViewportService, ViewportType } from '../../services/viewport.service';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { Subscription } from 'rxjs';
 import { Review } from '../../models/review.model';
-import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
 import { Unit } from '../../models/unit.model';
+import { User } from '../../models/user.model';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { ViewportService, ViewportType } from '../../services/viewport.service';
+import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
 declare let google: any;
 
 @Component({

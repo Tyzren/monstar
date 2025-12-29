@@ -1,14 +1,14 @@
-import { Component, Input } from '@angular/core';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { ButtonModule } from 'primeng/button';
-import { User } from '../../../models/user.model';
-import { NotificationCardComponent } from '../notification-card/notification-card.component';
 import { CommonModule } from '@angular/common';
-import { Notification } from '../../../models/notification.model';
+import { Component, Input } from '@angular/core';
 import { BadgeModule } from 'primeng/badge';
+import { ButtonModule } from 'primeng/button';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { Subscription } from 'rxjs';
+import { Notification } from '../../../models/notification.model';
+import { User } from '../../../models/user.model';
 import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
+import { NotificationCardComponent } from '../notification-card/notification-card.component';
 
 @Component({
   selector: 'app-notifications-popup',

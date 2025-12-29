@@ -1,12 +1,10 @@
-import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Review } from '../models/review.model';
-import { Observable, catchError, of, tap, throwError } from 'rxjs';
-import { AuthService } from './auth.service';
-import { User } from '../models/user.model';
-import { ObjectId, Types } from 'mongoose';
-import { Unit } from '../models/unit.model';
+import { Injectable } from '@angular/core';
+import { Types } from 'mongoose';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Review } from '../models/review.model';
+import { Unit } from '../models/unit.model';
 
 interface ReportPayload {
   reportReason: string | null;

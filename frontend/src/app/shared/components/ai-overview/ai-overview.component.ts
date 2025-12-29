@@ -1,15 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 // PrimeNG modules
 import { CardModule } from 'primeng/card';
 import { TooltipModule } from 'primeng/tooltip';
 
 // App specific models
-import { AiOverview } from '../../models/ai-overview.model';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { Subject, takeUntil } from 'rxjs';
+import { AiOverview } from '../../models/ai-overview.model';
+import { ViewportService, ViewportType } from '../../services/viewport.service';
 
 @Component({
   selector: 'app-ai-overview',

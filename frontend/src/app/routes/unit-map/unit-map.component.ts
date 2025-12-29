@@ -1,25 +1,23 @@
+import { Location, UpperCasePipe } from '@angular/common';
 import {
   Component,
   ElementRef,
-  Input,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Location } from '@angular/common';
-import { OrganizationChartModule } from 'primeng/organizationchart';
-import { ApiService } from '../../shared/services/api.service';
 import { Router } from '@angular/router';
 import { Edge, NgxGraphModule, NgxGraphZoomOptions } from '@swimlane/ngx-graph';
 import * as shape from 'd3-shape';
-import { Subject } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
-import { CardModule } from 'primeng/card';
+import { Subject } from 'rxjs';
 import { Unit } from '../../shared/models/unit.model';
-import { UpperCasePipe } from '@angular/common';
-import { DividerModule } from 'primeng/divider';
+import { ApiService } from '../../shared/services/api.service';
 
 /**
  * * Unit Node Interface

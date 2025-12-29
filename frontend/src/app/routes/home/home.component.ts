@@ -1,19 +1,19 @@
 import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import {
   AfterViewInit,
   Component,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-} from '@angular/animations';
 import { DomSanitizer, Meta, SafeHtml, Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 // Constants
 import {
@@ -32,19 +32,19 @@ import {
 import { Unit } from '../../shared/models/unit.model';
 
 // Components
-import { UnitCardComponent } from '../../shared/components/unit-card/unit-card.component';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { UnitCardComponent } from '../../shared/components/unit-card/unit-card.component';
 
 // Modules
 import { AccordionModule } from 'primeng/accordion';
+import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
 import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 
 // Services
-import { NavigationService } from '../../shared/services/navigation.service';
 import { ApiService } from '../../shared/services/api.service';
+import { NavigationService } from '../../shared/services/navigation.service';
 
 @Component({
   selector: 'app-home',

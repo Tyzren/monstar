@@ -1,25 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Setu } from '../../shared/models/setu.model';
-import {
-  ViewportService,
-  ViewportType,
-} from '../../shared/services/viewport.service';
-import { Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SetuService } from '../../shared/services/setu.service';
-import { AuthService } from '../../shared/services/auth.service';
-import { ProfileDialogService } from '../../shared/services/profile-dialog.service';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { CarouselModule } from 'primeng/carousel';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CardModule } from 'primeng/card';
-import { SkeletonModule } from 'primeng/skeleton';
-import { TooltipModule } from 'primeng/tooltip';
-import { ButtonModule } from 'primeng/button';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { CarouselModule } from 'primeng/carousel';
 import { DividerModule } from 'primeng/divider';
 import { KnobModule } from 'primeng/knob';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TooltipModule } from 'primeng/tooltip';
+import { Subject, takeUntil } from 'rxjs';
 import {
   BASE_URL,
   getMetaSetuOverviewDescription,
@@ -30,7 +23,14 @@ import {
   getMetaSetuOverviewTwitterDescription,
   getMetaSetuOverviewTwitterTitle,
 } from '../../shared/constants';
-import { Meta, Title } from '@angular/platform-browser';
+import { Setu } from '../../shared/models/setu.model';
+import { AuthService } from '../../shared/services/auth.service';
+import { ProfileDialogService } from '../../shared/services/profile-dialog.service';
+import { SetuService } from '../../shared/services/setu.service';
+import {
+  ViewportService,
+  ViewportType,
+} from '../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-setu-overview',

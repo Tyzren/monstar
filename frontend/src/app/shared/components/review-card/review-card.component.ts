@@ -1,8 +1,13 @@
-import { CommonModule, NgOptimizedImage, SlicePipe } from '@angular/common';
 import {
-  AfterViewInit,
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { CommonModule, SlicePipe } from '@angular/common';
+import {
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
@@ -10,31 +15,23 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { ApiService } from '../../services/api.service';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ConfirmationService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/user.model';
-import { Subscription } from 'rxjs';
-import { TooltipModule } from 'primeng/tooltip';
-import { ReportReviewComponent } from './report-review/report-review.component';
-import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { BadgeModule } from 'primeng/badge';
-import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
-import { Review } from '../../models/review.model';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TooltipModule } from 'primeng/tooltip';
+import { Subscription } from 'rxjs';
+import { Review } from '../../models/review.model';
+import { User } from '../../models/user.model';
 import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { ViewportService, ViewportType } from '../../services/viewport.service';
+import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
+import { ReportReviewComponent } from './report-review/report-review.component';
 
 @Component({
   selector: 'app-review-card',

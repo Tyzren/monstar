@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
-  Observable,
-  tap,
   catchError,
-  of,
-  throwError,
   map,
+  Observable,
+  of,
+  tap,
+  throwError,
 } from 'rxjs';
 import { environment } from '../../../environments/environment';
 

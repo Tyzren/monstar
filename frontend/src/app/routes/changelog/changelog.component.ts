@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import * as changelogJson from '../../../../public/changelog.json';
 import {
   ChangelogData,
-  ChangelogYear,
   ChangelogEntry,
+  ChangelogYear,
 } from '../../shared/models/changelog';
 import { CommitHashPipe } from '../../shared/pipes/commit-hash.pipe';
-import * as changelogJson from '../../../../public/changelog.json';
 
 @Component({
   selector: 'app-changelog',

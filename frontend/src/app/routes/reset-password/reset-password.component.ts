@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
-import { AuthService } from '../../shared/services/auth.service';
-import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
-import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-reset-password',

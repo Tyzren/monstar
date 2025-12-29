@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -6,12 +7,9 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
-import { filter, take } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // Environment
 import { environment } from '../../../environments/environment';
@@ -26,23 +24,22 @@ import {
   getMetaUnitOverviewTitle,
   getMetaUnitOverviewTwitterDescription,
   getMetaUnitOverviewTwitterTitle,
-  NAVBAR_HEIGHT,
 } from '../../shared/constants';
 
 // Services
-import { ApiService } from '../../shared/services/api.service';
 import { MessageService } from 'primeng/api';
+import { ApiService } from '../../shared/services/api.service';
 import { FooterService } from '../../shared/services/footer.service';
 
 // Components
-import { ReviewCardComponent } from '../../shared/components/review-card/review-card.component';
-import { UnitReviewHeaderComponent } from '../../shared/components/unit-review-header/unit-review-header.component';
-import { SetuCardComponent } from '../../shared/components/setu-card/setu-card.component';
 import { AiOverviewComponent } from '../../shared/components/ai-overview/ai-overview.component';
+import { ReviewCardComponent } from '../../shared/components/review-card/review-card.component';
+import { SetuCardComponent } from '../../shared/components/setu-card/setu-card.component';
+import { UnitReviewHeaderComponent } from '../../shared/components/unit-review-header/unit-review-header.component';
 // Modules
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
 import { Review } from '../../shared/models/review.model';
 

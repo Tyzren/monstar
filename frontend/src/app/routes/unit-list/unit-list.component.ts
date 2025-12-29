@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -6,31 +7,26 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UnitCardComponent } from '@components/unit-card/unit-card.component';
 import { ApiService } from '@services/api.service';
 import { UnitService } from '@services/api/unit.service';
-import {
-  FilteredUnitsResponse,
-  UnitData,
-} from '../../shared/models/v2/unit.model';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ToolbarModule } from 'primeng/toolbar';
-import { SplitButtonModule } from 'primeng/splitbutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
-import { SkeletonModule } from 'primeng/skeleton';
-import { CommonModule } from '@angular/common';
-import { Dropdown, DropdownModule } from 'primeng/dropdown';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { ScrollTopModule } from 'primeng/scrolltop';
-import { Meta, Title } from '@angular/platform-browser';
 import { ViewportService } from '@services/viewport.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { Dropdown, DropdownModule } from 'primeng/dropdown';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { PaginatorModule } from 'primeng/paginator';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ScrollTopModule } from 'primeng/scrolltop';
+import { SkeletonModule } from 'primeng/skeleton';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { ToolbarModule } from 'primeng/toolbar';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import {
@@ -41,8 +37,12 @@ import {
   META_BASIC_TWITTER_TITLE,
   META_UNIT_LIST_TITLE,
 } from '../../shared/constants';
-import { scrollToTop } from '../../shared/helpers';
 import { SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
+import { scrollToTop } from '../../shared/helpers';
+import {
+  FilteredUnitsResponse,
+  UnitData,
+} from '../../shared/models/v2/unit.model';
 
 @Component({
   selector: 'app-unit-list',

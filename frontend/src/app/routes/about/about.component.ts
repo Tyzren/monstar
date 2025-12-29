@@ -1,9 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-  GitHubService,
   GitHubContributor,
+  GitHubService,
 } from '../../shared/services/github.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-about',

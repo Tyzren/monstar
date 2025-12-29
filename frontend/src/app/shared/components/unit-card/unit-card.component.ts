@@ -1,3 +1,4 @@
+import { CommonModule, UpperCasePipe } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -7,18 +8,17 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { CardModule } from 'primeng/card';
 import { FormsModule } from '@angular/forms';
-import { RatingModule } from 'primeng/rating';
-import { ButtonModule } from 'primeng/button';
-import { CommonModule, UpperCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { TruncatePipe } from '../../pipes/truncate.pipe';
-import { TooltipModule } from 'primeng/tooltip';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { ChipModule } from 'primeng/chip';
-import { UnitData, UnitTag } from '../../models/v2/unit.model';
+import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { UnitData, UnitTag } from '../../models/v2/unit.model';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-unit-card',

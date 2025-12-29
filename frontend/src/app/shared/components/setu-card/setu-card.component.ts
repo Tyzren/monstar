@@ -1,14 +1,14 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
+  HostBinding,
+  HostListener,
   Input,
   OnChanges,
-  SimpleChanges,
-  OnInit,
   OnDestroy,
-  HostListener,
-  HostBinding,
+  OnInit,
+  SimpleChanges,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
@@ -16,16 +16,16 @@ import { Subscription } from 'rxjs';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { SplitButtonModule } from 'primeng/splitbutton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { TooltipModule } from 'primeng/tooltip';
 
 // App specific services and models
-import { SetuService } from '../../services/setu.service';
+import { Setu } from '../../models/setu.model';
 import { AuthService } from '../../services/auth.service';
 import { ProfileDialogService } from '../../services/profile-dialog.service';
-import { Setu } from '../../models/setu.model';
+import { SetuService } from '../../services/setu.service';
 
 @Component({
   selector: 'app-setu-card',

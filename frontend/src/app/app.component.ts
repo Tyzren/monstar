@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 // Services
@@ -6,10 +6,10 @@ import { ApiService } from './shared/services/api.service';
 import { FooterService } from './shared/services/footer.service';
 
 // Components
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { PrimeNGConfig, MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 // Vercel Analytics
 import { inject as injectAnalytics } from '@vercel/analytics';

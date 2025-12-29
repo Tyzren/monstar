@@ -6,24 +6,24 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { RouterLink, Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
+import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { RippleModule } from 'primeng/ripple';
 import { Sidebar, SidebarModule } from 'primeng/sidebar';
 import { StyleClassModule } from 'primeng/styleclass';
-import { Dialog, DialogModule } from 'primeng/dialog';
-import { ProfileComponent } from '../profile/profile.component';
-import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { User } from '../../models/user.model';
 import { TooltipModule } from 'primeng/tooltip';
-import { BadgeModule } from 'primeng/badge';
 import { filter } from 'rxjs/operators';
-import { ViewportService, ViewportType } from '../../services/viewport.service';
+import { User } from '../../models/user.model';
 import { NavigationService } from '../../services/navigation.service';
 import { ProfileDialogService } from '../../services/profile-dialog.service';
+import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { NotificationsPopupComponent } from '../notifications/notifications-popup/notifications-popup.component';
+import { ProfileComponent } from '../profile/profile.component';
 
 @Component({
   selector: 'app-navbar',

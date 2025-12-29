@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -10,22 +11,20 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { RatingModule } from 'primeng/rating';
-import { ApiService } from '../../services/api.service';
-import { Review } from '../../models/review.model';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { MessageService } from 'primeng/api';
+import { RatingModule } from 'primeng/rating';
 import { ToastModule } from 'primeng/toast';
+import { Review } from '../../models/review.model';
 import { User } from '../../models/user.model';
+import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
-import { trigger, style, animate, transition } from '@angular/animations';
-import { RatingComponent } from '../rating/rating.component';
-import { AutoFocusModule } from 'primeng/autofocus';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
+import { RatingComponent } from '../rating/rating.component';
 
 @Component({
   selector: 'app-write-review-unit',
