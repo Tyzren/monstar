@@ -16,10 +16,9 @@ import { Router } from '@angular/router';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { TooltipModule } from 'primeng/tooltip';
 import { ChipModule } from 'primeng/chip';
-import { Unit } from '../../models/unit.model';
+import { UnitData, UnitTag } from '../../models/v2/unit.model';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
-import { UnitTag } from '../../models/unit.model';
 
 @Component({
   selector: 'app-unit-card',
@@ -51,7 +50,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   loading: boolean = true;
 
   // & This unit's offerings, locations, and teaching periods
-  @Input() unit: Unit | undefined;
+  @Input() unit: UnitData | undefined;
   offerings: any[] = [];
   locations: any[] = [];
   teachingPeriods: any[] = [];

@@ -10,7 +10,10 @@ import { ButtonModule } from 'primeng/button';
 import { UnitCardComponent } from '@components/unit-card/unit-card.component';
 import { ApiService } from '@services/api.service';
 import { UnitService } from '@services/api/unit.service';
-import { FilteredUnitsResponse } from '../../shared/models/v2/unit.model';
+import {
+  FilteredUnitsResponse,
+  UnitData,
+} from '../../shared/models/v2/unit.model';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SplitButtonModule } from 'primeng/splitbutton';
@@ -24,7 +27,6 @@ import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { Unit, UnitData } from '../../shared/models/unit.model';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { Meta, Title } from '@angular/platform-browser';
 import { ViewportService } from '@services/viewport.service';
@@ -36,15 +38,11 @@ import {
   META_BASIC_DESCRIPTION,
   META_BASIC_KEYWORDS,
   META_BASIC_OPEN_GRAPH_DESCRIPTION,
-  META_BASIC_TITLE,
   META_BASIC_TWITTER_TITLE,
   META_UNIT_LIST_TITLE,
 } from '../../shared/constants';
 import { scrollToTop } from '../../shared/helpers';
-import {
-  SortOptions,
-  SORT_OPTIONS_LIST,
-} from '../../shared/constants/sort-options';
+import { SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
 
 @Component({
   selector: 'app-unit-list',
@@ -71,7 +69,7 @@ import {
   styleUrl: './unit-list.component.scss',
 })
 export class UnitListComponent implements OnInit, OnDestroy {
-  filteredUnits: Unit[] = [];
+  filteredUnits: UnitData[] = [];
   totalRecords: number = 0;
 
   // Loading state of unit cards
@@ -282,14 +280,11 @@ export class UnitListComponent implements OnInit, OnDestroy {
    */
 
   fetchPaginatedUnits() {
-    const searchLower = this.filterData.search.toLowerCase();
     this.loading = true;
 
     this.unitService.getUnitsFiltered(this.filterData).subscribe({
       next: (response: FilteredUnitsResponse) => {
-        this.filteredUnits = response.units.map(
-          (unitData: UnitData) => new Unit(unitData)
-        );
+        this.filteredUnits = response.units;
         this.totalRecords = response.total;
         this.loading = false;
       },
@@ -410,7 +405,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
       event.preventDefault();
       if (searchInput) {
         searchInput.focus();
-        this.sortByDropdown.hide(); // We hide the dropdown if we focus on the search bar.
+        this.sortByDropdown.hide();
         this.overlayPanel.hide();
       }
     }

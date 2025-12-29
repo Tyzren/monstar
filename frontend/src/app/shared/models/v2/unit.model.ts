@@ -1,17 +1,11 @@
 import { AiOverview } from '../ai-overview.model';
 import { Review } from '../review.model';
 
-export interface FilteredUnitsResponse {
-  units: Array<UnitData>;
-  total: number;
-}
-
 export enum UnitTag {
   MOST_REVIEWS = 'most-reviews',
   CONTROVERSIAL = 'controversial',
   WAM_BOOSTER = 'wam-booster',
 }
-
 export interface Requisites {
   permission: boolean;
   prerequisites: { NumReq: number; units: string[] }[];
@@ -24,7 +18,7 @@ export interface Offering {
   mode: string;
   name: string;
   period: string;
-  _id: Types.ObjectId;
+  _id: string;
 }
 export interface UnitData {
   _id: string;
@@ -45,4 +39,9 @@ export interface UnitData {
   offerings: Offering[];
   tags: UnitTag[];
   aiOverview: AiOverview;
+}
+
+export interface FilteredUnitsResponse {
+  units: Array<UnitData>;
+  total: number;
 }
