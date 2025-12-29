@@ -27,6 +27,10 @@ class UserController {
 
   static refresh = asyncHandler(async (req, res) => {
     const { refresh_token } = req.cookies;
+    if (!refresh_token) {
+      return res.status(401).json({ error: 'No refresh token provided' });
+    }
+
     const { newAccessToken, newRefreshToken } =
       await UserService.refreshUserToken(refresh_token);
 
