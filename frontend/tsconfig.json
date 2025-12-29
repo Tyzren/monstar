@@ -24,7 +24,13 @@
       "ES2022",
       "dom"
     ],
-    "typeRoots": ["src/types"]
+    "typeRoots": ["src/types"],
+    "baseUrl": "./src/",
+    "paths": {
+      "@routes/*": ["app/routes/*"],
+      "@components/*": ["app/shared/components/*"],
+      "@services/*": ["app/shared/services/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
