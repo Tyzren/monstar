@@ -31,7 +31,7 @@ export class User {
   constructor(data?: UserData) {
     // Default avatar URL
     const defaultAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s';
-    
+
     if (!data) {
       // Handle case where data is undefined
       this._id = new Types.ObjectId();
@@ -51,10 +51,10 @@ export class User {
     // Assign values with safe property access
     this._id = data._id ?? new Types.ObjectId();
     this.email = data.email ?? '';
-    
+
     // Derive username from email if not provided
     this.username = data.username ?? (data.email?.slice(0, 8) ?? '');
-    
+
     this.isGoogleUser = data.isGoogleUser ?? false;
     this.reviews = data.reviews ?? [];
     this.profileImg = data.profileImg ?? defaultAvatar;
@@ -67,14 +67,14 @@ export class User {
 
   // Maintain backward compaitibility for constructing User objects
   static fromDetailedConstructor(
-    _id?: Types.ObjectId, 
-    email?: string, 
-    username?: string, 
+    _id?: Types.ObjectId,
+    email?: string,
+    username?: string,
     isGoogleUser?: boolean,
-    reviews?: Types.ObjectId[], 
-    profileImg?: string, 
-    admin?: boolean, 
-    verified?: boolean, 
+    reviews?: Types.ObjectId[],
+    profileImg?: string,
+    admin?: boolean,
+    verified?: boolean,
     likedReviews?: Types.ObjectId[],
     dislikedReviews?: Types.ObjectId[],
     notifications?: Object[]

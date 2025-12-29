@@ -8,22 +8,21 @@ export enum UnitTag {
 }
 
 export interface Requisites {
-    permission: boolean;
-    prerequisites: { NumReq: number, units: string[] }[];
-    corequisites: string[];
-    prohibitions: string[];
-    cpRequired: number;
+  permission: boolean;
+  prerequisites: { NumReq: number, units: string[] }[];
+  corequisites: string[];
+  prohibitions: string[];
+  cpRequired: number;
 }
 
 export interface Offering {
-    location: string;
-    mode: string;
-    name: string;
-    period: string;
-    _id: Types.ObjectId;
+  location: string;
+  mode: string;
+  name: string;
+  period: string;
+  _id: Types.ObjectId;
 }
 
-// Define interface for unit data
 export interface UnitData {
     _id?: Types.ObjectId;
     unitCode?: string;
@@ -146,8 +145,8 @@ export class Unit {
     // Keep compatibility with old constructor form
     static fromDetailedConstructor(
         _id: Types.ObjectId,
-        unitCode: string, 
-        name: string, 
+        unitCode: string,
+        name: string,
         description: string,
         reviews: Review[],
         avgOverallRating: number,
@@ -164,7 +163,7 @@ export class Unit {
         tags?: UnitTag[]
     ): Unit {
         return new Unit({
-            _id, unitCode, name, description, reviews, 
+            _id, unitCode, name, description, reviews,
             avgOverallRating, avgRelevancyRating, avgFacultyRating, avgContentRating,
             level, creditPoints, school, academicOrg, scaBand, requisites, offerings, tags
         });
