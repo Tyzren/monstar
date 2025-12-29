@@ -166,6 +166,9 @@ class ReviewService {
   /**
    * Toggle like/dislike reaction on a review
    *
+   * NOTE: NotificationService calls are not awaited, we let those happen in the
+   * background to make this faster.
+   *
    * @param {String} reviewId
    * @param {String} userId
    * @param {String} reactionType - 'like' or 'dislike'
@@ -198,7 +201,7 @@ class ReviewService {
       if (hasLiked) {
         // Action: Un-Like
         operations.push(ReviewRepository.decrementLikes(reviewId));
-        operations.push(UserRepository.removeLikedReview(reviewId));
+        operations.push(UserRepository.removeLikedReview(userId, reviewId));
 
         NotificationService.delete(review.author, reviewId);
 
@@ -207,7 +210,7 @@ class ReviewService {
       } else {
         // Action: Like
         operations.push(ReviewRepository.incrementLikes(reviewId));
-        operations.push(UserRepository.addLikedReview(reviewId));
+        operations.push(UserRepository.addLikedReview(userId, reviewId));
 
         NotificationService.createLike(user, review);
 
