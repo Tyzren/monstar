@@ -3,10 +3,10 @@ const {
   Error409Conflict,
   Error401NotAuthorized,
 } = require('@infra/utilities/errors');
-const Notification = require('@models/notification');
 const ReviewRepository = require('@repositories/review.repository');
 const UnitRepository = require('@repositories/unit.repository');
 const UserRepository = require('@repositories/user.repository');
+const NotificationService = require('@services/notification.service');
 
 /**
  * @typedef {import('@models/review').IReview} IReview
@@ -172,136 +172,98 @@ class ReviewService {
    * @returns {Promise<{review: IReview, reactions: {liked: boolean, disliked: boolean}}>}
    */
   static toggleReaction = async (reviewId, userId, reactionType) => {
-    //TODO: We can't have these database operations done here, find out a way to use repos only.
-    // Fetch all required documents in parallel
-    const [review, user] = await Promise.all([
-      ReviewRepository.findById(reviewId),
+    const [user, review] = await Promise.all([
       UserRepository.findById(userId),
+      ReviewRepository.findById(reviewId),
     ]);
-
     if (!review) throw new Error404NotFound('Review not found');
     if (!user) throw new Error404NotFound('User not found');
 
-    // Fetch additional required documents
-    const [unit, author] = await Promise.all([
-      UnitRepository.findById(review.unit),
-      UserRepository.findById(review.author),
-    ]);
+    const strReviewId = review._id.toString();
+    const hasLiked = user.likedReviews
+      .map((id) => id.toString())
+      .includes(strReviewId);
+    const hasDisliked = user.dislikedReviews
+      .map((id) => id.toString())
+      .includes(strReviewId);
 
-    if (!unit) throw new Error404NotFound('Unit not found');
-    if (!author) throw new Error404NotFound('Author not found');
+    const operations = [];
 
-    // Initialize operations object to track changes
-    const operations = {
-      notificationToRemove: null,
-      notificationToAdd: null,
-      reactionAdded: false,
-      reactionRemoved: false,
-      oppositeReactionRemoved: false,
-    };
+    let likesDelta = 0;
+    let dislikesDelta = 0;
+    let finalHasLiked = hasLiked;
+    let finalHasDisliked = hasDisliked;
 
-    // Handle like/dislike toggle
     if (reactionType === 'like') {
-      const hasLiked = user.likedReviews.includes(review._id);
-
       if (hasLiked) {
-        // Remove like
-        review.likes = Math.max(0, review.likes - 1);
-        user.likedReviews.pull(review._id);
-        operations.reactionRemoved = true;
+        // Action: Un-Like
+        operations.push(ReviewRepository.decrementLikes(reviewId));
+        operations.push(UserRepository.removeLikedReview(reviewId));
 
-        // Find and mark notification for removal
-        operations.notificationToRemove = await Notification.findOne({
-          user: author._id,
-          review: review._id,
-        });
+        NotificationService.delete(review.author, reviewId);
+
+        likesDelta = -1;
+        finalHasLiked = false;
       } else {
-        // Add like
-        review.likes++;
-        user.likedReviews.push(review._id);
-        operations.reactionAdded = true;
+        // Action: Like
+        operations.push(ReviewRepository.incrementLikes(reviewId));
+        operations.push(UserRepository.addLikedReview(reviewId));
 
-        // Create notification data
-        operations.notificationToAdd = {
-          data: {
-            message: `${user.username} liked your review on ${unit.unitCode.toUpperCase()}`,
-            user: { username: user.username, profileImg: user.profileImg },
-          },
-          navigateTo: `/unit/${unit.unitCode}`,
-          review: review._id,
-          user: author._id,
-        };
+        NotificationService.createLike(user, review);
 
-        // Check if user had disliked this review
-        if (user.dislikedReviews.includes(review._id)) {
-          review.dislikes = Math.max(0, review.dislikes - 1);
-          user.dislikedReviews.pull(review._id);
-          operations.oppositeReactionRemoved = true;
+        likesDelta = 1;
+        finalHasLiked = true;
+
+        if (hasDisliked) {
+          // If previously disliked, remove dislike
+          operations.push(ReviewRepository.decrementDislikes(reviewId));
+          operations.push(
+            UserRepository.removeDislikedReview(userId, reviewId)
+          );
+          dislikesDelta = -1;
+          finalHasDisliked = false;
         }
       }
-    } else {
-      // dislike
-      const hasDisliked = user.dislikedReviews.includes(review._id);
-
+    } else if (reactionType === 'dislike') {
       if (hasDisliked) {
-        // Remove dislike
-        review.dislikes = Math.max(0, review.dislikes - 1);
-        user.dislikedReviews.pull(review._id);
-        operations.reactionRemoved = true;
+        // Action: Un-Dislike
+        operations.push(ReviewRepository.decrementDislikes(reviewId));
+        operations.push(UserRepository.removeDislikedReview(userId, reviewId));
+
+        dislikesDelta = -1;
+        finalHasDisliked = false;
       } else {
-        // Add dislike
-        review.dislikes++;
-        user.dislikedReviews.push(review._id);
-        operations.reactionAdded = true;
+        // Action: Dislike
+        operations.push(ReviewRepository.incrementDislikes(reviewId));
+        operations.push(UserRepository.addDislikedReview(userId, reviewId));
 
-        // Check if user had liked this review
-        if (user.likedReviews.includes(review._id)) {
-          review.likes = Math.max(0, review.likes - 1);
-          user.likedReviews.pull(review._id);
-          operations.oppositeReactionRemoved = true;
+        dislikesDelta = 1;
+        finalHasDisliked = true;
 
-          // Find and mark notification for removal
-          operations.notificationToRemove = await Notification.findOne({
-            user: author._id,
-            review: review._id,
-          });
+        if (hasLiked) {
+          // if previously liked, remove like
+          operations.push(ReviewRepository.decrementLikes(reviewId));
+          operations.push(UserRepository.removeLikedReview(userId, reviewId));
+
+          NotificationService.delete(review.author, reviewId);
+
+          likesDelta = -1;
+          finalHasLiked = false;
         }
       }
     }
 
-    // Process notifications
-    if (operations.notificationToRemove) {
-      await Notification.deleteOne({
-        _id: operations.notificationToRemove._id,
-      });
+    await Promise.all(operations);
 
-      if (
-        author.notifications &&
-        author.notifications.includes(operations.notificationToRemove._id)
-      ) {
-        author.notifications.pull(operations.notificationToRemove._id);
-      }
-    }
-
-    if (operations.notificationToAdd) {
-      const newNotification = new Notification(operations.notificationToAdd);
-      await newNotification.save();
-
-      if (!author.notifications) {
-        author.notifications = [];
-      }
-      author.notifications.push(newNotification._id);
-    }
-
-    // Save all documents in parallel
-    await Promise.all([review.save(), user.save(), author.save()]);
-
-    // Return the updated review with reaction status
     return {
-      review,
+      review: {
+        ...review.toObject(),
+        likes: review.likes + likesDelta,
+        dislikes: review.dislikes + dislikesDelta,
+      },
       reactions: {
-        liked: user.likedReviews.includes(review._id),
-        disliked: user.dislikedReviews.includes(review._id),
+        liked: finalHasLiked,
+        disliked: finalHasDisliked,
       },
     };
   };
