@@ -11,4 +11,11 @@ router.post(
   UserController.authenticateWithGoogle
 );
 
+router.post(
+  '/refresh',
+  // #swagger.tags = ['User V2']
+  // #swagger.summary = 'Refresh access token using refresh token'
+  UserController.refresh
+)
+
 module.exports = router;
