@@ -73,7 +73,9 @@ app.use(async (req, res, next) => {
 app.use('/api/v1/units', require('./infra/routes/v1/units'));
 app.use('/api/v2/units', require('./infra/routes/v2/units'));
 app.use('/api/v1/reviews', require('./infra/routes/v1/reviews'));
+app.use('/api/v2/reviews', require('./infra/routes/v2/reviews'));
 app.use('/api/v1/auth', require('./infra/routes/v1/auth'));
+app.use('/api/v2/users', require('./infra/routes/v2/users'));
 app.use('/api/v1/notifications', require('./infra/routes/v1/notifications'));
 app.use('/api/v1/github', require('./infra/routes/v1/github'));
 app.use('/api/v1/setus', require('./infra/routes/v1/setus'));
