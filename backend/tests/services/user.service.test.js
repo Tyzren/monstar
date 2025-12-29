@@ -12,7 +12,10 @@ jest.mock('google-auth-library', () => {
 
 const UserService = require('@services/user.service');
 const User = require('@models/user');
-const { DomainValidationError } = require('@infra/utilities/errors');
+const {
+  Error403Forbidden,
+  Error409Conflict,
+} = require('@infra/utilities/errors');
 
 describe(UserService.name, () => {
   beforeEach(() => {
@@ -76,14 +79,14 @@ describe(UserService.name, () => {
       expect(dbUser.isGoogleUser).toBe(true);
     });
 
-    it('should throw DomainValidationError for non-Monash emails', async () => {
+    it('should throw Error403Forbidden for non-Monash emails', async () => {
       // arrange
       setupGoogleMock('nonmonashuser@gmail.com');
 
       // act and assert
       await expect(
         UserService.googleAuthenticate(fakeIdTokenString)
-      ).rejects.toThrow(DomainValidationError);
+      ).rejects.toThrow(Error403Forbidden);
     });
 
     it('should login an existing Google user and update refresh token', async () => {
@@ -109,7 +112,7 @@ describe(UserService.name, () => {
       expect(updatedUser.refreshToken).not.toBe('old-token');
     });
 
-    it('should throw ConflictError if account exists but is not a Google account', async () => {
+    it('should throw Error409Conflict if account exists but is not a Google account', async () => {
       const email = 'jdoe6767@student.monash.edu';
       await User.create({
         email,
@@ -122,7 +125,7 @@ describe(UserService.name, () => {
 
       await expect(
         UserService.googleAuthenticate(fakeIdTokenString)
-      ).rejects.toThrow(ConflictError);
+      ).rejects.toThrow(Error409Conflict);
     });
   });
 });
