@@ -1,8 +1,8 @@
 const { OAuth2Client } = require('google-auth-library');
 
 const {
-  ConflictError,
-  DomainValidationError,
+  Error409Conflict,
+  Error403Forbidden,
 } = require('@infra/utilities/errors');
 const TokenProvider = require('@providers/token.provider');
 const UserRepository = require('@repositories/user.repository');
@@ -30,7 +30,7 @@ class UserService {
     const isStudentEmail = this.STUDENT_EMAIL_REGEX.test(email);
     const isStaffEmail = this.STAFF_EMAIL_REGEX.test(email);
     if (!isStudentEmail && !isStaffEmail) {
-      throw new DomainValidationError(
+      throw new Error403Forbidden(
         'Only students with a valid Monash email can log in.'
       );
     }
@@ -53,7 +53,7 @@ class UserService {
     }
 
     if (!user.isGoogleUser) {
-      throw new ConflictError('Account already exists as non-Google account.');
+      throw new Error409Conflict('Account already exists as non-Google account.');
     }
 
     const accessToken = TokenProvider.generateAccessToken(user._id, user.admin);
@@ -80,7 +80,7 @@ class UserService {
     const hashedRefreshToken = TokenProvider.hashRefreshToken(refreshToken);
     const user = await UserRepository.findByHashedRefreshToken(hashedRefreshToken);
     if (!user) {
-      throw new DomainValidationError('Invalid or expired refresh token');
+      throw new Error403Forbidden('Invalid or expired refresh token');
     }
 
     const newAccessToken = TokenProvider.generateAccessToken(user._id, user.admin);

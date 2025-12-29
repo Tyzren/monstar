@@ -1,3 +1,8 @@
+const {
+  Error404NotFound,
+  Error409Conflict,
+  Error401NotAuthorized,
+} = require('@infra/utilities/errors');
 const Notification = require('@models/notification');
 const ReviewRepository = require('@repositories/review.repository');
 const UnitRepository = require('@repositories/unit.repository');
@@ -21,7 +26,7 @@ class ReviewService {
   static fetchByUnit = async (unitCode) => {
     // Find the unit first
     const unit = await UnitRepository.findOneByUnitcode(unitCode);
-    if (!unit) throw new Error(`Unit not found`);
+    if (!unit) throw new Error404NotFound(`Unit not found`);
 
     return await ReviewRepository.findByUnitId(unit._id);
   };
@@ -44,7 +49,8 @@ class ReviewService {
   static createReview = async (unitCode, reviewData) => {
     // Find the unit
     const unit = await UnitRepository.findOneByUnitcode(unitCode);
-    if (!unit) throw new Error(`Unit with code ${unitCode} not found in DB`);
+    if (!unit)
+      throw new Error404NotFound(`Unit with code ${unitCode} not found in DB`);
 
     // Check if the user has already reviewed this unit
     const existingReview = await ReviewRepository.findByAuthorAndUnit(
@@ -53,7 +59,7 @@ class ReviewService {
     );
 
     if (existingReview) {
-      throw new Error('You have already reviewed this unit');
+      throw new Error409Conflict('You have already reviewed this unit');
     }
 
     // Create and save the review
@@ -83,16 +89,17 @@ class ReviewService {
    */
   static updateReview = async (reviewId, userId, updateData) => {
     const review = await ReviewRepository.findById(reviewId);
-    if (!review) throw new Error('Review not found');
+    if (!review) throw new Error404NotFound('Review not found');
 
     // Get the requesting user
     const requestingUser = await UserRepository.findById(userId);
-    if (!requestingUser) throw new Error('Requesting user not found');
+    if (!requestingUser)
+      throw new Error404NotFound('Requesting user not found');
 
     // Check authorization (must be author or admin)
     const isAuthor = review.author.toString() === requestingUser._id.toString();
     if (!isAuthor && !requestingUser.admin) {
-      throw new Error('Unauthorized to update review');
+      throw new Error401NotAuthorized('Unauthorized to update review');
     }
 
     // Update the review
@@ -115,17 +122,20 @@ class ReviewService {
    */
   static deleteReview = async (reviewId, userId) => {
     const review = await ReviewRepository.findById(reviewId);
-    if (!review) throw new Error('Review not found');
+    if (!review) throw new Error404NotFound('Review not found');
 
     // Get the requesting user
     const requestingUser = await UserRepository.findById(userId);
-    if (!requestingUser) throw new Error('Requesting user not found');
+    if (!requestingUser)
+      throw new Error404NotFound('Requesting user not found');
 
     // Check authorization (must be author or admin)
     const isAuthor = review.author.toString() === requestingUser._id.toString();
     const isAdmin = requestingUser.admin;
     if (!isAuthor && !isAdmin) {
-      throw new Error('You are not authorized to delete this review');
+      throw new Error401NotAuthorized(
+        'You are not authorized to delete this review'
+      );
     }
 
     const unitId = review.unit;
@@ -158,8 +168,8 @@ class ReviewService {
       UserRepository.findById(userId),
     ]);
 
-    if (!review) throw new Error('Review not found');
-    if (!user) throw new Error('User not found');
+    if (!review) throw new Error404NotFound('Review not found');
+    if (!user) throw new Error404NotFound('User not found');
 
     // Fetch additional required documents
     const [unit, author] = await Promise.all([
@@ -167,8 +177,8 @@ class ReviewService {
       UserRepository.findById(review.author),
     ]);
 
-    if (!unit) throw new Error('Unit not found');
-    if (!author) throw new Error('Author not found');
+    if (!unit) throw new Error404NotFound('Unit not found');
+    if (!author) throw new Error404NotFound('Author not found');
 
     // Initialize operations object to track changes
     const operations = {

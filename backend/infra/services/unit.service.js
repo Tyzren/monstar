@@ -1,4 +1,8 @@
 const { getSortCriteria } = require('@constants/sortOptions');
+const {
+  Error404NotFound,
+  Error422Unprocessable,
+} = require('@infra/utilities/errors');
 const UnitRepository = require('@repositories/unit.repository');
 const { buildFilterQuery } = require('@utilities/unitFilterHelpers');
 
@@ -44,7 +48,8 @@ class UnitService {
    * @param {String} unitCode
    */
   static fetchByCode = async (unitCode) => {
-    return await UnitRepository.findOneByUnitcode(unitCode);
+    const unit = await UnitRepository.findOneByUnitcode(unitCode);
+    if (!unit) throw new Error404NotFound('Unit not found');
   };
 
   /**
@@ -66,9 +71,11 @@ class UnitService {
       allowedFields.includes(key)
     );
     if (!hasOnlyAllowedFields)
-      throw new Error('Disallowed fields present in update data');
+      throw new Error422Unprocessable(
+        'Disallowed fields present in update data'
+      );
     const unit = await UnitRepository.updateOneByUnitcode(unitCode, updateData);
-    if (!unit) throw new Error('Unit not found');
+    if (!unit) throw new Error404NotFound('Unit not found');
     return unit;
   };
 
@@ -79,7 +86,7 @@ class UnitService {
    */
   static fetchUnitsRequiredBy = async (unitCode) => {
     const unit = await UnitRepository.findOneByUnitCode(unitCode);
-    if (!unit) throw new Error('Unit not found');
+    if (!unit) throw new Error404NotFound('Unit not found');
     return await UnitRepository.findRequiredBy(unitCode);
   };
 }

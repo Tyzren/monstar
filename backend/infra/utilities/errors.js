@@ -7,31 +7,37 @@ class AppError extends Error {
 }
 
 /* ------------------------------ Basic errors ------------------------------ */
-class DomainValidationError extends AppError {
+class Error403Forbidden extends AppError {
   constructor(message = 'Invalid domain access') {
     super(message, 403); // Forbidden
   }
 }
 
-class ConflictError extends AppError {
+class Error409Conflict extends AppError {
   constructor(message = 'Resource already exists') {
     super(message, 409); // Conflict
   }
 }
 
-class NotFoundError extends AppError {
+class Error404NotFound extends AppError {
   constructor(message = 'Not found') {
     super(message, 404); // Not Found
   }
 }
 
-class UnauthorizedError extends AppError {
+class Error422Unprocessable extends AppError {
+  constructor(message = 'Not found') {
+    super(message, 404); // Not Found
+  }
+}
+
+class Error401NotAuthorized extends AppError {
   constructor(message = 'Not authorized') {
     super(message, 401);
   }
 }
 
-class RateLimitError extends AppError {
+class Error429RateLimited extends AppError {
   constructor(message = 'Too many requests') {
     super(message, 429);
   }
@@ -40,9 +46,10 @@ class RateLimitError extends AppError {
 /* ------------------------- Domain specific errors ------------------------- */
 
 module.exports = {
-  DomainValidationError,
-  ConflictError,
-  NotFoundError,
-  UnauthorizedError,
-  RateLimitError,
+  Error403Forbidden,
+  Error409Conflict,
+  Error404NotFound,
+  Error401NotAuthorized,
+  Error422Unprocessable,
+  Error429RateLimited,
 };
