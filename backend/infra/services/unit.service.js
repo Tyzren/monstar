@@ -3,6 +3,7 @@ const {
   Error404NotFound,
   Error422Unprocessable,
 } = require('@infra/utilities/errors');
+const CacheProvider = require('@providers/cache.provider');
 const UnitRepository = require('@repositories/unit.repository');
 const { buildFilterQuery } = require('@utilities/unitFilterHelpers');
 
@@ -47,7 +48,13 @@ class UnitService {
    * @returns {Promise<Array<IUnit>>}
    */
   static fetchMostReviewed = async (n = 10) => {
-    return await UnitRepository.findMostReviewedUnits(n);
+    return await CacheProvider.getOrSet(
+      'units:popular',
+      async () => {
+        return await UnitRepository.findMostReviewedUnits(n);
+      },
+      CacheProvider.POPULAR_UNITS_TTL
+    );
   };
 
   /**

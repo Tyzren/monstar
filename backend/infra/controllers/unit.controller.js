@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler');
 
-const CacheProvider = require('@providers/cache.provider'); // TODO: Move caching logic to the service layer
 const UnitService = require('@services/unit.service');
 
 const { isValidSortOption } = require('../../constants/sortOptions');
@@ -34,16 +33,12 @@ class UnitController {
   });
 
   /**
-   * List most reviewed units
+   * List most reviewed units (cached)
+   *
+   * @see UnitService.fetchMostReviewed
    */
   static getMostReviewed = asyncHandler(async (req, res) => {
-    const mostReviewedUnits = await CacheProvider.getOrSet(
-      'units:popular',
-      async () => {
-        return await UnitService.fetchMostReviewed(10);
-      },
-      CacheProvider.POPULAR_UNITS_TTL
-    );
+    const mostReviewedUnits = await UnitService.fetchMostReviewed(10);
     return res.status(200).json(mostReviewedUnits);
   });
 
