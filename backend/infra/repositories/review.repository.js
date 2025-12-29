@@ -9,6 +9,8 @@ const User = require('@models/user');
  */
 
 class ReviewRepository {
+  /* -------------------------------- Retrieval ------------------------------- */
+
   /**
    * Find all reviews with optional filter
    *
@@ -65,6 +67,8 @@ class ReviewRepository {
     return await Review.findById(reviewId);
   }
 
+  /* -------------------------------- Creation -------------------------------- */
+
   /**
    * Create a new review
    *
@@ -74,27 +78,6 @@ class ReviewRepository {
   static async create(reviewData) {
     const review = new Review(reviewData);
     return await review.save();
-  }
-
-  /**
-   * Update a review by ID
-   *
-   * @param {String} reviewId
-   * @param {Object} updateData
-   * @returns {Promise<IReview|null>}
-   */
-  static async updateById(reviewId, updateData) {
-    return await Review.findByIdAndUpdate(reviewId, updateData, { new: true });
-  }
-
-  /**
-   * Delete a review by ID
-   *
-   * @param {String} reviewId
-   * @returns {Promise<IReview|null>}
-   */
-  static async deleteById(reviewId) {
-    return await Review.findByIdAndDelete(reviewId);
   }
 
   /**
@@ -112,6 +95,8 @@ class ReviewRepository {
     );
   }
 
+  /* ------------------------------ Modification ------------------------------ */
+
   /**
    * Add a review to a user's reviews array
    *
@@ -125,6 +110,29 @@ class ReviewRepository {
       { $push: { reviews: reviewId } },
       { new: true, runValidators: true }
     );
+  }
+
+  /**
+   * Update a review by ID
+   *
+   * @param {String} reviewId
+   * @param {Object} updateData
+   * @returns {Promise<IReview|null>}
+   */
+  static async updateById(reviewId, updateData) {
+    return await Review.findByIdAndUpdate(reviewId, updateData, { new: true });
+  }
+
+  /* --------------------------------- Removal -------------------------------- */
+
+  /**
+   * Delete a review by ID
+   *
+   * @param {String} reviewId
+   * @returns {Promise<IReview|null>}
+   */
+  static async deleteById(reviewId) {
+    return await Review.findByIdAndDelete(reviewId);
   }
 
   /**
@@ -151,6 +159,64 @@ class ReviewRepository {
     return await Unit.findByIdAndUpdate(unitId, {
       $pull: { reviews: reviewId },
     });
+  }
+
+  /* -------------------------------- Reactions ------------------------------- */
+
+  /**
+   * Increment likes count for a review
+   *
+   * @param {String} reviewId
+   * @returns {Promise<IReview|null>}
+   */
+  static async incrementLikes(reviewId) {
+    return await Review.findByIdAndUpdate(
+      reviewId,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Decrement likes count for a review
+   *
+   * @param {String} reviewId
+   * @returns {Promise<IReview|null>}
+   */
+  static async decrementLikes(reviewId) {
+    return await Review.findByIdAndUpdate(
+      reviewId,
+      { $inc: { likes: -1 } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Increment dislikes count for a review
+   *
+   * @param {String} reviewId
+   * @returns {Promise<IReview|null>}
+   */
+  static async incrementDislikes(reviewId) {
+    return await Review.findByIdAndUpdate(
+      reviewId,
+      { $inc: { dislikes: 1 } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Decrement dislikes count for a review
+   *
+   * @param {String} reviewId
+   * @returns {Promise<IReview|null>}
+   */
+  static async decrementDislikes(reviewId) {
+    return await Review.findByIdAndUpdate(
+      reviewId,
+      { $inc: { dislikes: -1 } },
+      { new: true }
+    );
   }
 }
 
