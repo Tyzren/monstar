@@ -5,6 +5,8 @@ const User = require('@models/user');
  */
 
 class UserRepository {
+  /* -------------------------------- Retrieval ------------------------------- */
+
   /**
    * Find a user by ID
    *
@@ -28,6 +30,8 @@ class UserRepository {
     });
   }
 
+  /* -------------------------------- Creation -------------------------------- */
+
   /**
    * Create a user
    *
@@ -38,6 +42,25 @@ class UserRepository {
     const user = new User(userData);
     return await user.save();
   }
+
+  /* ------------------------------ Modification ------------------------------ */
+
+  /**
+   * Update user's profile image
+   *
+   * @param {String} userId
+   * @param {String} profileImgUrl
+   * @returns {Promise<IUser|null>}
+   */
+  static async updateProfileImage(userId, profileImgUrl) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { profileImg: profileImgUrl },
+      { new: true }
+    );
+  }
+
+  /* ----------------------------- Authentication ----------------------------- */
 
   /**
    * Update the refresh token of a user
@@ -83,17 +106,120 @@ class UserRepository {
     });
   }
 
+  /* -------------------------------- Reactions ------------------------------- */
+
   /**
-   * Update user's profile image
+   * Add a review to user's liked reviews
    *
    * @param {String} userId
-   * @param {String} profileImgUrl
+   * @param {String} reviewId
    * @returns {Promise<IUser|null>}
    */
-  static async updateProfileImage(userId, profileImgUrl) {
+  static async addLikedReview(userId, reviewId) {
     return await User.findByIdAndUpdate(
       userId,
-      { profileImg: profileImgUrl },
+      { $addToSet: { likedReviews: reviewId } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Remove a review from user's liked reviews
+   *
+   * @param {String} userId
+   * @param {String} reviewId
+   * @returns {Promise<IUser|null>}
+   */
+  static async removeLikedReview(userId, reviewId) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $pull: { likedReviews: reviewId } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Add a review to user's disliked reviews
+   *
+   * @param {String} userId
+   * @param {String} reviewId
+   * @returns {Promise<IUser|null>}
+   */
+  static async addDislikedReview(userId, reviewId) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { dislikedReviews: reviewId } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Remove a review from user's disliked reviews
+   *
+   * @param {String} userId
+   * @param {String} reviewId
+   * @returns {Promise<IUser|null>}
+   */
+  static async removeDislikedReview(userId, reviewId) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $pull: { dislikedReviews: reviewId } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Check if user has liked a review
+   *
+   * @param {String} userId
+   * @param {String} reviewId
+   * @returns {Promise<boolean>}
+   */
+  static async hasLikedReview(userId, reviewId) {
+    const user = await User.findById(userId, { likedReviews: 1 });
+    return user ? user.likedReviews.includes(reviewId) : false;
+  }
+
+  /**
+   * Check if user has disliked a review
+   *
+   * @param {String} userId
+   * @param {String} reviewId
+   * @returns {Promise<boolean>}
+   */
+  static async hasDislikedReview(userId, reviewId) {
+    const user = await User.findById(userId, { dislikedReviews: 1 });
+    return user ? user.dislikedReviews.includes(reviewId) : false;
+  }
+
+  /* ------------------------------ Notifications ----------------------------- */
+
+  /**
+   * Add a notification to user's notifications array
+   *
+   * @param {String} userId
+   * @param {String} notificationId
+   * @returns {Promise<IUser|null>}
+   */
+  static async addNotification(userId, notificationId) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { notifications: notificationId } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Remove a notification from user's notifications array
+   *
+   * @param {String} userId
+   * @param {String} notificationId
+   * @returns {Promise<IUser|null>}
+   */
+  static async removeNotification(userId, notificationId) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $pull: { notifications: notificationId } },
       { new: true }
     );
   }
