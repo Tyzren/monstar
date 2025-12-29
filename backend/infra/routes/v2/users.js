@@ -18,4 +18,11 @@ router.post(
   UserController.refresh
 )
 
+router.post(
+  '/logout',
+  // #swagger.tags = ['Auth']
+  // #swagger.summary = 'Clear the token cookies and invalidate refresh token in database'
+  UserController.logout
+)
+
 module.exports = router;

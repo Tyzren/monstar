@@ -1,8 +1,10 @@
 const { OAuth2Client } = require('google-auth-library');
+const jwt = require('jsonwebtoken');
 
 const {
   Error409Conflict,
   Error403Forbidden,
+  Error404NotFound,
 } = require('@infra/utilities/errors');
 const TokenProvider = require('@providers/token.provider');
 const UserRepository = require('@repositories/user.repository');
@@ -53,7 +55,9 @@ class UserService {
     }
 
     if (!user.isGoogleUser) {
-      throw new Error409Conflict('Account already exists as non-Google account.');
+      throw new Error409Conflict(
+        'Account already exists as non-Google account.'
+      );
     }
 
     const accessToken = TokenProvider.generateAccessToken(user._id, user.admin);
@@ -78,25 +82,50 @@ class UserService {
    */
   static refreshUserToken = async (refreshToken) => {
     const hashedRefreshToken = TokenProvider.hashRefreshToken(refreshToken);
-    const user = await UserRepository.findByHashedRefreshToken(hashedRefreshToken);
+    const user =
+      await UserRepository.findByHashedRefreshToken(hashedRefreshToken);
     if (!user) {
       throw new Error403Forbidden('Invalid or expired refresh token');
     }
 
-    const newAccessToken = TokenProvider.generateAccessToken(user._id, user.admin);
+    const newAccessToken = TokenProvider.generateAccessToken(
+      user._id,
+      user.admin
+    );
     const newRefreshToken = TokenProvider.generateRefreshToken();
-    const newHashedRefreshToken = TokenProvider.hashRefreshToken(newRefreshToken);
+    const newHashedRefreshToken =
+      TokenProvider.hashRefreshToken(newRefreshToken);
     const newRefreshTokenExpiry = new Date(
       Date.now() + TokenProvider.REFRESH_TOKEN_EXPIRY
-    )
+    );
     await UserRepository.updateRefreshToken(
       user._id,
       newHashedRefreshToken,
-      newRefreshTokenExpiry,
+      newRefreshTokenExpiry
     );
 
-    return { newAccessToken, newRefreshToken }
-  }
+    return { newAccessToken, newRefreshToken };
+  };
+
+  /**
+   * Invalidates the refresh token to logout a user
+   */
+  static invalidateRefreshToken = async (userId) => {
+    await UserRepository.invalidateRefreshToken(userId);
+  };
+
+  /**
+   * Validates user using access token
+   *
+   * @param {String} accessToken
+   * @returns {User}
+   */
+  static validate = async (accessToken) => {
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const user = await UserRepository.findById(decoded.id);
+    if (!user) throw new Error404NotFound('User not found');
+    return user;
+  };
 }
 
 module.exports = UserService;

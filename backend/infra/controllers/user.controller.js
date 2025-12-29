@@ -4,6 +4,9 @@ const TokenProvider = require('@infra/providers/token.provider');
 const UserService = require('@infra/services/user.service');
 
 class UserController {
+  /**
+   * Login/sign up with google oauth
+   */
   static authenticateWithGoogle = asyncHandler(async (req, res) => {
     const { idToken } = req.body;
 
@@ -25,6 +28,9 @@ class UserController {
       .json({ message: 'Login successful', data: user });
   });
 
+  /**
+   * Refreshes tokens
+   */
   static refresh = asyncHandler(async (req, res) => {
     const { refresh_token } = req.cookies;
     if (!refresh_token) {
@@ -47,6 +53,31 @@ class UserController {
       })
       .status(200)
       .json({ message: 'Token refreshed successfully' });
+  });
+
+  /**
+   * Logs out a user
+   */
+  static logout = asyncHandler(async (req, res) => {
+    await UserService.invalidateRefreshToken(req.user.id);
+
+    res.clearCookie('access_token', { httpOnly: true, sameSite: 'strict' });
+    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'strict' });
+
+    return res.status(200).json({ message: 'Logged out successfully' });
+  });
+
+  /**
+   * Validates user session
+   */
+  static validate = asyncHandler(async (req, res) => {
+    const accessToken = req.cookies.access_token;
+    if (!accessToken)
+      return res.status(401).json({ message: 'Not authenticated' });
+
+    const user = await UserService.validate(accessToken);
+
+    return res.status(200).json({ message: 'Authenticated', data: user });
   });
 }
 

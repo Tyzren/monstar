@@ -61,6 +61,15 @@ class UserRepository {
       refreshTokenExpires: { $gt: Date.now() },
     });
   }
+
+  /**
+   * Unsets the refreshToken and expiry fields
+   */
+  static async invalidateRefreshToken(userId) {
+    return await User.findByIdAndUpdate(userId, {
+      $unset: { refreshToken: 1, refreshTokenExpires: 1 }
+    });
+  }
 }
 
 module.exports = UserRepository;
