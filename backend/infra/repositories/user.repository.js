@@ -82,6 +82,21 @@ class UserRepository {
       $unset: { refreshToken: 1, refreshTokenExpires: 1 },
     });
   }
+
+  /**
+   * Update user's profile image
+   *
+   * @param {String} userId
+   * @param {String} profileImgUrl
+   * @returns {Promise<IUser|null>}
+   */
+  static async updateProfileImage(userId, profileImgUrl) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { profileImg: profileImgUrl },
+      { new: true }
+    );
+  }
 }
 
 module.exports = UserRepository;

@@ -79,6 +79,25 @@ class UserController {
 
     return res.status(200).json({ message: 'Authenticated', data: user });
   });
+
+  /**
+   * Uploads user avatar to cloudinary
+   */
+  static uploadAvatar = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const avatarUrl = req.file.path;
+    const user = await UserService.uploadAvatar(userId, avatarUrl);
+
+    return res.status(200).json({
+      message: 'Avatar uploaded successfully',
+      data: { profileImg: user.profileImg },
+    });
+  });
 }
 
 module.exports = UserController;

@@ -1,6 +1,7 @@
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
+const { cloudinary } = require('@infra/providers/cloudinary.provider');
 const {
   Error409Conflict,
   Error403Forbidden,
@@ -133,6 +134,36 @@ class UserService {
     const user = await UserRepository.findById(decoded.id);
     if (!user) throw new Error404NotFound('User not found');
     return user;
+  };
+
+  /**
+   * Uploads user avatar to cloudinary
+   *
+   * @param {String} userId
+   * @param {String} avatarUrl - Cloudinary URL of the uploaded file
+   * @returns {Promise<IUser>}
+   */
+  static uploadAvatar = async (userId, avatarUrl) => {
+    const user = await UserRepository.findById(userId);
+    if (!user) throw new Error404NotFound('User not found');
+
+    if (user.profileImg) {
+      try {
+        const urlParts = user.profileImg.split('/');
+        const fileName = urlParts[urlParts.length - 1].split('.')[0];
+        const publicId = `user_avatars/${fileName}`;
+        await cloudinary.uploader.destroy(publicId);
+      } catch (error) {
+        console.error('Failed to delete old avatar:', error.message);
+      }
+    }
+
+    const updatedUser = await UserRepository.updateProfileImage(
+      userId,
+      avatarUrl
+    );
+
+    return updatedUser;
   };
 }
 

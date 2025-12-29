@@ -1,7 +1,11 @@
 const express = require('express');
+const multer = require('multer');
 
 const UserController = require('@controllers/user.controller');
+const userMiddleware = require('@infra/middleware/user.middleware');
+const { storage } = require('@infra/providers/cloudinary.provider');
 
+const upload = multer({ storage });
 const router = express.Router();
 
 router.post(
@@ -16,13 +20,23 @@ router.post(
   // #swagger.tags = ['User V2']
   // #swagger.summary = 'Refresh access token using refresh token'
   UserController.refresh
-)
+);
 
 router.post(
   '/logout',
-  // #swagger.tags = ['Auth']
+  userMiddleware,
+  // #swagger.tags = ['User V2']
   // #swagger.summary = 'Clear the token cookies and invalidate refresh token in database'
   UserController.logout
-)
+);
+
+router.post(
+  '/upload-avatar',
+  userMiddleware,
+  upload.single('avatar'),
+  // #swagger.tags = ['User V2']
+  // #swagger.summary = 'Upload avatar to cloudinary and assign it as user's profileImg'
+  UserController.uploadAvatar
+);
 
 module.exports = router;
