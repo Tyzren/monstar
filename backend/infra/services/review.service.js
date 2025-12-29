@@ -8,11 +8,16 @@ const ReviewRepository = require('@repositories/review.repository');
 const UnitRepository = require('@repositories/unit.repository');
 const UserRepository = require('@repositories/user.repository');
 
+/**
+ * @typedef {import('@models/review').IReview} IReview
+ */
+
 class ReviewService {
   /**
    * Fetch all reviews with optional filter
    *
    * @param {Object} filter - Optional filter criteria
+   * @returns {Promise<Array<IReview>>}
    */
   static fetchAll = async (filter = {}) => {
     return await ReviewRepository.findAll(filter);
@@ -22,6 +27,7 @@ class ReviewService {
    * Fetch all reviews for a specific unit
    *
    * @param {String} unitCode
+   * @returns {Promise<Array<IReview>>}
    */
   static fetchByUnit = async (unitCode) => {
     // Find the unit first
@@ -35,6 +41,7 @@ class ReviewService {
    * Fetch all reviews by a specific user
    *
    * @param {String} userId
+   * @returns {Promise<Array<IReview>>}
    */
   static fetchByUser = async (userId) => {
     return await ReviewRepository.findByUserId(userId);
@@ -45,6 +52,7 @@ class ReviewService {
    *
    * @param {String} unitCode
    * @param {Object} reviewData
+   * @returns {Promise<IReview>}
    */
   static createReview = async (unitCode, reviewData) => {
     // Find the unit
@@ -86,6 +94,7 @@ class ReviewService {
    * @param {String} reviewId
    * @param {String} userId - ID of the user making the request
    * @param {Object} updateData
+   * @returns {Promise<IReview|null>}
    */
   static updateReview = async (reviewId, userId, updateData) => {
     const review = await ReviewRepository.findById(reviewId);
@@ -119,6 +128,7 @@ class ReviewService {
    *
    * @param {String} reviewId
    * @param {String} userId - ID of the user making the request
+   * @returns {Promise<void>}
    */
   static deleteReview = async (reviewId, userId) => {
     const review = await ReviewRepository.findById(reviewId);
@@ -159,6 +169,7 @@ class ReviewService {
    * @param {String} reviewId
    * @param {String} userId
    * @param {String} reactionType - 'like' or 'dislike'
+   * @returns {Promise<{review: IReview, reactions: {liked: boolean, disliked: boolean}}>}
    */
   static toggleReaction = async (reviewId, userId, reactionType) => {
     //TODO: We can't have these database operations done here, find out a way to use repos only.
@@ -299,6 +310,7 @@ class ReviewService {
    * Private helper to recalculate and update unit rating averages
    *
    * @param {ObjectId} unitId
+   * @returns {Promise<void>}
    */
   static _recalculateUnitAverages = async (unitId) => {
     const allReviews = await ReviewRepository.findByUnitId(unitId);

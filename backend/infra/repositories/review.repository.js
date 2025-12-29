@@ -2,11 +2,18 @@ const Review = require('@models/review');
 const Unit = require('@models/unit');
 const User = require('@models/user');
 
+/**
+ * @typedef {import('@models/review').IReview} IReview
+ * @typedef {import('@models/unit').IUnit} IUnit
+ * @typedef {import('@models/user').IUser} IUser
+ */
+
 class ReviewRepository {
   /**
    * Find all reviews with optional filter
    *
    * @param {Object} filter Optional filter criteria
+   * @returns {Promise<Array<IReview>>}
    */
   static async findAll(filter = {}) {
     return await Review.find(filter).populate('author');
@@ -16,6 +23,7 @@ class ReviewRepository {
    * Find all reviews for a specific unit
    *
    * @param {ObjectId} unitId
+   * @returns {Promise<Array<IReview>>}
    */
   static async findByUnitId(unitId) {
     return await Review.find({ unit: unitId });
@@ -25,6 +33,7 @@ class ReviewRepository {
    * Find all reviews by a specific user
    *
    * @param {String} userId
+   * @returns {Promise<Array<IReview>>}
    */
   static async findByUserId(userId) {
     return await Review.find({ author: userId })
@@ -37,6 +46,7 @@ class ReviewRepository {
    *
    * @param {String} authorId
    * @param {ObjectId} unitId
+   * @returns {Promise<IReview|null>}
    */
   static async findByAuthorAndUnit(authorId, unitId) {
     return await Review.findOne({
@@ -49,6 +59,7 @@ class ReviewRepository {
    * Find a review by ID
    *
    * @param {String} reviewId
+   * @returns {Promise<IReview|null>}
    */
   static async findById(reviewId) {
     return await Review.findById(reviewId);
@@ -58,6 +69,7 @@ class ReviewRepository {
    * Create a new review
    *
    * @param {Object} reviewData
+   * @returns {Promise<IReview>}
    */
   static async create(reviewData) {
     const review = new Review(reviewData);
@@ -69,6 +81,7 @@ class ReviewRepository {
    *
    * @param {String} reviewId
    * @param {Object} updateData
+   * @returns {Promise<IReview|null>}
    */
   static async updateById(reviewId, updateData) {
     return await Review.findByIdAndUpdate(reviewId, updateData, { new: true });
@@ -78,6 +91,7 @@ class ReviewRepository {
    * Delete a review by ID
    *
    * @param {String} reviewId
+   * @returns {Promise<IReview|null>}
    */
   static async deleteById(reviewId) {
     return await Review.findByIdAndDelete(reviewId);
@@ -88,6 +102,7 @@ class ReviewRepository {
    *
    * @param {ObjectId} unitId
    * @param {ObjectId} reviewId
+   * @returns {Promise<IUnit|null>}
    */
   static async addReviewToUnit(unitId, reviewId) {
     return await Unit.findByIdAndUpdate(
@@ -102,6 +117,7 @@ class ReviewRepository {
    *
    * @param {String} userId
    * @param {ObjectId} reviewId
+   * @returns {Promise<IUser|null>}
    */
   static async addReviewToUser(userId, reviewId) {
     return await User.findByIdAndUpdate(
@@ -116,6 +132,7 @@ class ReviewRepository {
    *
    * @param {String} userId
    * @param {String} reviewId
+   * @returns {Promise<IUser|null>}
    */
   static async removeReviewFromUser(userId, reviewId) {
     return await User.findByIdAndUpdate(userId, {
@@ -128,6 +145,7 @@ class ReviewRepository {
    *
    * @param {ObjectId} unitId
    * @param {String} reviewId
+   * @returns {Promise<IUnit|null>}
    */
   static async removeReviewFromUnit(unitId, reviewId) {
     return await Unit.findByIdAndUpdate(unitId, {

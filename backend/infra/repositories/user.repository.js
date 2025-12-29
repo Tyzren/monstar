@@ -1,10 +1,15 @@
 const User = require('@models/user');
 
+/**
+ * @typedef {import('@models/user').IUser} IUser
+ */
+
 class UserRepository {
   /**
    * Find a user by ID
    *
    * @param {String} userId
+   * @returns {Promise<IUser|null>}
    */
   static async findById(userId) {
     return await User.findById(userId);
@@ -15,6 +20,7 @@ class UserRepository {
    *
    * @param {String} email
    * @param {String} googleId
+   * @returns {Promise<IUser|null>}
    */
   static async findByEmailOrGoogleId(email, googleId) {
     return await User.findOne({
@@ -26,6 +32,7 @@ class UserRepository {
    * Create a user
    *
    * @param {Object} userData
+   * @returns {Promise<IUser>}
    */
   static async create(userData) {
     const user = new User(userData);
@@ -38,6 +45,7 @@ class UserRepository {
    * @param {String|import('mongoose').ObjectId} userId
    * @param {String} hashedToken
    * @param {Date} expiry
+   * @returns {Promise<IUser|null>}
    */
   static async updateRefreshToken(userId, hashedToken, expiry) {
     return await User.findByIdAndUpdate(
@@ -54,6 +62,7 @@ class UserRepository {
    * Find a user by their hashed refresh token
    *
    * @param {String} hashedRefreshToken
+   * @returns {Promise<IUser|null>}
    */
   static async findByHashedRefreshToken(hashedRefreshToken) {
     return await User.findOne({
@@ -64,10 +73,13 @@ class UserRepository {
 
   /**
    * Unsets the refreshToken and expiry fields
+   *
+   * @param {String} userId
+   * @returns {Promise<IUser|null>}
    */
   static async invalidateRefreshToken(userId) {
     return await User.findByIdAndUpdate(userId, {
-      $unset: { refreshToken: 1, refreshTokenExpires: 1 }
+      $unset: { refreshToken: 1, refreshTokenExpires: 1 },
     });
   }
 }

@@ -9,6 +9,10 @@ const {
 const TokenProvider = require('@providers/token.provider');
 const UserRepository = require('@repositories/user.repository');
 
+/**
+ * @typedef {import('@models/user').IUser} IUser
+ */
+
 const googleClient = new OAuth2Client();
 
 class UserService {
@@ -19,7 +23,7 @@ class UserService {
    * Authenticates a new or existing user with Google OAuth
    *
    * @param {String} idToken
-   * @returns {Object}
+   * @returns {Promise<{accessToken: string, refreshToken: string, user: IUser}>}
    */
   static googleAuthenticate = async (idToken) => {
     const ticket = await googleClient.verifyIdToken({
@@ -79,6 +83,7 @@ class UserService {
    * Rotate and create new access token and refresh token for a user
    *
    * @param {String} refreshToken
+   * @returns {Promise<{newAccessToken: string, newRefreshToken: string}>}
    */
   static refreshUserToken = async (refreshToken) => {
     const hashedRefreshToken = TokenProvider.hashRefreshToken(refreshToken);
@@ -109,6 +114,9 @@ class UserService {
 
   /**
    * Invalidates the refresh token to logout a user
+   *
+   * @param {String} userId
+   * @returns {Promise<void>}
    */
   static invalidateRefreshToken = async (userId) => {
     await UserRepository.invalidateRefreshToken(userId);
@@ -118,7 +126,7 @@ class UserService {
    * Validates user using access token
    *
    * @param {String} accessToken
-   * @returns {User}
+   * @returns {Promise<IUser>}
    */
   static validate = async (accessToken) => {
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
