@@ -49,6 +49,10 @@ const setupSwagger = async (app) => {
         description: 'Authentication and user management',
       },
       {
+        name: 'User V2',
+        description: 'Authentication and user management V2',
+      },
+      {
         name: 'Notifications',
         description: 'User notifications',
       },
