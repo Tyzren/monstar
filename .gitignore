@@ -13,7 +13,9 @@ jspm_packages/
 .idea/
 .DS_Store
 Thumbs.db
+.vercel/
 .claude/
+.mcp.json
 
 # --------------------------------- Frontend --------------------------------- #
 
@@ -28,6 +30,7 @@ frontend/connect.lock/
 frontend/coverage/
 frontend/libpeerconnection.log
 frontend/.claude/
+frontned/.mcp.json
 
 # ---------------------------------- Backend --------------------------------- #
 
@@ -36,4 +39,5 @@ backend/docs/swagger.json
 backend/scraper/
 backend/scrapers/
 backend/.claude/
+backend/.mcp.json
 
