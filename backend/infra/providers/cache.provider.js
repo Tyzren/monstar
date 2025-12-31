@@ -20,7 +20,7 @@ class CacheProvider {
    * @param {number} ttl - Time to live in seconds (default: 1 hour)
    */
   static async getOrSet(key, fetchFn, ttl = 3600) {
-    if (!redis) {
+    if (!this.CLIENT) {
       if (process.env.NODE_ENV !== 'test')
         console.warn('Redis not configured, fetching directly');
       return await fetchFn();
