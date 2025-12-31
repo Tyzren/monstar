@@ -31,15 +31,21 @@ const loadJson = (relPath) => {
 
 let mongo;
 
+/**
+ * Before each test suite, create a mongodb memory server
+ */
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
 });
 
+/**
+ * Before each singular test, create collections from sample data
+ */
 beforeEach(async () => {
-  const users = loadJson('./fixtures/users.json');
-  const units = loadJson('./fixtures/units.json');
-  const reviews = loadJson('./fixtures/reviews.json');
+  const users = loadJson('../fixtures/users.json');
+  const units = loadJson('../fixtures/units.json');
+  const reviews = loadJson('../fixtures/reviews.json');
 
   if (users.length)
     await mongoose.connection.collection('users').insertMany(users);
@@ -49,6 +55,9 @@ beforeEach(async () => {
     await mongoose.connection.collection('reviews').insertMany(reviews);
 });
 
+/**
+ * After each singular test, delete the collections
+ */
 afterEach(async () => {
   const collecs = await mongoose.connection.db.collections();
   for (const c of collecs) {
@@ -56,6 +65,9 @@ afterEach(async () => {
   }
 });
 
+/**
+ * After each test suite, disconnect and stop the mongodb memory server
+ */
 afterAll(async () => {
   await mongoose.disconnect();
   if (mongo) await mongo.stop();
