@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "contexts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the context (e.g. 'Shipping')"
+          },
+          "domainVisionStatement": {
+            "type": "string",
+            "description": "A description of what this context covers."
+          },
+          "terms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "definition"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The word or phrase being defined (e.g. 'Unit')"
+                },
+                "definition": {
+                  "type": "string",
+                  "description": "The explanation of the term"
+                },
+                "examples": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "aliases": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Other names for this term (e.g. 'Subject')"
+                }
+              }
+            }
+          }
+        },
+        "required": ["terms"]
+      }
+    }
+  }
+}
