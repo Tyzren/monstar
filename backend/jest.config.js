@@ -23,5 +23,18 @@ const makeModuleNameMapper = (aliases) => {
 module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: makeModuleNameMapper(_moduleAliases),
-  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.js'],
+  projects: [
+    {
+      displayName: 'services',
+      testMatch: ['<rootDir>/tests/services/*.test.js'],
+      setupFilesAfterEnv: ['<rootDir>/tests/services/jest.setup.js'],
+      moduleNameMapper: makeModuleNameMapper(_moduleAliases),
+    },
+    {
+      displayName: 'performance',
+      testMatch: ['<rootDir>/tests/performance/*.test.js'],
+      setupFilesAfterEnv: ['<rootDir>/tests/performance/jest.setup.js'],
+      moduleNameMapper: makeModuleNameMapper(_moduleAliases),
+    },
+  ],
 };
