@@ -4,7 +4,8 @@
   "description": "MonSTAR Server",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --selectProjects services",
+    "test:perf": "jest --selectProjects performance",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "lint": "eslint .",
