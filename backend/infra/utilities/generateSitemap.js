@@ -2,7 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const mongoose = require('mongoose');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('dotenv').config({
+  path: path.join(__dirname, '..', '.env'),
+  quiet: true,
+});
 
 const MONGODB_URI = process.env.MONGODB_CONN_STRING;
 const TODAY = new Date().toISOString().split('T')[0];

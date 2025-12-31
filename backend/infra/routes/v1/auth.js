@@ -13,7 +13,7 @@ const TokenProvider = require('@infra/providers/token.provider.js');
 const { verifyToken, verifyAdmin } = require('@infra/utilities/verifyToken.js');
 const User = require('@models/user');
 
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 const router = express.Router();
 const client = new OAuth2Client();

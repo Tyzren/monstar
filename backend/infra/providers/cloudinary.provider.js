@@ -1,6 +1,6 @@
 const cloudinary = require('cloudinary').v2; // Cloudinary library
 const { CloudinaryStorage } = require('multer-storage-cloudinary'); // Multer storage enging for Cloudinary
-require('dotenv').config(); // Environment variables
+require('dotenv').config({ quiet: true });
 
 // Configure Cloudinary with credentials from environment variables
 cloudinary.config({
