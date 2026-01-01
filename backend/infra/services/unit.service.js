@@ -1,10 +1,10 @@
 const { getSortCriteria } = require('@constants/sortOptions');
+const CacheProvider = require('@providers/cache.provider');
+const UnitRepository = require('@repositories/unit.repository');
 const {
   Error404NotFound,
   Error422Unprocessable,
-} = require('@infra/utilities/errors');
-const CacheProvider = require('@providers/cache.provider');
-const UnitRepository = require('@repositories/unit.repository');
+} = require('@utilities/errors');
 const { buildFilterQuery } = require('@utilities/unitFilterHelpers');
 
 /**

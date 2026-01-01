@@ -16,6 +16,7 @@ Thumbs.db
 .vercel/
 .claude/
 .mcp.json
+CLAUDE.md
 
 # --------------------------------- Frontend --------------------------------- #
 
@@ -41,6 +42,4 @@ backend/scrapers/
 backend/.claude/
 backend/.mcp.json
 
-# Artillery test results
 backend/tests/performance/**/*.report.json
-

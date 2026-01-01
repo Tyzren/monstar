@@ -2,8 +2,8 @@ const express = require('express');
 const multer = require('multer');
 
 const UserController = require('@controllers/user.controller');
-const userMiddleware = require('@infra/middleware/user.middleware');
-const { storage } = require('@infra/providers/cloudinary.provider');
+const userMiddleware = require('@middleware/user.middleware');
+const { storage } = require('@providers/cloudinary.provider');
 
 const upload = multer({ storage });
 const router = express.Router();

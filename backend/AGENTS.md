@@ -86,12 +86,6 @@ Key environment variables for configuration:
 - Admin-only actions use `verifyAdmin` (unit and SETU bulk operations, destructive maintenance).
 - Notification deletion ensures the cookie user matches the notification owner.
 
-## Automation
-
-- Hourly: tagManager.updateMostReviewsTag refreshes trending tags.
-- Daily 03:00: utils/generate-sitemap.js pushes sitemap XMLs to the frontend.
-- Semester prep (Feb 1 & Jun 1 at 02:00 AET): aiOverviewService.generateOverviewsForAllUnits reruns Gemini summaries with force true so new semesters start with fresh copy.
-
 ## Ops & Tooling
 
 - Scripts: `npm run dev` (nodemon), `npm start` (Node), `npm run build` (if run from repo root to build frontend + backend).
@@ -103,4 +97,4 @@ Stay aligned with this contract when extending endpoints or introducing new jobs
 
 ## MCP servers available to you
 
-- `semgrep`: This MCP server will allow you to scan code for security vulnerabiltiies. You should use it whenever a new critical feature is implemented that could introduce security vulnerabilties.
+- `semgrep`: This MCP server will allow you to scan code for security vulnerabiltiies. You should use it whenever a new critical feature is implemented that could introduce security vulnerabilties. You can ignore only the CSRF vulnerability.

@@ -1,14 +1,14 @@
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
-const { cloudinary } = require('@infra/providers/cloudinary.provider');
+const { cloudinary } = require('@providers/cloudinary.provider');
+const TokenProvider = require('@providers/token.provider');
+const UserRepository = require('@repositories/user.repository');
 const {
   Error409Conflict,
   Error403Forbidden,
   Error404NotFound,
-} = require('@infra/utilities/errors');
-const TokenProvider = require('@providers/token.provider');
-const UserRepository = require('@repositories/user.repository');
+} = require('@utilities/errors');
 
 /**
  * @typedef {import('@models/user').IUser} IUser

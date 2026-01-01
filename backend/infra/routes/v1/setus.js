@@ -1,7 +1,7 @@
 const express = require('express');
 
-const { verifyAdmin } = require('@infra/utilities/verifyToken.js');
 const SETU = require('@models/setu');
+const { verifyAdmin } = require('@utilities/verifyToken.js');
 
 const router = express.Router();
 

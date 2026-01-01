@@ -4,7 +4,6 @@
     "paths": {
       "@models/*": ["./models/*"],
       "@routes/*": ["./infra/routes/*"],
-      "@infra/*": ["./infra/*"],
       "@controllers/*": ["./infra/controllers/*"],
       "@providers/*": ["./infra/providers/*"],
       "@middleware/*": ["./infra/middleware/*"],

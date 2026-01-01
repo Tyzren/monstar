@@ -12,10 +12,7 @@ jest.mock('google-auth-library', () => {
 
 const UserService = require('@services/user.service');
 const User = require('@models/user');
-const {
-  Error403Forbidden,
-  Error409Conflict,
-} = require('@infra/utilities/errors');
+const { Error403Forbidden, Error409Conflict } = require('@utilities/errors');
 
 describe(UserService.name, () => {
   beforeEach(() => {

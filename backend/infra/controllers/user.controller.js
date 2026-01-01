@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 
-const TokenProvider = require('@infra/providers/token.provider');
-const UserService = require('@infra/services/user.service');
+const TokenProvider = require('@providers/token.provider');
+const UserService = require('@services/user.service');
 
 class UserController {
   /**

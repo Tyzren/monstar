@@ -5,9 +5,9 @@ const {
   requiresReviews, // eslint-disable-line
   isValidSortOption,
 } = require('@constants/sortOptions');
-const { buildFilterQuery } = require('@infra/utilities/unitFilterHelpers.js');
-const { verifyAdmin } = require('@infra/utilities/verifyToken.js');
 const Unit = require('@models/unit');
+const { buildFilterQuery } = require('@utilities/unitFilterHelpers.js');
+const { verifyAdmin } = require('@utilities/verifyToken.js');
 
 // Router instance
 const router = express.Router();
