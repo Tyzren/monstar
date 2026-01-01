@@ -2,9 +2,9 @@
 const express = require('express');
 
 // Model Imports
-const { verifyToken } = require('@infra/utilities/verifyToken.js');
 const Notification = require('@models/notification');
 const User = require('@models/user');
+const { verifyToken } = require('@utilities/verifyToken.js');
 
 // Function Imports
 

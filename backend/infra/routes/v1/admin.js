@@ -1,8 +1,8 @@
 const express = require('express');
 
-const AiOverviewService = require('@infra/providers/aiOverview.provider');
-const CacheService = require('@infra/providers/cache.provider');
 const Unit = require('@models/unit');
+const AiOverviewService = require('@providers/aiOverview.provider');
+const CacheService = require('@providers/cache.provider');
 const router = express.Router();
 
 router.get('/invalidate-cache', async (req, res) => {

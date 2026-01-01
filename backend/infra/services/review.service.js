@@ -1,12 +1,12 @@
-const {
-  Error404NotFound,
-  Error409Conflict,
-  Error401NotAuthorized,
-} = require('@infra/utilities/errors');
 const ReviewRepository = require('@repositories/review.repository');
 const UnitRepository = require('@repositories/unit.repository');
 const UserRepository = require('@repositories/user.repository');
 const NotificationService = require('@services/notification.service');
+const {
+  Error404NotFound,
+  Error409Conflict,
+  Error401NotAuthorized,
+} = require('@utilities/errors');
 
 /**
  * @typedef {import('@models/review').IReview} IReview

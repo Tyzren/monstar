@@ -1,7 +1,7 @@
-const UnitRepository = require('@infra/repositories/unit.repository');
-const { Error404NotFound } = require('@infra/utilities/errors');
 const NotificationRepository = require('@repositories/notification.repository');
+const UnitRepository = require('@repositories/unit.repository');
 const UserRepository = require('@repositories/user.repository');
+const { Error404NotFound } = require('@utilities/errors');
 
 /**
  * @typedef {import('@models/review').IReview} IReview

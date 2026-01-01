@@ -3,11 +3,11 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 
 // Model Imports
-const { verifyToken } = require('@infra/utilities/verifyToken');
 const Notification = require('@models/notification');
 const Review = require('@models/review');
 const Unit = require('@models/unit');
 const User = require('@models/user');
+const { verifyToken } = require('@utilities/verifyToken');
 
 // Function Imports
 

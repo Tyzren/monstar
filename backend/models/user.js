@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const { cloudinary } = require('@infra/providers/cloudinary.provider');
 const Notification = require('@models/notification');
 const Review = require('@models/review');
 const Unit = require('@models/unit');
+const { cloudinary } = require('@providers/cloudinary.provider');
 
 /**
  * @typedef {Object} IUser

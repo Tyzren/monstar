@@ -4,14 +4,11 @@ const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
-const {
-  storage,
-  cloudinary,
-} = require('@infra/providers/cloudinary.provider.js');
-const upload = multer({ storage });
-const TokenProvider = require('@infra/providers/token.provider.js');
-const { verifyToken, verifyAdmin } = require('@infra/utilities/verifyToken.js');
 const User = require('@models/user');
+const { storage, cloudinary } = require('@providers/cloudinary.provider.js');
+const upload = multer({ storage });
+const TokenProvider = require('@providers/token.provider.js');
+const { verifyToken, verifyAdmin } = require('@utilities/verifyToken.js');
 
 require('dotenv').config({ quiet: true });
 
