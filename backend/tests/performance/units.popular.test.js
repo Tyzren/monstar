@@ -1,39 +1,13 @@
-const { exec } = require('child_process');
-const { readFile: readFileAsync } = require('node:fs/promises');
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
+const { runArtillery } = require('./runArtillery');
 
-const execAsync = util.promisify(exec);
-
-describe('Performance Smoke Tests', () => {
-  const runArtillery = async (scriptName) => {
-    const scriptPath = path.join(__dirname, scriptName + '.yml');
-    const reportPath = path.join(__dirname, scriptName + '.report.json');
-
-    if (fs.existsSync(reportPath)) fs.unlinkSync(reportPath);
-
-    console.log(`Running ${scriptName}`);
-
-    try {
-      await execAsync(`npx artillery run -o "${reportPath}" "${scriptPath}"`);
-    } catch (err) {
-      console.error(`❌ Artillery CRASHED for ${scriptName}`);
-      console.error(err.stdout);
-      console.error(err.stderr);
-      throw err;
-    }
-
-    const report = await readFileAsync(reportPath, 'utf-8');
-    return JSON.parse(report);
-  };
-
+describe('Comparing V1 and V2 APIs for GET /units/popular', () => {
   test('compare', async () => {
     const baseline = await runArtillery('v1.units.popular');
     const candidate = await runArtillery('v2.units.popular');
 
-    const p95Baseline = baseline.aggregate.summaries["http.response_time"].p95;
-    const p95Candidate = candidate.aggregate.summaries["http.response_time"].p95;
+    const p95Baseline = baseline.aggregate.summaries['http.response_time'].p95;
+    const p95Candidate =
+      candidate.aggregate.summaries['http.response_time'].p95;
 
     console.log(`
       📊 Results:
