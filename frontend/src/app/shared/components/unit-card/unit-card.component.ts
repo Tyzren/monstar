@@ -17,7 +17,7 @@ import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { UnitData, UnitTag } from '../../models/v2/unit.model';
+import { Offering, UnitData, UnitTag } from '../../models/v2/unit.model';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
@@ -40,7 +40,6 @@ import { TruncatePipe } from '../../pipes/truncate.pipe';
   styleUrls: ['./unit-card.component.scss'],
 })
 export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
-  // Provide Math to the template
   Math = Math;
 
   // The approximate height of a single row in the chips rows
@@ -49,24 +48,24 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Loading state of the card
   loading: boolean = true;
 
-  // & This unit's offerings, locations, and teaching periods
+  // This unit's offerings, locations, and teaching periods
   @Input() unit: UnitData | undefined;
-  offerings: any[] = [];
-  locations: any[] = [];
-  teachingPeriods: any[] = [];
+  offerings: Offering[] = [];
+  locations: string[] = [];
+  teachingPeriods: string[] = [];
   // Chips container references for checking overflow
   @ViewChild('locationsRow') locationsRow!: ElementRef;
   @ViewChild('periodsRow') periodsRow!: ElementRef;
 
-  // & Overflow bools for locations and periods
+  // Overflow bools for locations and periods
   locationChipsOverflow = false;
   periodChipsOverflow = false;
 
-  // & Visible locations and periods
+  // Visible locations and periods
   visibleLocations: string[] = [];
   visiblePeriods: string[] = [];
 
-  // & Teaching periods
+  // Teaching periods
   private reversePeriodsMap: Record<string, string> = {};
   private periodNames: Record<string, string> = {
     // Regular semesters
@@ -134,11 +133,6 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Memoized original period names for performance
   private memoizedOriginalPeriodNames = new Map<string, string[]>();
 
-  /**
-   * === Constructor ===
-   *
-   * Initialises the period order map and short name cache.
-   */
   constructor(private router: Router) {
     // Initalise period order map
     this.periodOrderMap = new Map(
@@ -154,30 +148,12 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | ANGULAR LIFE CYCLE HOOKS
-   *  ! |======================================================================|
-   */
+  /* ---------------------------- Life cycle hooks ---------------------------- */
 
-  /**
-   * * Runs on Component Initialisation
-   *
-   * Calls the processUnitData method to extract needed data from the unit object.
-   * If the unit has no offerings, sets the teaching periods to ['No Offerings in 2025']
-   *
-   * @async
-   * @returns {Promise<void>} A promise that resolves when the component initialisation is complete.
-   */
   async ngOnInit(): Promise<void> {
     await this.processUnitData();
   }
 
-  /**
-   * * After View Initialisation
-   *
-   * Waits for the view to render before checking for overflow in the locations and periods rows.
-   */
   ngAfterViewInit(): void {
     // Wait for the view to render before checking for overflow
     requestAnimationFrame(() => {
@@ -185,20 +161,11 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * * On Destroy
-   *
-   * Clears the memoization cache.
-   */
   ngOnDestroy(): void {
     this.memoizedOriginalPeriodNames.clear();
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | UNIT DATA PROCESSING
-   *  ! |======================================================================|
-   */
+  /* -------------------------- Unit data processing -------------------------- */
 
   /**
    * * Process Unit Data
@@ -267,11 +234,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | TEACHING PERIODS AND LOCATIONS HELPER METHODS
-   *  ! |======================================================================|
-   */
+  /* -------------- Teaching periods and locations helper methods ------------- */
 
   /**
    * * Get Original Teaching Period Name
@@ -347,11 +310,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | TAGS HELPER METHODS
-   *  ! |======================================================================|
-   */
+  /* --------------------------- Tags helper methods -------------------------- */
 
   /**
    * * Get Tag Display
@@ -419,11 +378,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | BASIC HELPER METHODS
-   *  ! |======================================================================|
-   */
+  /* -------------------------- Basic helper methods -------------------------- */
 
   // * Navigates to the unit overview page for the selected unit.
   onCardClick(): void {
