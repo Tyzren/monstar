@@ -1,7 +1,7 @@
 const { runArtillery } = require('./runArtillery');
 
-describe('Comparing V1 and V2 APIs for GET /units/popular', () => {
-  test('compare', async () => {
+describe('Comparing v1 and v2 /units APIs', () => {
+  test('/popular', async () => {
     const baseline = await runArtillery('v1.units.popular');
     const candidate = await runArtillery('v2.units.popular');
 
