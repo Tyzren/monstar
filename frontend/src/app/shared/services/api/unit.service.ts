@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { FilteredUnitsResponse } from '../../models/v2/unit.model';
+import { FilterData, FilteredUnitsResponse } from '../../models/v2/unit.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class UnitService {
     selectedFaculties = [],
     selectedSemesters = [],
     selectedCampuses = [],
-  }): Observable<FilteredUnitsResponse> {
+  }: FilterData): Observable<FilteredUnitsResponse> {
     let params = new HttpParams()
       .set('offset', offset.toString())
       .set('limit', limit.toString())
