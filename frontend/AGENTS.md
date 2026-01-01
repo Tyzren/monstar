@@ -25,7 +25,7 @@ This project is a frontend Angular SPA that powers MonSTAR, the student-built pl
 
 ## MCP servers available to you
 
-- `chrome-devtools`: This will allow you to test your changes.
+- `chrome-devtools`: This will allow you to test your changes and see them visually, use this when needed.
 
 ---
 
