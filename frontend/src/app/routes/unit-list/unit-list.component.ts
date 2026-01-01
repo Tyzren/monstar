@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UnitCardComponent } from '@components/unit-card/unit-card.component';
-import { ApiService } from '@services/api.service';
 import { UnitService } from '@services/api/unit.service';
 import { ViewportService } from '@services/viewport.service';
 import { ButtonModule } from 'primeng/button';
@@ -21,7 +20,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -40,6 +39,7 @@ import {
 import { SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
 import { scrollToTop } from '../../shared/helpers';
 import {
+  FilterData,
   FilteredUnitsResponse,
   UnitData,
 } from '../../shared/models/v2/unit.model';
@@ -86,7 +86,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
   @ViewChild('op') overlayPanel!: OverlayPanel;
   @ViewChild('filterButton', { read: ElementRef }) filterButton!: ElementRef;
 
-  faculties: string[] = [
+  allFaculties: string[] = [
     'Art, Design and Architecture',
     'Arts',
     'Business and Economics',
@@ -98,7 +98,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
     'Pharmacy and Pharmaceutical Sciences',
     'Science',
   ];
-  semesters: string[] = [
+  allSemesters: string[] = [
     'First semester',
     'Second semester',
     'Summer semester A',
@@ -120,7 +120,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
     'Teaching period 4',
     'Teaching period 5',
   ];
-  campuses: string[] = [
+  allCampuses: string[] = [
     'Clayton',
     'Caulfield',
     'Malaysia',
@@ -151,9 +151,9 @@ export class UnitListComponent implements OnInit, OnDestroy {
   viewportType: string = 'desktop';
 
   // Debouncing search
-  private searchSubject = new Subject<string>();
+  private $$debounchedSearch = new Subject<string>();
 
-  filterData = {
+  filterData: FilterData = {
     offset: 0,
     limit: 24,
     search: '',
@@ -166,11 +166,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
     selectedCampuses: [],
   };
 
-  /**
-   * ! Constructor
-   */
   constructor(
-    private apiService: ApiService,
     private unitService: UnitService,
     private meta: Meta,
     private titleService: Title,
@@ -179,23 +175,13 @@ export class UnitListComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  /**
-   *  ! |======================================================================|
-   *  ! | LIFECYCLE HOOKS
-   *  ! |======================================================================|
-   */
+  /* ----------------------------- Lifecycle hooks ---------------------------- */
 
-  /**
-   * * Angular lifecycle hook called after the component has been initalised.
-   *
-   * This method is used to trigger data fetching when the component loads.
-   */
   ngOnInit(): void {
-    // Update meta tags for this page
     this.updateMetaTags();
 
-    // Setup the debounced search
-    this.searchSubject
+    // Setup debounced search
+    this.$$debounchedSearch
       .pipe(
         debounceTime(400), // Wait 400ms after the user stops typing
         distinctUntilChanged() // Only emit if the search string changed
@@ -249,35 +235,14 @@ export class UnitListComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * * Angular lifecycle hook called on deletion
-   */
   ngOnDestroy(): void {
-    // Reset title
-    this.titleService.setTitle(
-      'MonSTAR | Browse and Review Monash University Units'
-    );
+    this.removeMetaTags();
 
-    // Remove all custom meta tags
-    this.meta.removeTag("name='description'");
-    this.meta.removeTag("name='keywords'");
-    this.meta.removeTag("property='og:title'");
-    this.meta.removeTag("property='og:description'");
-    this.meta.removeTag("property='og:url'");
-    this.meta.removeTag("property='og:type'");
-    this.meta.removeTag("name='twitter:card'");
-    this.meta.removeTag("name='twitter:title'");
-    this.meta.removeTag("name='twitter:description'");
-
-    // Unsubscribe from the subject
-    this.searchSubject.complete();
+    // Unsubscribe from the debounced search
+    this.$$debounchedSearch.complete();
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | PAGINATION & UNITS RETRIEVAL
-   *  ! |======================================================================|
-   */
+  /* --------------------- Paginations and units retrieval -------------------- */
 
   fetchPaginatedUnits() {
     this.loading = true;
@@ -299,7 +264,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
   }
 
   onSearchInput() {
-    this.searchSubject.next(this.filterData.search);
+    this.$$debounchedSearch.next(this.filterData.search);
   }
 
   updateSearchQueryParams(searchTerm: string) {
@@ -353,37 +318,28 @@ export class UnitListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * * Handle paginator page change.
-   *
-   * @param event Paginator event containing the new `first` and `rows` values
+   * Handle paginator page change.
    */
-  onPageChange(event: any) {
-    this.filterData.offset = event.first;
-    this.filterData.limit = event.rows;
+  onPageChange(event: PaginatorState) {
+    if (event.first) this.filterData.offset = event.first;
+    if (event.rows) this.filterData.limit = event.rows;
     localStorage.setItem('rowsPerPage', JSON.stringify(this.filterData.limit));
     this.fetchPaginatedUnits();
     scrollToTop();
   }
 
   /**
-   * * Handles changes on sortBy dropdown change
-   *
-   * - Saves the sortBy option to localStorage
-   * - Fetches paginated units again to refresh
+   * Save the sortBy dropdown option
    */
   onSortByChange() {
     localStorage.setItem('sortBy', this.filterData.sort);
-    this.fetchPaginatedUnits();
+    this.fetchPaginatedUnits(); // Refetch units
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | KEYBOARD SHORTCUTS
-   *  ! |======================================================================|
-   */
+  /* --------------------------- Keyboard shortcuts --------------------------- */
 
   /**
-   * * Handles focusing via keybinds
+   * Handles focusing via keybinds
    *
    * - CTRL + K: Focuses on search bar
    * - CTRL + F: Focuses on sort by dropdown
@@ -444,15 +400,8 @@ export class UnitListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | META TAGS
-   *  ! |======================================================================|
-   */
+  /* ---------------------------- SEO meta tagging ---------------------------- */
 
-  /**
-   * * Update meta tags for SEO
-   */
   private updateMetaTags(): void {
     const pageUrl = `${BASE_URL}/list`;
 
@@ -503,5 +452,17 @@ export class UnitListComponent implements OnInit, OnDestroy {
     canonicalLink.setAttribute('rel', 'canonical');
     canonicalLink.setAttribute('href', canonicalUrl);
     document.head.appendChild(canonicalLink);
+  }
+
+  private removeMetaTags() {
+    this.meta.removeTag("name='description'");
+    this.meta.removeTag("name='keywords'");
+    this.meta.removeTag("property='og:title'");
+    this.meta.removeTag("property='og:description'");
+    this.meta.removeTag("property='og:url'");
+    this.meta.removeTag("property='og:type'");
+    this.meta.removeTag("name='twitter:card'");
+    this.meta.removeTag("name='twitter:title'");
+    this.meta.removeTag("name='twitter:description'");
   }
 }
