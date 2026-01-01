@@ -25,6 +25,7 @@
     "@angular/router": "18.2.14",
     "@swimlane/ngx-graph": "11.0.0",
     "@tsparticles/preset-confetti": "3.2.0",
+    "@types/canvas-confetti": "^1.9.0",
     "@vercel/analytics": "1.5.0",
     "bootstrap": "5.3.8",
     "bootstrap-icons": "1.13.1",
