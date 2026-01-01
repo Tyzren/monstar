@@ -24,6 +24,8 @@ describe(UserService.name, () => {
 
   afterEach(() => jest.clearAllMocks());
 
+  // Authentication
+
   describe(UserService.googleAuthenticate.name, () => {
     const fakeIdTokenString = 'fake-token-string';
 
