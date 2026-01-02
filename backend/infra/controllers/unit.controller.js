@@ -46,9 +46,12 @@ class UnitController {
    * Get a unit by unitcode
    */
   static getByUnitcode = asyncHandler(async (req, res) => {
-    const unit = await UnitService.fetchByCode(req.params.unitCode);
+    const unit = await UnitService.fetchByCode(
+      req.params.unitCode,
+      req.query.populateReviews
+    );
     return res.status(200).json(unit);
-  })
+  });
 
   /**
    * Update unit by unitcode

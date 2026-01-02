@@ -22,10 +22,12 @@ class UnitRepository {
    * Find unit by unitcode
    *
    * @param {String} unitcode
+   * @param {Boolean} populateReviews
    * @returns {Promise<IUnit|null>}
    */
-  static async findOneByUnitcode(unitcode) {
-    return await Unit.findOne({ unitCode: unitcode.toLowerCase() });
+  static async findOneByUnitcode(unitcode, populateReviews = false) {
+    const query = Unit.findOne({ unitCode: unitcode.toLowerCase() });
+    return populateReviews ? await query.populate('reviews') : await query;
   }
 
   /**

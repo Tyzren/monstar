@@ -63,9 +63,13 @@ class UnitService {
    * @param {String} unitCode
    * @returns {Promise<IUnit>}
    */
-  static fetchByCode = async (unitCode) => {
-    const unit = await UnitRepository.findOneByUnitcode(unitCode);
+  static fetchByCode = async (unitCode, populateReviews = false) => {
+    const unit = await UnitRepository.findOneByUnitcode(
+      unitCode,
+      populateReviews
+    );
     if (!unit) throw new Error404NotFound('Unit not found');
+    return unit;
   };
 
   /**
