@@ -1,16 +1,33 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { FilterData, FilteredUnitsResponse } from '../../models/v2/unit.model';
+import {
+  FilterData,
+  FilteredUnitsResponse,
+  UnitData,
+} from '../../models/v2/unit.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UnitService {
+export class GetUnitService {
   private urlV2 = environment.apiV2Url;
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
+  getByUnitcode(unitCode: string): Observable<UnitData> {
+    return this.http.get<UnitData>(`${this.urlV2}/units/${unitCode}`).pipe(
+      tap({
+        next: (res) => {
+          console.log('Response:', res)
+        },
+        error: (err) => {
+          console.error('Error', err.error);
+        }
+      })
+    );
+  }
 
   getUnitsFiltered({
     offset = 0,

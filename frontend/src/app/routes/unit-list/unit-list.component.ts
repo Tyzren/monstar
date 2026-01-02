@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UnitCardComponent } from '@components/unit-card/unit-card.component';
-import { UnitService } from '@services/api/unit.service';
+import { GetUnitService } from '@services/api/get-unit.service';
 import { ViewportService } from '@services/viewport.service';
 import { ButtonModule } from 'primeng/button';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
@@ -167,7 +167,7 @@ export class UnitListComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private unitService: UnitService,
+    private unitService: GetUnitService,
     private meta: Meta,
     private titleService: Title,
     private viewportService: ViewportService,
