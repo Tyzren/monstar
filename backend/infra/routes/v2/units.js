@@ -26,6 +26,13 @@ router.get(
   UnitController.getPaginated
 );
 
+router.get(
+  '/:unitCode',
+  // #swagger.tags = ['Units V2']
+  // #swagger.summary = 'Get a unit by unit code'
+  UnitController.getByUnitcode
+);
+
 router.put(
   '/update/:unitcode',
   adminMiddleware,
