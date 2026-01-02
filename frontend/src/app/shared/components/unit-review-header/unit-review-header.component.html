@@ -208,5 +208,6 @@
 <app-write-review-unit
   [unit]="unit"
   [user]="user"
-  (reviewPosted)="handleReviewPosted()"
+  (reviewSubmit)="this.reviewAdded.emit()"
+  (reviewUpdate)="this.reviewModified.emit()"
 ></app-write-review-unit>

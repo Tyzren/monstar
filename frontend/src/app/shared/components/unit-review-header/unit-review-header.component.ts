@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UnitData } from 'app/shared/models/v2/unit.model';
+import { IUnitDeeplyPopulated } from 'app/shared/models/v2/unit.model';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -63,22 +63,17 @@ import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit
   styleUrls: ['./unit-review-header.component.scss'],
 })
 export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
-  // ViewChild to reference the WriteReviewUnitComponent
   @ViewChild(WriteReviewUnitComponent)
   writeReviewDialog!: WriteReviewUnitComponent;
 
-  // Provide Math to the template
   Math = Math;
 
-  // Receives the unit data from the parent component (UnitOverviewComponent)
-  @Input() unit?: UnitData;
+  @Input() unit: IUnitDeeplyPopulated | null | undefined;
 
-  // Emits the sorting criteria to the parent component (UnitOverviewComponent)
   @Output() sortBy = new EventEmitter<string>();
-  // Emits that the user has added a review
-  @Output() reviewAdded = new EventEmitter<void>();
+  @Output() reviewAdded = new EventEmitter<Review>();
+  @Output() reviewModified = new EventEmitter<Review>()
 
-  // The current user
   user: User | null = null;
   userSubscription: Subscription | null = null;
 
@@ -335,24 +330,12 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.skeletonHeight = height;
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | HELPERS                                                              |
-   *  ! |======================================================================|
-   */
+  /* --------------------------------- Helpers -------------------------------- */
 
-  /**
-   * * Handles the dropdown toggle action.
-   */
   toggleDropdown(event: Event) {
     this.sortMenu.toggle(event);
   }
 
-  /**
-   * * Handles the sorting action and emits the chosen criteria to the parent component.
-   *
-   * @param {any} event - The event object containing the sorting criteria.
-   */
   onSort(event: any) {
     console.log('Sorting by: ', event.value);
     this.sortBy.emit(event.value);
@@ -361,7 +344,6 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.sortMenu.hide();
   }
 
-  // * Shows the dialog to write a review
   showDialog() {
     if (this.user == null) {
       this.messageService.add({
@@ -375,12 +357,10 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.writeReviewDialog.openDialog();
   }
 
-  // * Emits the reviewAdded signal to be received by unit-overview component.
   handleReviewPosted() {
     this.reviewAdded.emit();
   }
 
-  // * Navigate to the unit map page
   navigateToUnitMap() {
     this.router.navigate(['/map', this.unit?.unitCode]);
   }
