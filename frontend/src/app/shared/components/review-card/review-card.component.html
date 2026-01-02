@@ -1,9 +1,11 @@
+@let userState = userState$ | async;
+
 <!-- === Confirmation Popup === -->
 <p-confirmPopup #confirmPopupRef>
   <ng-template pTemplate="headless" let-message let-test>
     <div class="border-round p-3">
       <!-- Delete review if this is the current user's review -->
-      @if (currentUser?.email == review.author.email) {
+      @if (userState && userState.isAuthor) {
         <span>{{ message.message }}</span>
         <div class="flex align-items-center gap-2 mt-3">
           <p-button
@@ -45,10 +47,10 @@
 </p-confirmPopup>
 
 <!-- Presents the user with the option to delete or update their review-->
-<p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
+<p-menu #menu [model]="dropdownMenuItems" [popup]="true" appendTo="body"></p-menu>
 
 <!-- === Review Card Component === -->
-@if (review) {
+@if (review && userState) {
   <!-- Container for the whole review card -->
   <div
     class="container mt-5 review-card-container"
@@ -56,8 +58,8 @@
     (mouseleave)="deleteButtonState = 'hidden'"
   >
     <div class="review-card position-relative">
-      <!-- ! Buttons for deletion and reporting (shown in top right of review card) -->
-      @if (currentUser?.email == review.author.email) {
+      <!-- Buttons for deletion and reporting (shown in top right of review card) -->
+      @if (userState.isAuthor) {
         <!--Review Modification Button -->
         <div
           class="top-right-button"
@@ -65,14 +67,6 @@
           (click)="menu.toggle($event)"
         >
           <i class="pi pi-ellipsis-v"></i>
-        </div>
-      } @else if (currentUser) {
-        <div
-          class="top-right-button"
-          [@fadeInOut]="deleteButtonState"
-          (click)="confirmDeletion($event)"
-        >
-          <i class="pi pi-flag"></i>
         </div>
       }
 
@@ -87,22 +81,15 @@
             <p class="d-flex align-items-center user-section">
               <!-- Profile picture -->
               <img
-                [src]="
-                  review.author.profileImg ||
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'
-                "
+                [src]="userState.profileImg || defaultProfileImg"
                 alt="Profile Picture"
                 class="mr-2 profile-picture"
                 loading="lazy"
                 crossOrigin="anonymous"
                 referrerpolicy="no-referrer"
-                (error)="
-                  review.author.profileImg =
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'
-                "
               />
               <!-- Username -->
-              <span>{{ review.author.username || 'Anonymous' }}</span>
+              <span>{{ userState.username || 'Anonymous' }}</span>
               <!-- A primeng badge for the year taken -->
               <p-badge
                 [value]="review.year"
@@ -273,7 +260,7 @@
                   <span
                     class="me-2"
                     [style]="{
-                      color: liked ? 'rgb(72, 158, 60)' : 'gray',
+                      color: userState.liked ? 'rgb(72, 158, 60)' : 'gray',
                     }"
                     >{{ review.likes }}</span
                   >
@@ -281,30 +268,24 @@
                   <i
                     class="thumbs"
                     [class]="'pi pi-thumbs-up-fill'"
-                    (click)="toggleLike()"
+                    (click)="toggleReaction('like')"
                     (mouseover)="hoveringLike = true"
                     (mouseleave)="hoveringLike = false"
                     [ngStyle]="{
-                      color: liked
+                      color: userState.liked
                         ? 'rgb(72, 158, 60)'
-                        : currentUser
-                          ? currentUser.email == review.author.email
-                            ? 'rgb(96,96,96)'
-                            : 'gray'
-                          : 'rgb(96,96,96)',
+                        : userState.isAuthor
+                          ? 'rgb(96,96,96)'
+                          : 'gray',
                     }"
-                    [pTooltip]="
-                      currentUser?._id === review.author._id
-                        ? 'Cant like yours :('
-                        : ''
-                    "
+                    [pTooltip]="userState.isAuthor ? 'Cant like yours :(' : ''"
                     fitContent="true"
                   ></i>
                   <!-- Dislike count -->
                   <span
                     class="me-2 ml-3"
                     [style]="{
-                      color: disliked ? 'rgb(196, 57, 94)' : 'gray',
+                      color: userState.disliked ? 'rgb(196, 57, 94)' : 'gray',
                     }"
                     >{{ review.dislikes }}</span
                   >
@@ -312,22 +293,18 @@
                   <i
                     class="thumbs"
                     [class]="'pi pi-thumbs-down-fill'"
-                    (click)="toggleDislike()"
+                    (click)="toggleReaction('dislike')"
                     (mouseover)="hoveringDislike = true"
                     (mouseleave)="hoveringDislike = false"
                     [style]="{
-                      color: disliked
+                      color: userState.disliked
                         ? 'rgb(196, 57, 94)'
-                        : currentUser
-                          ? currentUser.email == review.author.email
-                            ? 'rgb(96,96,96)'
-                            : 'gray'
-                          : 'rgb(96,96,96)',
+                        : userState.isAuthor
+                          ? 'rgb(96,96,96)'
+                          : 'gray',
                     }"
                     [pTooltip]="
-                      currentUser?._id === review.author._id
-                        ? 'Cant dislike yours :('
-                        : ''
+                      userState.isAuthor ? 'Cant dislike yours :(' : ''
                     "
                   ></i>
                 </div>
@@ -342,10 +319,8 @@
   <!-- === Child component: Edit Review -->
   <app-write-review-unit
     [unit]="unit"
-    [user]="currentUser"
     [review]="reviewEdit"
     [editMode]="true"
-    (reviewEdited)="handleReviewEdited()"
   ></app-write-review-unit>
 
   <!-- === Child component: Report Review === -->
