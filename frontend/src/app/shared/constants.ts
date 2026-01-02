@@ -85,7 +85,7 @@ export const getMetaUnitOverviewOpenGraphTitle = (
 export const getMetaUnitOverviewOpenGraphDescription = (
   unitCode: string,
   averageRating: number,
-  reviewCount: string
+  reviewCount: number,
 ): string =>
   `See what students think about ${unitCode}. Average rating: ${averageRating}/5 from ${reviewCount} reviews.`;
 
