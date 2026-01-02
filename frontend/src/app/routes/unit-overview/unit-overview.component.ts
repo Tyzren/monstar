@@ -2,20 +2,52 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-
-// Environment
+import { ActivatedRoute } from '@angular/router';
+import { DeleteReviewService } from '@services/api/delete-review.service';
+import { GetUnitService } from '@services/api/get-unit.service';
+import { ModifyReviewService } from '@services/api/modify-review.service';
+import { PostReviewService } from '@services/api/post-review.service';
+import { UserService } from '@services/api/user.service';
+import { Review } from 'app/shared/models/review.model';
+import {
+  IReview,
+  IReviewAuthorPopulated,
+} from 'app/shared/models/v2/review.model';
+import { IUnitDeeplyPopulated } from 'app/shared/models/v2/unit.model';
+import { MessageService } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ToastModule } from 'primeng/toast';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  exhaustMap,
+  filter,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-// Constants
+import { AiOverviewComponent } from '../../shared/components/ai-overview/ai-overview.component';
+import { ReviewCardComponent } from '../../shared/components/review-card/review-card.component';
+import { SetuCardComponent } from '../../shared/components/setu-card/setu-card.component';
+import { UnitReviewHeaderComponent } from '../../shared/components/unit-review-header/unit-review-header.component';
 import {
   BASE_URL,
   getMetaUnitOverviewDescription,
@@ -26,26 +58,7 @@ import {
   getMetaUnitOverviewTwitterDescription,
   getMetaUnitOverviewTwitterTitle,
 } from '../../shared/constants';
-
-// Services
-import { MessageService } from 'primeng/api';
-import { ApiService } from '../../shared/services/api.service';
 import { FooterService } from '../../shared/services/footer.service';
-
-// Components
-import { AiOverviewComponent } from '../../shared/components/ai-overview/ai-overview.component';
-import { ReviewCardComponent } from '../../shared/components/review-card/review-card.component';
-import { SetuCardComponent } from '../../shared/components/setu-card/setu-card.component';
-import { UnitReviewHeaderComponent } from '../../shared/components/unit-review-header/unit-review-header.component';
-// Modules
-import { GetUnitService } from '@services/api/get-unit.service';
-import { UnitData } from 'app/shared/models/v2/unit.model';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { SkeletonModule } from 'primeng/skeleton';
-import { ToastModule } from 'primeng/toast';
-import { forkJoin, map, switchMap, tap } from 'rxjs';
-import { Review } from '../../shared/models/review.model';
 
 @Component({
   selector: 'app-unit-overview',
@@ -70,74 +83,76 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('headerSkeleton') headerSkeleton!: ElementRef;
   @ViewChild('unitOverviewContainer') unitOverviewContainer!: ElementRef;
 
-  // unit: UnitData;
-  reviews: Review[] = [];
-  reviewsLoading: boolean = true;
-
-  // Environment flags
   enableSetuCards = environment.enableSetuCards;
 
-  // Split view boolean
   isSplitView: boolean = false;
   splitViewMinWidth: number = 1414;
 
-  // Resize handler
+  private destroyRef = inject(DestroyRef);
+
   private resizeHandler = () => {
     this.isSplitView = window.innerWidth >= this.splitViewMinWidth;
     this.updateContainerHeight();
   };
 
   private getUnitService = inject(GetUnitService);
-  private apiService = inject(ApiService);
+  private deleteReviewService = inject(DeleteReviewService);
+  private modifyReviewService = inject(ModifyReviewService);
+  private postReviewService = inject(PostReviewService);
   private messageService = inject(MessageService);
+  private userService = inject(UserService);
   private meta = inject(Meta);
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private titleService = inject(Title);
   private footerService = inject(FooterService);
 
-  private unitCode$ = this.route.paramMap.pipe(
+  private refreshReviews$ = new BehaviorSubject<void>(undefined);
+  private sortCriteria$ = new BehaviorSubject<string>('most-likes');
+
+  private unitCode$: Observable<string | null> = this.route.paramMap.pipe(
     map((params) => params.get('unitcode'))
   );
 
-  private unitData$ = this.unitCode$.pipe(
+  private rawUnit$: Observable<IUnitDeeplyPopulated | null> = combineLatest([
+    this.unitCode$,
+    this.refreshReviews$,
+  ]).pipe(
+    map(([code, _]) => code),
     switchMap((code) => {
-      if (!code) return [];
+      if (!code) return of(null);
 
-      return forkJoin({
-        unit: this.getUnitService.getByUnitcode(code),
-        reviews: this.apiService.getAllReviewsGET(code),
-      }).pipe(
-        map(({ unit, reviews }: { unit: UnitData; reviews: Review[] }) => {
-          unit.reviews = reviews;
-          return unit;
-        }),
-        tap((unit) => {
-          this.updateMetaTags(unit);
-          this.resetScrollPosition();
-        })
-      );
+      const populateReviews = true;
+      const populateReviewsAuthor = true;
+      return this.getUnitService
+        .getByUnitcode(code, populateReviews, populateReviewsAuthor)
+        .pipe(
+          tap((unit) => {
+            this.updateMetaTags(unit);
+            this.resetScrollPosition();
+            this.updateContainerHeight();
+          }),
+          catchError(() => of(null))
+        );
+    }),
+    shareReplay(1)
+  );
+
+  unitData$: Observable<IUnitDeeplyPopulated | null> = combineLatest([
+    this.rawUnit$,
+    this.sortCriteria$,
+  ]).pipe(
+    map(([unit, criteria]) => {
+      if (!unit) return null;
+      return {
+        ...unit,
+        reviews: this.sortReviews(unit.reviews, criteria),
+      };
     })
   );
 
-  /**
-   * * Runs on initialisation
-   *
-   * Gets the unitcode from the URL param and uses it to get the unit and reviews.
-   */
   ngOnInit(): void {
-    // Hide the footer
     this.footerService.hideFooter();
-
     this.isSplitView = window.innerWidth >= this.splitViewMinWidth;
-
-    // Get unit code from the route parameters
-    const unitCode = this.route.snapshot.paramMap.get('unitcode');
-
-    if (unitCode) {
-      this.getUnitByUnitcode(unitCode);
-      this.getAllReviews(unitCode);
-    }
   }
 
   ngAfterViewInit(): void {
@@ -146,16 +161,9 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     window.removeEventListener('resize', this.resizeHandler);
-
     this.unitOverviewContainer.nativeElement.style.height = '';
-
     this.footerService.showFooter();
 
-    this.titleService.setTitle(
-      'MonSTAR | Browse and Review Monash University Units'
-    );
-
-    // Remove all custom meta tags
     this.meta.removeTag("name='description'");
     this.meta.removeTag("name='keywords'");
     this.meta.removeTag("property='og:title'");
@@ -167,130 +175,107 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.meta.removeTag("name='twitter:description'");
   }
 
-  getAllReviews(unitCode?: string) {
-    this.apiService.getAllReviewsGET(unitCode).subscribe({
-      next: (reviews: Review[]) => {
-        this.reviews = reviews;
-        this.sortReviews('most-likes');
-
-        // Update the reviews property in the unit object
-        if (this.unit) this.unit.reviews = this.reviews;
-
-        this.reviewsLoading = false;
-        this.resetScrollPosition();
-      },
-      complete: () => {
-        this.updateContainerHeight();
-      },
-    });
+  setSort(criteria: string): void {
+    this.sortCriteria$.next(criteria);
   }
 
-  getUnitByUnitcode(unitCode: string) {
-    this.getUnitService.getByUnitcode(unitCode).subscribe({
-      next: (unit: UnitData) => {
-        this.unit = unit;
-        console.log(unit);
-        this.updateMetaTags();
-        this.resetScrollPosition();
-      },
-    });
-  }
+  private sortReviews(
+    reviews: IReviewAuthorPopulated[],
+    criteria: string
+  ): IReviewAuthorPopulated[] {
+    const reviewsClone = [...reviews];
 
-  /**
-   * * Sorts the reviews array based on the specified criteria
-   *
-   * @param {string} criteria - The criteria to sort the reviews by.
-   *
-   * Criteria options
-   * - 'recent': Sorts the reviews by most recent first based on `createdAt` property.
-   * - 'lowest-rating': Sorts the reviews by the lowest rating (`overallRating`) first.
-   * - 'highest-rating': Sorts the reviews by the highest rating (`overallRating`) first.
-   * - 'most-likes': Sorts the reviews by the most likes first.
-   */
-  sortReviews(criteria: string) {
-    // ? Debug log: Sorting reviews message
-    // console.log('Sorting reviews', criteria);
-
-    // Criterion
     switch (criteria) {
-      // Sorting by oldest
       case 'oldest':
-        this.reviews.sort(
+        return reviewsClone.sort(
           (a, b) =>
             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
         );
-        break;
-
-      // Sorting by most recent
       case 'recent':
-        this.reviews.sort(
+        return reviewsClone.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
-        break;
-
-      // Sorting by lowest rating
       case 'lowest-rating':
-        this.reviews.sort((a, b) => a.overallRating - b.overallRating);
-        break;
-
-      // Sorting by highest rating
+        return reviewsClone.sort((a, b) => a.overallRating - b.overallRating);
       case 'highest-rating':
-        this.reviews.sort((a, b) => b.overallRating - a.overallRating);
-        break;
-
-      // Sorting by most likes
+        return reviewsClone.sort((a, b) => b.overallRating - a.overallRating);
       case 'most-likes':
-        this.reviews.sort(
+        return reviewsClone.sort(
           (a, b) => b.likes - b.dislikes - (a.likes - a.dislikes)
         );
-        break;
-
-      // Sorting by most dislikes
       case 'most-dislikes':
-        this.reviews.sort(
+        return reviewsClone.sort(
           (a, b) => a.likes - a.dislikes - (b.likes - b.dislikes)
         );
-        break;
+      default:
+        return reviewsClone;
     }
   }
 
-  /**
-   * This method is called finally after a few event emittors going from:
-   * write-review-unit (emits reviewPosted) -> unit-review-header (emits reviewAdded) -> unit-overview
-   */
-  refreshReviews(toast?: string) {
-    if (this.unit && this.unit.unitCode) {
-      this.reviewsLoading = true; // Set the loading state to true again.
-      this.getAllReviews(this.unit.unitCode); // Get all the reviews again.
-      this.getUnitByUnitcode(this.unit.unitCode); // Get the unit again for updated avg ratings.
+  onDeleteReview(reviewId: string) {
+    this.deleteReviewService
+      .deleteById(reviewId)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Deleted',
+            detail: 'Review removed successfully',
+          });
 
-      if (toast == 'delete') {
-        // Show delete toast
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Review deleted!',
-          detail: `Review has been deleted.`,
-        });
-      } else if (toast == 'edit') {
-        // Show edit toast
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Review edited!',
-          detail: `Review has been updated.`,
-        });
-      }
-    }
+          this.userService.removeReview(reviewId);
+
+          this.refreshReviews$.next();
+        })
+      )
+      .subscribe();
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | UI Manipulators
-   *  ! |======================================================================|
-   */
+  onAddReview(review: Review) {
+    this.unitCode$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        take(1),
+        filter((code) => code !== null),
+        exhaustMap((unitCode) => {
+          return this.postReviewService.createReview(unitCode, review);
+        }),
+        tap((newReview: IReview) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Review submitted!',
+            detail: 'Review has been published publicly',
+          });
+          this.userService.addReview(newReview._id);
+          this.refreshReviews$.next();
+        })
+      )
+      .subscribe();
+  }
+
+  onEditReview(review: Review) {
+    this.modifyReviewService
+      .editReview(review)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        tap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Review updated!',
+            detail: 'Your changes have been saved',
+          });
+          this.refreshReviews$.next();
+        })
+      )
+      .subscribe();
+  }
+
+  /* ------------------------------- UI updates ------------------------------- */
 
   /**
-   * * Updates unit overview container height
+   * Updates unit overview container height
    *
    * Runs on window resize and component initialisation
    *
@@ -313,7 +298,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * * Reset scroll position on all possible containers
+   * Reset scroll position on all possible containers
    */
   private resetScrollPosition(): void {
     console.log('Resetting scroll position');
@@ -340,16 +325,9 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | META TAGS
-   *  ! |======================================================================|
-   */
+  /* -------------------------------- Meta tags ------------------------------- */
 
-  /**
-   * * Updates Meta Tags
-   */
-  updateMetaTags(unit: UnitData): void {
+  updateMetaTags(unit: IUnitDeeplyPopulated): void {
     const unitReviewsCount: number = unit.reviews.length;
     const unitAverageRating: number = +unit.avgOverallRating.toFixed(1);
     const unitCode: string = unit.unitCode.toUpperCase();
