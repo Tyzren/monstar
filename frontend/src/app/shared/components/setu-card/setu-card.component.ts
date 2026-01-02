@@ -3,14 +3,14 @@ import {
   Component,
   HostBinding,
   HostListener,
+  inject,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 
 // PrimeNG modules
 import { AccordionModule } from 'primeng/accordion';
@@ -43,7 +43,7 @@ import { SetuService } from '../../services/setu.service';
   templateUrl: './setu-card.component.html',
   styleUrl: './setu-card.component.scss',
 })
-export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
+export class SetuCardComponent implements OnChanges, OnInit {
   @Input() unitCode: string | null = null;
 
   loading = true;
@@ -59,42 +59,29 @@ export class SetuCardComponent implements OnChanges, OnInit, OnDestroy {
   isDesktopView = false;
   activeIndex: number | null = null;
 
-  // Authentication
-  isAuthenticated = false;
-  private authSubscription?: Subscription;
-
-  // Host binding for CSS class when no SETU data
   @HostBinding('class.no-setu-data')
   get hasNoSetuData(): boolean {
     return this.isDesktopView && !this.hasSetuData();
   }
 
+  private authService = inject(AuthService);
+
+  isAuthenticated$ = this.authService.getCurrentUser().pipe(
+    map((user) => !!user),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
   constructor(
     private setuService: SetuService,
-    private authService: AuthService,
     private profileDialogService: ProfileDialogService
   ) {}
 
   ngOnInit(): void {
     this.checkViewportSize();
-
-    // Subscribe to auth state
-    this.authSubscription = this.authService
-      .getCurrentUser()
-      .subscribe((user) => {
-        this.isAuthenticated = user !== null;
-      });
-  }
-
-  ngOnDestroy(): void {
-    // Cleanup auth subscription
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  onResize(_event: Event) {
     this.checkViewportSize();
   }
 
