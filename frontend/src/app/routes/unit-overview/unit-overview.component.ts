@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -37,10 +38,13 @@ import { ReviewCardComponent } from '../../shared/components/review-card/review-
 import { SetuCardComponent } from '../../shared/components/setu-card/setu-card.component';
 import { UnitReviewHeaderComponent } from '../../shared/components/unit-review-header/unit-review-header.component';
 // Modules
+import { GetUnitService } from '@services/api/get-unit.service';
+import { UnitData } from 'app/shared/models/v2/unit.model';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
+import { forkJoin, map, switchMap, tap } from 'rxjs';
 import { Review } from '../../shared/models/review.model';
 
 @Component({
@@ -66,7 +70,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('headerSkeleton') headerSkeleton!: ElementRef;
   @ViewChild('unitOverviewContainer') unitOverviewContainer!: ElementRef;
 
-  unit: any = null;
+  // unit: UnitData;
   reviews: Review[] = [];
   reviewsLoading: boolean = true;
 
@@ -83,22 +87,38 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateContainerHeight();
   };
 
-  /**
-   * === Constructor ===
-   *
-   * @param {ApiService} apiService - The API service to make API calls.
-   * @param {ActivatedRoute} route - The route service to get the route parameters.
-   * @param {MessageService} messageService - The message service to show toasts.
-   */
-  constructor(
-    private apiService: ApiService,
-    private route: ActivatedRoute,
-    private messageService: MessageService,
-    private meta: Meta,
-    private router: Router,
-    private titleService: Title,
-    private footerService: FooterService
-  ) {}
+  private getUnitService = inject(GetUnitService);
+  private apiService = inject(ApiService);
+  private messageService = inject(MessageService);
+  private meta = inject(Meta);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private titleService = inject(Title);
+  private footerService = inject(FooterService);
+
+  private unitCode$ = this.route.paramMap.pipe(
+    map((params) => params.get('unitcode'))
+  );
+
+  private unitData$ = this.unitCode$.pipe(
+    switchMap((code) => {
+      if (!code) return [];
+
+      return forkJoin({
+        unit: this.getUnitService.getByUnitcode(code),
+        reviews: this.apiService.getAllReviewsGET(code),
+      }).pipe(
+        map(({ unit, reviews }: { unit: UnitData; reviews: Review[] }) => {
+          unit.reviews = reviews;
+          return unit;
+        }),
+        tap((unit) => {
+          this.updateMetaTags(unit);
+          this.resetScrollPosition();
+        })
+      );
+    })
+  );
 
   /**
    * * Runs on initialisation
@@ -115,32 +135,22 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     const unitCode = this.route.snapshot.paramMap.get('unitcode');
 
     if (unitCode) {
-      this.getUnitByUnitcode(unitCode); // Get the unit
-      this.getAllReviews(unitCode); // Get the reviews
+      this.getUnitByUnitcode(unitCode);
+      this.getAllReviews(unitCode);
     }
   }
 
-  /**
-   * * Runs after the view has been initialised
-   */
   ngAfterViewInit(): void {
     window.addEventListener('resize', this.resizeHandler);
   }
 
-  /**
-   * * On Component Destruction
-   */
   ngOnDestroy(): void {
-    // Remove the event listener
     window.removeEventListener('resize', this.resizeHandler);
 
-    // Reset height of the unit overview container
     this.unitOverviewContainer.nativeElement.style.height = '';
 
-    // Show the footer again
     this.footerService.showFooter();
 
-    // Reset title
     this.titleService.setTitle(
       'MonSTAR | Browse and Review Monash University Units'
     );
@@ -157,69 +167,33 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.meta.removeTag("name='twitter:description'");
   }
 
-  /**
-   * * Fetches all reviews from the API and stores them in the component.
-   *
-   * This method calls the API to retrieve all the reviews and stores the fetched reviews in the `reviews` property.
-   * It also logs the response to the console for debugging purposes.
-   */
-  getAllReviews(unitCode?: any) {
-    this.apiService.getAllReviewsGET(unitCode).subscribe(
-      (reviews: Review[]) => {
-        // Store the fetched reviews
+  getAllReviews(unitCode?: string) {
+    this.apiService.getAllReviewsGET(unitCode).subscribe({
+      next: (reviews: Review[]) => {
         this.reviews = reviews;
-
-        this.sortReviews('most-likes'); // Sort by most-likes by default
+        this.sortReviews('most-likes');
 
         // Update the reviews property in the unit object
         if (this.unit) this.unit.reviews = this.reviews;
 
-        // Not loading anymore
         this.reviewsLoading = false;
-
         this.resetScrollPosition();
-
-        // ? Debug log: Success
-        // console.log('GET Get All Reviews', reviews);
       },
-      (error: any) => {
-        // ? Debug log: Error
-        // console.log('ERROR DURING: GET Get All Reviews', error)
-      },
-      () => {
-        // Update the height of the whole container
+      complete: () => {
         this.updateContainerHeight();
-      }
-    );
+      },
+    });
   }
 
-  /**
-   * * Fetches the unit by its unit code and stores it in the component.
-   *
-   * This method calls the API to retrieve the unit details for a specific unit code ('fit1045'),
-   * and stores the resulting unit data in the `unit` property.
-   *
-   * Logs the success or error response to the console.
-   */
-  getUnitByUnitcode(unit: string) {
-    this.apiService.getUnitByUnitcodeGET(unit).subscribe(
-      (unit: any) => {
-        // Store the unit
+  getUnitByUnitcode(unitCode: string) {
+    this.getUnitService.getByUnitcode(unitCode).subscribe({
+      next: (unit: UnitData) => {
         this.unit = unit;
-
-        // Update meta tags AFTER unit data is available
+        console.log(unit);
         this.updateMetaTags();
-
         this.resetScrollPosition();
-
-        // ? Debug log: Success
-        // console.log('GET Get Unit by Unitcode', unit);
       },
-      (error: any) => {
-        // ? Debug log: Error
-        // console.log('ERROR DURING: GET Get Unit by Unitcode');
-      }
-    );
+    });
   }
 
   /**
@@ -375,17 +349,12 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * * Updates Meta Tags
    */
-  updateMetaTags(): void {
-    if (!this.unit || !this.unit.unitCode) {
-      console.warn('Cannot update meta tags: Unit data is not available');
-      return;
-    }
-
-    const unitReviewsCount = this.unit.reviews.length;
-    const unitAverageRating = this.unit.avgOverallRating.toFixed(1);
-    const unitCode = this.unit.unitCode.toUpperCase();
-    const unitName = this.unit.name;
-    const pageUrl = `${BASE_URL}/unit/${this.unit.unitCode}`;
+  updateMetaTags(unit: UnitData): void {
+    const unitReviewsCount: number = unit.reviews.length;
+    const unitAverageRating: number = +unit.avgOverallRating.toFixed(1);
+    const unitCode: string = unit.unitCode.toUpperCase();
+    const unitName: string = unit.name;
+    const pageUrl: string = `${BASE_URL}/unit/${unit.unitCode}`;
 
     // Basic meta tags
     this.titleService.setTitle(getMetaUnitOverviewTitle(unitCode, unitName));
