@@ -17,7 +17,7 @@ import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { Offering, UnitData, UnitTag } from '../../models/v2/unit.model';
+import { IUnit, Offering, UnitTag } from '../../models/v2/unit.model';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
@@ -49,7 +49,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   loading: boolean = true;
 
   // This unit's offerings, locations, and teaching periods
-  @Input() unit: UnitData | undefined;
+  @Input() unit: IUnit | undefined;
   offerings: Offering[] = [];
   locations: string[] = [];
   teachingPeriods: string[] = [];
