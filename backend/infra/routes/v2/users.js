@@ -8,6 +8,14 @@ const { storage } = require('@providers/cloudinary.provider');
 const upload = multer({ storage });
 const router = express.Router();
 
+router.get(
+  '/me',
+  // #swagger.tags = ['User V2']
+  // #swagger.summary = 'Get current user'
+  userMiddleware,
+  UserController.me()
+);
+
 router.post(
   '/google/authenticate',
   // #swagger.tags = ['User V2']

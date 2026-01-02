@@ -5,6 +5,15 @@ const UserService = require('@services/user.service');
 
 class UserController {
   /**
+   * Get current user
+   */
+  static me = asyncHandler(async (req, res) => {
+    const user = req.user;
+    if (!user) return res.status(404).json({ message: 'User context not found' });
+    return res.status(200).json(user);
+  });
+
+  /**
    * Login/sign up with google oauth
    */
   static authenticateWithGoogle = asyncHandler(async (req, res) => {
