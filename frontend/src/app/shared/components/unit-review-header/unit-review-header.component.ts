@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UnitData } from 'app/shared/models/v2/unit.model';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -28,7 +29,6 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { Subscription } from 'rxjs';
 import { Review, ReviewData } from '../../models/review.model';
-import { Unit } from '../../models/unit.model';
 import { User } from '../../models/user.model';
 import { DecimalPipe } from '../../pipes/decimal.pipe';
 import { ApiService } from '../../services/api.service';
@@ -71,7 +71,7 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
   Math = Math;
 
   // Receives the unit data from the parent component (UnitOverviewComponent)
-  @Input() unit?: Unit;
+  @Input() unit?: UnitData;
 
   // Emits the sorting criteria to the parent component (UnitOverviewComponent)
   @Output() sortBy = new EventEmitter<string>();
@@ -285,12 +285,9 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
    * @returns {boolean} Returns true if the unit has prerequisites or parent units, false otherwise.
    */
   unitHasRequisites(): boolean {
-    if (!this.unit || !this.unit.unitCode) return false;
+    if (!this.unit) return false;
 
-    if (
-      this.unit?.requisites?.prerequisites &&
-      this.unit.requisites.prerequisites.length > 0
-    ) {
+    if (this.unit.requisites.prerequisites.length > 0) {
       console.info(`UnitReviewHeader | Unit has requisites.`);
       return true;
     }
