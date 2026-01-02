@@ -357,34 +357,21 @@ export class ApiService {
    * @returns {Observable<any>} An observable containing the response from the server
    */
   editReviewPUT(review: Review): Observable<any> {
-    return this.http
-      .put(
-        `${this.url}/reviews/update/${review._id}`,
-        {
-          title: review.title,
-          semester: review.semester,
-          grade: review.grade,
-          year: review.year,
-          overallRating: review.overallRating,
-          relevancyRating: review.relevancyRating,
-          facultyRating: review.facultyRating,
-          contentRating: review.contentRating,
-          description: review.description,
-        },
-        { withCredentials: true }
-      )
-      .pipe(
-        tap({
-          next: (response) => {
-            // ? Debug log
-            // console.log('ApiService | Successfully updated review:', response);
-          },
-          error: (error) => {
-            // ? Debug log
-            // console.log('ApiService | Error whilst updating review:', error.error);
-          },
-        })
-      );
+    return this.http.put(
+      `${this.url}/reviews/update/${review._id}`,
+      {
+        title: review.title,
+        semester: review.semester,
+        grade: review.grade,
+        year: review.year,
+        overallRating: review.overallRating,
+        relevancyRating: review.relevancyRating,
+        facultyRating: review.facultyRating,
+        contentRating: review.contentRating,
+        description: review.description,
+      },
+      { withCredentials: true }
+    );
   }
 
   /**
