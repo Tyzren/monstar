@@ -16,17 +16,27 @@ export class GetUnitService {
 
   private http = inject(HttpClient);
 
-  getByUnitcode(unitCode: string): Observable<UnitData> {
-    return this.http.get<UnitData>(`${this.urlV2}/units/${unitCode}`).pipe(
-      tap({
-        next: (res) => {
-          console.log('Response:', res)
-        },
-        error: (err) => {
-          console.error('Error', err.error);
-        }
-      })
-    );
+  getByUnitcode(
+    unitCode: string,
+    populateReviews: boolean,
+    populateReviewsAuthor: boolean
+  ): Observable<UnitData> {
+    const params = new HttpParams()
+      .set('populateReviews', populateReviews)
+      .set('populateReviewsAuthor', populateReviewsAuthor);
+
+    return this.http
+      .get<UnitData>(`${this.urlV2}/units/${unitCode}`, { params })
+      .pipe(
+        tap({
+          next: (res) => {
+            console.log('Response:', res);
+          },
+          error: (err) => {
+            console.error('Error', err.error);
+          },
+        })
+      );
   }
 
   getUnitsFiltered({
