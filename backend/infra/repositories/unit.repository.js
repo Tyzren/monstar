@@ -23,11 +23,15 @@ class UnitRepository {
    *
    * @param {String} unitcode
    * @param {Boolean} populateReviews
+   * @param {Boolean} populateReviewsAuthor
    * @returns {Promise<IUnit|null>}
    */
-  static async findOneByUnitcode(unitcode, populateReviews = false) {
+  static async findOneByUnitcode(unitcode, populateReviews = false, populateReviewsAuthor = false) {
     const query = Unit.findOne({ unitCode: unitcode.toLowerCase() });
-    return populateReviews ? await query.populate('reviews') : await query;
+    return populateReviews ? await query.populate({
+      path: 'reviews',
+      populate: populateReviewsAuthor ? { path: 'author' } : undefined
+    }) : await query;
   }
 
   /**

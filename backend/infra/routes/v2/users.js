@@ -13,7 +13,7 @@ router.get(
   // #swagger.tags = ['User V2']
   // #swagger.summary = 'Get current user'
   userMiddleware,
-  UserController.me()
+  UserController.me
 );
 
 router.post(
