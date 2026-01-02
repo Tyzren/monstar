@@ -43,21 +43,7 @@ class ReviewController {
       });
     }
 
-    // TODO: Update frontend first to use keys so we don't need this
-    const reviewData = {
-      title: req.body.review_title,
-      semester: req.body.review_semester,
-      grade: req.body.review_grade,
-      year: req.body.review_year,
-      overallRating: req.body.review_overall_rating,
-      relevancyRating: req.body.review_relevancy_rating,
-      facultyRating: req.body.review_faculty_rating,
-      contentRating: req.body.review_content_rating,
-      description: req.body.review_description,
-      author: req.body.review_author,
-    };
-
-    const review = await ReviewService.createReview(unitCode, reviewData);
+    const review = await ReviewService.createReview(unitCode, req.body);
     return res.status(201).json(review);
   });
 
