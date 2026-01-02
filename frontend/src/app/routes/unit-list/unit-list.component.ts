@@ -41,7 +41,7 @@ import { scrollToTop } from '../../shared/helpers';
 import {
   FilterData,
   FilteredUnitsResponse,
-  UnitData,
+  IUnit,
 } from '../../shared/models/v2/unit.model';
 
 @Component({
@@ -69,7 +69,7 @@ import {
   styleUrl: './unit-list.component.scss',
 })
 export class UnitListComponent implements OnInit, OnDestroy {
-  filteredUnits: UnitData[] = [];
+  filteredUnits: IUnit[] = [];
   totalRecords: number = 0;
 
   // Loading state of unit cards
