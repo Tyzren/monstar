@@ -5,7 +5,7 @@ import { environment } from '../../../../environments/environment';
 import {
   FilterData,
   FilteredUnitsResponse,
-  UnitData,
+  IUnitDeeplyPopulated,
 } from '../../models/v2/unit.model';
 
 @Injectable({
@@ -20,13 +20,13 @@ export class GetUnitService {
     unitCode: string,
     populateReviews: boolean,
     populateReviewsAuthor: boolean
-  ): Observable<UnitData> {
+  ): Observable<IUnitDeeplyPopulated> {
     const params = new HttpParams()
       .set('populateReviews', populateReviews)
       .set('populateReviewsAuthor', populateReviewsAuthor);
 
     return this.http
-      .get<UnitData>(`${this.urlV2}/units/${unitCode}`, { params })
+      .get<IUnitDeeplyPopulated>(`${this.urlV2}/units/${unitCode}`, { params })
       .pipe(
         tap({
           next: (res) => {
