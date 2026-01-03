@@ -18,12 +18,13 @@ import { GetUnitService } from '@services/api/get-unit.service';
 import { ModifyReviewService } from '@services/api/modify-review.service';
 import { PostReviewService } from '@services/api/post-review.service';
 import { UserService } from '@services/api/user.service';
-import { Review } from 'app/shared/models/review.model';
 import {
+  ICreateReview,
   IReview,
   IReviewAuthorPopulated,
-} from 'app/shared/models/v2/review.model';
-import { IUnitDeeplyPopulated } from 'app/shared/models/v2/unit.model';
+  IUpdateReview,
+} from 'app/shared/models/v2/review.schema';
+import { IUnitDeeplyPopulated } from 'app/shared/models/v2/unit.schema';
 import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
@@ -233,7 +234,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  onAddReview(review: Review) {
+  onAddReview(review: ICreateReview) {
     this.unitCode$
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -255,7 +256,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
   }
 
-  onEditReview(review: Review) {
+  onEditReview(review: IUpdateReview) {
     this.modifyReviewService
       .editReview(review)
       .pipe(
