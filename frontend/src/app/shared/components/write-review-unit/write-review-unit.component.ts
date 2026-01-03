@@ -5,12 +5,19 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
+  inject,
   Input,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {
+  ICreateReview,
+  IUpdateReview,
+  UpdateReviewSchema,
+} from 'app/shared/models/v2/review.schema';
+import { IUnit } from 'app/shared/models/v2/unit.schema';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogModule } from 'primeng/dialog';
@@ -19,10 +26,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RatingModule } from 'primeng/rating';
 import { ToastModule } from 'primeng/toast';
-import { Review } from '../../models/review.model';
-import { User } from '../../models/user.model';
-import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { RatingComponent } from '../rating/rating.component';
 
@@ -66,29 +69,19 @@ export class WriteReviewUnitComponent implements OnInit {
   @ViewChild('contentRatingInput') contentRatingInput!: ElementRef;
   @ViewChild('submitReviewButton') submitReviewButton?: ElementRef;
 
-  // Input property to receive the unit data from the parent component
-  @Input() unit?: any;
+  @Input({ required: true }) unit: IUnit | undefined;
 
-  @Input() editMode: boolean = false;
+  @Input() review: IUpdateReview = UpdateReviewSchema.safeParse({}).data!;
 
-  // Input property to receive the visible boolean data from the parent component
+  @Input({ required: true }) editMode: boolean = false;
   @Input() visible: boolean = false;
 
-  // Input property to receive the current user data from the parent component
-  @Input() user: User | null = null;
-
-  // Event to notify that the review was posted
-  @Output() reviewPosted = new EventEmitter<void>();
-
-  @Output() reviewEdited = new EventEmitter<void>();
-
-  // Review object and it's properties
-  @Input() review: Review = new Review();
+  @Output() reviewSubmit = new EventEmitter<ICreateReview>();
+  @Output() reviewUpdate = new EventEmitter<IUpdateReview>();
 
   // List of years to choose from (see initialiseYearOptions)
   yearOptions: Array<{ label: string; value: number }> = [];
 
-  // The options for the semester dropdown
   semesterOptions = [
     { label: 'First semester', value: 'First semester' },
     { label: 'Second semester', value: 'Second semester' },
@@ -115,7 +108,6 @@ export class WriteReviewUnitComponent implements OnInit {
     { label: 'Teaching period 5', value: 'Teaching period 5' },
   ];
 
-  // The options for the grade dropdown
   gradeOptions = [
     { label: 'HD', value: 'HD' },
     { label: 'D', value: 'D' },
@@ -124,12 +116,8 @@ export class WriteReviewUnitComponent implements OnInit {
     { label: 'N (fail)', value: 'N' },
   ];
 
-  // The direction of the slide animation
   slideDirection: 'next' | 'prev' = 'next';
-  // Whether the dialog is currently animating
   isAnimating: boolean = false;
-
-  // State of the dialog
   stateList = [
     'title',
     'description',
@@ -154,38 +142,19 @@ export class WriteReviewUnitComponent implements OnInit {
   // Viewport type
   viewportType: ViewportType = 'desktop';
 
-  /**
-   * === Constructor ===
-   * - Calls initialiseYearOptions
-   */
-  constructor(
-    private apiService: ApiService,
-    private authService: AuthService,
-    private messageService: MessageService,
-    private viewportService: ViewportService
-  ) {
+  private messageService = inject(MessageService);
+  private viewportService = inject(ViewportService);
+
+  constructor() {
     this.initialiseYearOptions();
   }
 
-  /**
-   * * Runs on initialisation
-   *
-   * - Subscribes to the viewport service to get the viewport type.
-   */
   ngOnInit(): void {
-    // Get the viewport type from the viewport service
     this.viewportService.viewport$.subscribe((type) => {
       this.viewportType = type;
     });
   }
 
-  /**
-   * * Opens the dialog
-   *
-   * - Sets the visible property to true.
-   * - Calls the focusCurrentInput method.
-   * - Adds a toast message for the keyboard shortcuts (only for desktop and laptop)
-   */
   openDialog() {
     this.visible = true;
     this.focusCurrentInput();
@@ -203,23 +172,14 @@ export class WriteReviewUnitComponent implements OnInit {
     }
   }
 
-  /**
-   * * Called when the dialog is shown
-   *
-   * - Maximises the dialog if the viewport is not desktop or laptop.
-   */
   onDialogShow(dialog: Dialog) {
     if (this.viewportType !== 'desktop' && this.viewportType !== 'laptop') {
       dialog.maximize();
     }
   }
-
-  // === Closes the create review dialog ===
   closeDialog() {
     this.visible = false;
   }
-
-  // === Called when the dialog is hidden ===
   onDialogHide() {
     this.stateIndex = 0;
     this.visible = false;
@@ -227,7 +187,7 @@ export class WriteReviewUnitComponent implements OnInit {
   }
 
   /**
-   * === Moves to the next state in the dialog ===
+   * Moves to the next state in the dialog
    *
    * - Checks if the current state is not the last state in the stateList array.
    * - Adds the slide-next-leave class to the content div.
@@ -257,7 +217,7 @@ export class WriteReviewUnitComponent implements OnInit {
   }
 
   /**
-   * === Moves to the previous state in the dialog ===
+   * Moves to the previous state in the dialog
    *
    * - Checks if the current state is not the first state in the stateList array.
    * - Adds the slide-prev-leave class to the content div.
@@ -286,12 +246,6 @@ export class WriteReviewUnitComponent implements OnInit {
     }
   }
 
-  /**
-   * === Focuses the current input based on the stateIndex ===
-   *
-   * - Uses a setTimeout to focus the input after 500ms.
-   * - Switches the stateList[stateIndex] to focus the correct input.
-   */
   focusCurrentInput() {
     setTimeout(() => {
       switch (this.stateList[this.stateIndex]) {
@@ -326,19 +280,11 @@ export class WriteReviewUnitComponent implements OnInit {
     }, 500);
   }
 
-  /**
-   * === Handles paste events ===
-   */
   @HostListener('document:paste', ['$event'])
   handlePaste(event: ClipboardEvent) {
-    // Get current state
     const currentState = this.stateList[this.stateIndex];
-
-    // Only check paste for title and description
     if (['title', 'description'].includes(currentState)) {
       const pastedText = event.clipboardData?.getData('text');
-
-      // Check if pasted content contains dangerous characters
       if (
         pastedText &&
         this.dangerousChars.some((char) => pastedText.includes(char))
@@ -356,7 +302,7 @@ export class WriteReviewUnitComponent implements OnInit {
   }
 
   /**
-   * === Handles key press events ===
+   * Handles key press events
    *
    * - If the key pressed is 'Enter', it will submit the review if the current state is 'submit'.
    * - If the key pressed is a number from 1-5, it will set the rating for the current state.
@@ -374,20 +320,10 @@ export class WriteReviewUnitComponent implements OnInit {
       if (currentState === 'description' && event.shiftKey) {
         return;
       }
-
-      // Prevent the default action of the enter key
       event.preventDefault();
-
-      // If the current state is 'submit', post the review
       if (currentState === 'submit') {
-        // console.log(this.editMode);
-        if (this.editMode) {
-          return this.editReview();
-        }
-        return this.postReview();
+        this.submitReview();
       }
-
-      // Move to the next state if the current state is not 'submit'
       this.nextState();
     }
 
@@ -430,13 +366,13 @@ export class WriteReviewUnitComponent implements OnInit {
 
         if (
           this.lastKeyPressed === event.key &&
-          (this.review as any)[currentState] === ratingValue
+          this.review[currentState] === ratingValue
         ) {
           // Reset the rating if same key is pressed twice
-          (this.review as any)[currentState] = 0;
+          this.review[currentState] = 0;
         } else {
           // Set new rating
-          (this.review as any)[currentState] = ratingValue;
+          this.review[currentState] = ratingValue;
         }
 
         this.lastKeyPressed = event.key;
@@ -444,174 +380,30 @@ export class WriteReviewUnitComponent implements OnInit {
     }
   }
 
-  editReview() {
-    //Checking if user is logged in
-    if (!this.user) {
-      // console.error('User data not available.');
-      return;
+  submitReview() {
+    if (!this.review || !this.unit) return;
+
+    const ratings = [
+      this.review.relevancyRating,
+      this.review.facultyRating,
+      this.review.contentRating,
+    ].filter((r) => r > 0);
+
+    if (ratings.length > 0) {
+      const sum = ratings.reduce((acc, curr) => acc + curr, 0);
+      this.review.overallRating = Number((sum / ratings.length).toFixed(1));
     }
 
-    //Checking if unit is assigned to us
-    if (!this.unit) {
-      // console.error('Unit data not available.');
-      return;
+    // Emit to parent (unit-review-header or review-card)
+    if (this.editMode) {
+      this.reviewUpdate.emit(this.review);
+    } else {
+      this.reviewSubmit.emit(this.review as ICreateReview);
     }
 
-    // Ensure all defaults are set in the review object
-    this.review.ensureDefaults();
-
-    // Push the new review to the currentUser's reviews array
-    this.user.reviews.push(this.review._id);
-
-    // ? Debug log
-    // console.log('Updating review:', this.review);
-
-    // Calculate the overall rating
-    this.review.calcOverallRating();
-
-    // Send the review using the API service
-    this.apiService.editReviewPUT(this.review).subscribe({
-      next: (response) => {
-        // Update the current user in AuthService
-        this.authService.setCurrentUser(this.user!);
-
-        // ? Debug log
-        // console.log('WriteReviewUnit | Update current user:', this.user);
-
-        // Close the pop up write review
-        this.closeDialog();
-
-        // Emit that we posted the review
-        this.reviewEdited.emit();
-
-        // Show success toast
-        this.messageService.add({
-          key: 'success-toast',
-          severity: 'success',
-          summary: 'Review Modified!',
-          detail: 'Review has been published publicly',
-        });
-
-        // Reset form after successful submission
-        this.review = new Review();
-      },
-      error: (error) => {
-        // Show error toast
-        this.messageService.add({
-          key: 'error-toast',
-          severity: 'error',
-          summary: 'Failed to submit review :(',
-          detail: 'Make sure you give it a title and description dummy!',
-        });
-      },
-    });
+    this.closeDialog();
   }
 
-  /**
-   * === Posts the Review (to the backend) ===
-   *
-   * This method checks if:
-   * - we are currently creating a review FOR a unit.
-   * - we have default values for the review.
-   * - we have valid values for the review.
-   *
-   * Also calculates the overallRating using the Review model's calcOverallRating
-   * helper method.
-   *
-   * If all checks pass, it sends the review to the backend.
-   *
-   * Pushes the review to the frontend currentUser's reviews array as well.
-   *
-   * @subscribes apiService.createReviewForUnitPOST
-   */
-  postReview() {
-    // Checking if user is logged in
-    if (!this.user) {
-      // console.error('User data not available.');
-      return;
-    }
-
-    // Checking if unit is assigned to us
-    if (!this.unit) {
-      // console.error('Unit data not available.');
-      return;
-    }
-
-    // Ensure all defaults are set in the review object
-    this.review.ensureDefaults();
-
-    // Validating values
-    // if (!this.review.isValid()) {
-    //   console.error('Please fill out all fields before submitting the review, and please check your values.')
-    //   return;
-    // }
-
-    // Set review author user
-    this.review.author = this.user._id;
-
-    // Push the new review to the currentUser's reviews array
-    this.user.reviews.push(this.review._id);
-
-    // ? Debug log
-    // console.log('Posting review:', this.review);
-
-    // Calculate the overall rating
-    this.review.calcOverallRating();
-
-    // Send the review using the API service
-    this.apiService
-      .createReviewForUnitPOST(this.unit.unitCode, this.review)
-      .subscribe({
-        next: (data) => {
-          // Create the review object from the response
-          const review = new Review(data);
-
-          // Update the user's reviews array
-          this.user!.reviews.push(review._id);
-
-          // Update the current user in AuthService
-          this.authService.setCurrentUser(this.user!);
-
-          // ? Debug log
-          // console.log('WriteReviewUnit | Update current user:', this.user);
-
-          // Close the pop up write review
-          this.closeDialog();
-
-          // Emit that we posted the review
-          this.reviewPosted.emit();
-
-          // Show success toast
-          this.messageService.add({
-            key: 'success-toast',
-            severity: 'success',
-            summary: 'Review submitted!',
-            detail: 'Review has been published publicly',
-          });
-
-          // Reset form after successful submission
-          this.review = new Review();
-        },
-        error: (error) => {
-          // Show error toast
-          this.messageService.add({
-            key: 'error-toast',
-            severity: 'error',
-            summary: 'Failed to submit review :(',
-            detail: 'Make sure you give it a title and description dummy!',
-          });
-        },
-      });
-  }
-
-  /**
-   * === Creates the multiple previous years from current year. ===
-   *
-   * - Pushes the values to the yearOptions array.
-   * - This is used for the year dropdown option.
-   *
-   * @private
-   */
   private initialiseYearOptions(): void {
     const currentYear = new Date().getFullYear();
     for (let i = currentYear; i >= currentYear - 10; i--)

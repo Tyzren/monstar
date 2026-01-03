@@ -240,7 +240,7 @@
                 #submitReviewButton
                 [label]="(editMode ? 'Edit' : 'Post') + ' (Enter)'"
                 icon="pi pi-check"
-                (click)="this.editMode ? editReview() : postReview()"
+                (click)="submitReview()"
               ></p-button>
             </div>
           }
