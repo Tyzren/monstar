@@ -1,7 +1,7 @@
 @if (!unit) {
   <!-- Show skeleton while unit is loading -->
   <p-skeleton height="12rem" borderRadius="16px" />
-} @else if (aiOverview && aiOverview.summary && aiOverview.summary.trim()) {
+} @else if (aiOverview && aiOverview.summary?.trim()) {
   <!-- Show AI overview card when data exists -->
   <div class="ai-overview-highlight">
     <p-card class="ai-overview-card">
