@@ -10,17 +10,20 @@
       [style]="{ width: '100%', height: '100%' }"
     >
       <!-- Unit review header -->
-      <app-unit-review-header
-        [unit]="unit"
-        (sortBy)="setSort($event)"
-        (reviewAdded)="onAddReview($event)"
-        (reviewModified)="onEditReview($event)"
-      />
+      @if (unit) {
+        <app-unit-review-header
+          [unit]="unit"
+          (sortBy)="setSort($event)"
+          (reviewAdded)="onAddReview($event)"
+        />
+      }
 
       <br /><br />
 
       <!-- AI overview -->
-      <app-ai-overview [unit]="unit" />
+      @if (unit) {
+        <app-ai-overview [unit]="unit" />
+      }
 
       <!-- Setu header -->
       @if (enableSetuCards && unit) {
@@ -41,8 +44,10 @@
         <div class="reviews-container">
           @for (review of unit.reviews; track $index) {
             <app-review-card
+              [unit]="unit"
               [review]="review"
               (reviewDeleted)="onDeleteReview($event)"
+              (reviewEdited)="onEditReview($event)"
             />
           }
         </div>
