@@ -41,8 +41,8 @@ import { scrollToTop } from '../../shared/helpers';
 import {
   FilterData,
   FilteredUnitsResponse,
-  IUnit,
 } from '../../shared/models/v2/unit.model';
+import { IUnit } from 'app/shared/models/v2/unit.schema';
 
 @Component({
   selector: 'app-unit-list',
