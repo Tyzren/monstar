@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { UserData } from 'app/shared/models/v2/user.model';
+import { IUser } from 'app/shared/models/v2/user.schema';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
 interface UserResponse {
   message: string;
-  data: UserData;
+  data: IUser;
 }
 
 @Injectable({
@@ -16,10 +16,10 @@ export class UserService {
   private url = environment.apiV2Url;
   private http = inject(HttpClient);
 
-  private _currentUser = new BehaviorSubject<UserData | null>(null);
-  public currentUser$: Observable<UserData | null> =
+  private _currentUser = new BehaviorSubject<IUser | null>(null);
+  public currentUser$: Observable<IUser | null> =
     this._currentUser.asObservable();
-  get currentUserValue(): UserData | null {
+  get currentUserValue(): IUser | null {
     return this._currentUser.getValue();
   }
 
@@ -96,7 +96,7 @@ export class UserService {
 
   me() {
     return this.http
-      .get<UserData>(`${this.url}/users/me`)
+      .get<IUser>(`${this.url}/users/me`)
       .pipe(tap((user) => this._currentUser.next(user)));
   }
 
@@ -119,7 +119,7 @@ export class UserService {
     return this.http.post(`${this.url}/refresh`, {}, { withCredentials: true });
   }
 
-  validateSession(): Observable<UserData> {
+  validateSession(): Observable<IUser> {
     return this.http
       .get<UserResponse>(`${this.url}/validate`, { withCredentials: true })
       .pipe(

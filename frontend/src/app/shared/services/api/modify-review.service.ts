@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Review } from 'app/shared/models/review.model';
-import { IReview } from 'app/shared/models/v2/review.model';
+import { IReview, IUpdateReview } from 'app/shared/models/v2/review.schema';
 import { environment } from 'environments/environment';
 import { map, Observable } from 'rxjs';
 
@@ -29,7 +28,7 @@ export class ModifyReviewService {
       .pipe(map((response) => response.review));
   }
 
-  editReview(review: Review) {
+  editReview(review: IUpdateReview) {
     return this.http.put(
       `${this.url}/reviews/update/${review._id}`,
       {

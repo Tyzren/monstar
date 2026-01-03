@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Review } from 'app/shared/models/review.model';
-import { IReview } from 'app/shared/models/v2/review.model';
+import { ICreateReview, IReview } from 'app/shared/models/v2/review.schema';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
@@ -12,7 +11,7 @@ export class PostReviewService {
   private url = environment.apiV2Url;
   private http = inject(HttpClient);
 
-  createReview(unitCode: string, review: Review): Observable<IReview> {
+  createReview(unitCode: string, review: ICreateReview): Observable<IReview> {
     return this.http.post<IReview>(
       `${this.url}/reviews/${unitCode}/create`,
       {

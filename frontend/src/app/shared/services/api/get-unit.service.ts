@@ -5,8 +5,8 @@ import { environment } from '../../../../environments/environment';
 import {
   FilterData,
   FilteredUnitsResponse,
-  IUnitDeeplyPopulated,
 } from '../../models/v2/unit.model';
+import { IUnitDeeplyPopulated } from 'app/shared/models/v2/unit.schema';
 
 @Injectable({
   providedIn: 'root',
