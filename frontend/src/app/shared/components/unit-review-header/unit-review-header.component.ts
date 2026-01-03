@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -72,7 +73,7 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() sortBy = new EventEmitter<string>();
   @Output() reviewAdded = new EventEmitter<Review>();
-  @Output() reviewModified = new EventEmitter<Review>()
+  @Output() reviewModified = new EventEmitter<Review>();
 
   user: User | null = null;
   userSubscription: Subscription | null = null;
@@ -108,39 +109,15 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     desktop: '438px',
   };
   skeletonHeight: string = this.SKELETON_HEIGHTS.desktop;
-
-  // Resize handler for skeleton heights
   private resizeHandler = () => this.updateSkeletonHeight();
 
-  /**
-   * === Constructor ===
-   *
-   * @param {AuthService} authService - The authentication service.
-   * @param {ApiService} apiService - The API service.
-   * @param {MessageService} messageService - The message service.
-   * @param {Router} router - The router service.
-   */
-  constructor(
-    private authService: AuthService,
-    private apiService: ApiService,
-    private messageService: MessageService,
-    private router: Router,
-    private viewportService: ViewportService
-  ) {}
+  private authService = inject(AuthService);
+  private apiService = inject(ApiService);
+  private messageService = inject(MessageService);
+  private router = inject(Router);
+  private viewportService = inject(ViewportService);
 
-  /**
-   *  ! |======================================================================|
-   *  ! | ANGULAR LIFECYCLE HOOKS                                              |
-   *  ! |======================================================================|
-   */
-
-  /**
-   * ! Runs on Init
-   *
-   * Subscribes to the current user observable to get the current user.
-   */
   ngOnInit(): void {
-    // Subscribe to the ucrrent user
     this.userSubscription = this.authService.getCurrentUser().subscribe({
       next: (currentUser: User | null) => {
         this.user = currentUser;
@@ -215,11 +192,7 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | VALIDATION                                                           |
-   *  ! |======================================================================|
-   */
+  /* ------------------------------- Validation ------------------------------- */
 
   /**
    * * Checks if a user has already reviewed this unit
@@ -309,11 +282,7 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
-  /**
-   *  ! |======================================================================|
-   *  ! | UI MANIPULATORS
-   *  ! |======================================================================|
-   */
+  /* ----------------------------- UI manipulation ---------------------------- */
 
   private updateSkeletonHeight() {
     const width = window.innerWidth;
