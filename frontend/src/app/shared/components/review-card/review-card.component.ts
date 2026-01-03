@@ -30,13 +30,11 @@ import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MenuModule } from 'primeng/menu';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
-import { combineLatest, firstValueFrom, map, ReplaySubject, Subscription } from 'rxjs';
+import { combineLatest, map, ReplaySubject, Subscription } from 'rxjs';
 import { Review } from '../../models/review.model';
 import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
-import { AuthService } from '../../services/auth.service';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
-import { ReportReviewComponent } from './report-review/report-review.component';
 
 @Component({
   selector: 'app-review-card',
@@ -50,7 +48,6 @@ import { ReportReviewComponent } from './report-review/report-review.component';
     ButtonModule,
     MenuModule,
     TooltipModule,
-    ReportReviewComponent,
     BadgeModule,
     WriteReviewUnitComponent,
     HighlightUnitPipe,
@@ -78,10 +75,7 @@ import { ReportReviewComponent } from './report-review/report-review.component';
   ],
 })
 export class ReviewCardComponent implements OnInit, OnDestroy {
-  private _reportReviewDialog!: ReportReviewComponent;
-
   Math = Math;
-  console = console;
 
   private review$ = new ReplaySubject<IReviewAuthorPopulated>(1);
   private _review!: IReviewAuthorPopulated;
@@ -97,16 +91,6 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   @Output() reviewDeleted = new EventEmitter<string>();
 
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
-
-  @ViewChild(ReportReviewComponent)
-  set reportReviewDialog(content: ReportReviewComponent) {
-    if (content) {
-      this._reportReviewDialog = content;
-    }
-  }
-  get reportReviewDialog(): ReportReviewComponent {
-    return this._reportReviewDialog;
-  }
 
   // Child component: write review unit dialog
   @ViewChild(WriteReviewUnitComponent)
@@ -163,7 +147,6 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private authService = inject(AuthService);
   private userService = inject(UserService);
   private modifyReviewService = inject(ModifyReviewService);
   private confirmationService = inject(ConfirmationService);
@@ -177,10 +160,10 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
       if (!user) return null;
       if (!review) return null;
       return {
-        liked: user?.likedReviews.includes(review._id) ?? false,
-        disliked: user?.dislikedReviews.includes(review._id) ?? false,
+        liked: user.likedReviews.includes(review._id) ?? false,
+        disliked: user.dislikedReviews.includes(review._id) ?? false,
         isAuthor:
-          user?._id ===
+          user._id ===
           (typeof review.author === 'object'
             ? review.author._id
             : review.author),
@@ -225,9 +208,6 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
 
   /* ----------------------------- Review deletion ---------------------------- */
 
-  /**
-   * * Choices on confirmation popup (either delete or cancel)
-   */
   accept() {
     this.confirmPopup.accept();
   }
@@ -235,9 +215,6 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
     this.confirmPopup.reject();
   }
 
-  /**
-   * * Subscribes to the confirmation service on deletion
-   */
   confirmDeletion(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
@@ -281,13 +258,5 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
 
   toggleExpand() {
     this.expanded = !this.expanded;
-  }
-
-  async showReportDialog() {
-    const state = await firstValueFrom(this.userState$);
-
-    if (state && this.reportReviewDialog) {
-      this.reportReviewDialog.openDialog();
-    }
   }
 }
