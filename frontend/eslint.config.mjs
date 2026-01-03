@@ -1,11 +1,11 @@
 // @ts-check
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
 import angular from '@angular-eslint/eslint-plugin';
-import angularTemplateParser from '@angular-eslint/template-parser';
 import angularTemplate from '@angular-eslint/eslint-plugin-template';
+import angularTemplateParser from '@angular-eslint/template-parser';
+import eslint from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import prettierConfig from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 
 export default [
   {
@@ -52,6 +52,7 @@ export default [
           varsIgnorePattern: '^_',
         },
       ],
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
   {
