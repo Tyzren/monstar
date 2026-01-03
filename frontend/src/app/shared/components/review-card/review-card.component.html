@@ -1,11 +1,11 @@
-@let userState = userState$ | async;
+@let state = state$ | async;
 
 <!-- === Confirmation Popup === -->
 <p-confirmPopup #confirmPopupRef>
   <ng-template pTemplate="headless" let-message let-test>
     <div class="border-round p-3">
       <!-- Delete review if this is the current user's review -->
-      @if (userState && userState.isAuthor) {
+      @if (state && state.isAuthor) {
         <span>{{ message.message }}</span>
         <div class="flex align-items-center gap-2 mt-3">
           <p-button
@@ -31,7 +31,7 @@
 <p-menu #menu [model]="dropdownMenuItems" [popup]="true" appendTo="body"></p-menu>
 
 <!-- === Review Card Component === -->
-@if (review && userState) {
+@if (review && state) {
   <!-- Container for the whole review card -->
   <div
     class="container mt-5 review-card-container"
@@ -40,7 +40,7 @@
   >
     <div class="review-card position-relative">
       <!-- Buttons for deletion and reporting (shown in top right of review card) -->
-      @if (userState.isAuthor) {
+      @if (state.isAuthor) {
         <!--Review Modification Button -->
         <div
           class="top-right-button"
@@ -62,7 +62,7 @@
             <p class="d-flex align-items-center user-section">
               <!-- Profile picture -->
               <img
-                [src]="userState.profileImg || defaultProfileImg"
+                [src]="state.profileImg || defaultProfileImg"
                 alt="Profile Picture"
                 class="mr-2 profile-picture"
                 loading="lazy"
@@ -70,7 +70,7 @@
                 referrerpolicy="no-referrer"
               />
               <!-- Username -->
-              <span>{{ userState.username || 'Anonymous' }}</span>
+              <span>{{ state.username || 'Anonymous' }}</span>
               <!-- A primeng badge for the year taken -->
               <p-badge
                 [value]="review.year"
@@ -241,7 +241,7 @@
                   <span
                     class="me-2"
                     [style]="{
-                      color: userState.liked ? 'rgb(72, 158, 60)' : 'gray',
+                      color: state.liked ? 'rgb(72, 158, 60)' : 'gray',
                     }"
                     >{{ review.likes }}</span
                   >
@@ -253,20 +253,20 @@
                     (mouseover)="hoveringLike = true"
                     (mouseleave)="hoveringLike = false"
                     [ngStyle]="{
-                      color: userState.liked
+                      color: state.liked
                         ? 'rgb(72, 158, 60)'
-                        : userState.isAuthor
+                        : state.isAuthor
                           ? 'rgb(96,96,96)'
                           : 'gray',
                     }"
-                    [pTooltip]="userState.isAuthor ? 'Cant like yours :(' : ''"
+                    [pTooltip]="state.isAuthor ? 'Cant like yours :(' : ''"
                     fitContent="true"
                   ></i>
                   <!-- Dislike count -->
                   <span
                     class="me-2 ml-3"
                     [style]="{
-                      color: userState.disliked ? 'rgb(196, 57, 94)' : 'gray',
+                      color: state.disliked ? 'rgb(196, 57, 94)' : 'gray',
                     }"
                     >{{ review.dislikes }}</span
                   >
@@ -278,14 +278,14 @@
                     (mouseover)="hoveringDislike = true"
                     (mouseleave)="hoveringDislike = false"
                     [style]="{
-                      color: userState.disliked
+                      color: state.disliked
                         ? 'rgb(196, 57, 94)'
-                        : userState.isAuthor
+                        : state.isAuthor
                           ? 'rgb(96,96,96)'
                           : 'gray',
                     }"
                     [pTooltip]="
-                      userState.isAuthor ? 'Cant dislike yours :(' : ''
+                      state.isAuthor ? 'Cant dislike yours :(' : ''
                     "
                   ></i>
                 </div>
@@ -302,5 +302,6 @@
     [unit]="unit"
     [review]="reviewEdit"
     [editMode]="true"
+    (reviewUpdate)="this.reviewEdited.emit($event)"
   ></app-write-review-unit>
 }

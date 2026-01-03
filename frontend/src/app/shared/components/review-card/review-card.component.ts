@@ -21,7 +21,10 @@ import { UserService } from '@services/api/user.service';
 import {
   IReview,
   IReviewAuthorPopulated,
-} from 'app/shared/models/v2/review.model';
+  IUpdateReview,
+  UpdateReviewSchema,
+} from 'app/shared/models/v2/review.schema';
+import { IUnit } from 'app/shared/models/v2/unit.schema';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
@@ -31,7 +34,6 @@ import { MenuModule } from 'primeng/menu';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
 import { combineLatest, map, ReplaySubject, Subscription } from 'rxjs';
-import { Review } from '../../models/review.model';
 import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
@@ -78,17 +80,20 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   Math = Math;
 
   private review$ = new ReplaySubject<IReviewAuthorPopulated>(1);
-  private _review!: IReviewAuthorPopulated;
+  private _review: IReviewAuthorPopulated | undefined;
   @Input({ required: true })
   set review(value: IReviewAuthorPopulated) {
     this._review = value;
     this.review$.next(value);
   }
-  get review() {
+  get review(): IReviewAuthorPopulated | undefined {
     return this._review;
   }
 
+  @Input({ required: true }) unit: IUnit | undefined;
+
   @Output() reviewDeleted = new EventEmitter<string>();
+  @Output() reviewEdited = new EventEmitter<IUpdateReview>();
 
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
 
@@ -116,32 +121,12 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s';
 
   private viewportSubscription: Subscription = new Subscription();
-
-  // Viewport type
   viewportType: ViewportType = 'desktop';
 
-  // The unit that is being edited
-  unit: any = null;
-
-  // Review that is being edited
-  reviewEdit: Review = new Review();
-
-  startEditReview(review: any) {
-    this.reviewEdit = new Review({
-      _id: review._id,
-      title: review.title,
-      semester: review.semester,
-      grade: review.grade,
-      year: review.year,
-      overallRating: review.overallRating,
-      relevancyRating: review.relevancyRating,
-      facultyRating: review.facultyRating,
-      contentRating: review.contentRating,
-      description: review.description,
-    });
-
-    this.unit = review.unit;
-
+  // Inputted to child in template (write-review-unit)
+  reviewEdit: IUpdateReview = UpdateReviewSchema.safeParse({}).data!;
+  startEditReview(review: IReviewAuthorPopulated) {
+    this.reviewEdit = UpdateReviewSchema.parse(review);
     if (this.writeReviewDialog) {
       this.writeReviewDialog.openDialog();
     }
@@ -152,7 +137,7 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   private confirmationService = inject(ConfirmationService);
   private viewportService = inject(ViewportService);
 
-  readonly userState$ = combineLatest([
+  readonly state$ = combineLatest([
     this.userService.currentUser$,
     this.review$,
   ]).pipe(
@@ -160,6 +145,9 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
       if (!user) return null;
       if (!review) return null;
       return {
+        reviewLikes: review.likes,
+        reviewDislikes: review.dislikes,
+
         liked: user.likedReviews.includes(review._id) ?? false,
         disliked: user.dislikedReviews.includes(review._id) ?? false,
         isAuthor:
@@ -175,9 +163,6 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   );
 
   ngOnInit(): void {
-    this.likes = this.review.likes;
-    this.dislikes = this.review.dislikes;
-
     this.viewportSubscription = this.viewportService.viewport$.subscribe(
       (type) => {
         this.viewportType = type;
@@ -189,6 +174,7 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
         label: 'Edit',
         icon: 'pi pi-pencil',
         command: () => {
+          if (!this.review) return;
           this.startEditReview(this.review);
         },
       },
@@ -227,12 +213,14 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   }
 
   deleteReview() {
+    if (!this.review) return;
     this.reviewDeleted.emit(this.review._id);
   }
 
   /* -------------------------- Liking and disliking -------------------------- */
 
   toggleReaction(reactionType: 'like' | 'dislike') {
+    if (!this.review) return;
     const reviewId = this.review._id;
     const rollback = this.userService.toggleReaction(reviewId, reactionType);
     const userId = this.userService.getId();
@@ -244,9 +232,12 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
     this.modifyReviewService
       .toggleReaction(reviewId, userId, reactionType)
       .subscribe({
-        next: (review: IReview) => {
-          this.review.likes = review.likes;
-          this.review.dislikes = review.dislikes;
+        next: (updatedReview: IReview) => {
+          this.review = {
+            ...this.review,
+            likes: updatedReview.likes,
+            dislikes: updatedReview.dislikes,
+          } as IReviewAuthorPopulated;
         },
         error: () => {
           if (rollback) rollback();
