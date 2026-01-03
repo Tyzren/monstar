@@ -13,7 +13,10 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IUnitDeeplyPopulated } from 'app/shared/models/v2/unit.model';
+import { UserService } from '@services/api/user.service';
+import { ICreateReview } from 'app/shared/models/v2/review.schema';
+import { IUnitDeeplyPopulated } from 'app/shared/models/v2/unit.schema';
+import { IUser } from 'app/shared/models/v2/user.schema';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -28,12 +31,9 @@ import { RippleModule } from 'primeng/ripple';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { Subscription } from 'rxjs';
-import { Review, ReviewData } from '../../models/review.model';
-import { User } from '../../models/user.model';
+import { combineLatest, map, ReplaySubject } from 'rxjs';
 import { DecimalPipe } from '../../pipes/decimal.pipe';
 import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
 import { ViewportService } from '../../services/viewport.service';
 import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
 
@@ -69,21 +69,23 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   Math = Math;
 
-  @Input() unit: IUnitDeeplyPopulated | null | undefined;
+  readonly unit$ = new ReplaySubject<IUnitDeeplyPopulated>(1);
+  private _unit!: IUnitDeeplyPopulated;
+  @Input({ required: true })
+  set unit(value: IUnitDeeplyPopulated) {
+    this._unit = value;
+    this.unit$.next(value);
+  }
+  get unit() {
+    return this._unit;
+  }
 
   @Output() sortBy = new EventEmitter<string>();
-  @Output() reviewAdded = new EventEmitter<Review>();
-  @Output() reviewModified = new EventEmitter<Review>();
+  @Output() reviewAdded = new EventEmitter<ICreateReview>();
 
-  user: User | null = null;
-  userSubscription: Subscription | null = null;
-
-  // Boolean to disable the unit map button if the unit has no prerequisites or parent units
   isUnitMapButtonEnabled: boolean = true;
 
-  // The currently selected sorting option for the dropdown
   selectedSort: string = 'highest-rating';
-  // Sorting options used for the dropdown
   sortOptions = [
     { name: 'Recent', value: 'recent' },
     { name: 'Oldest', value: 'oldest' },
@@ -92,13 +94,8 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     { name: 'Most Likes', value: 'most-likes' },
     { name: 'Most Dislikes', value: 'most-dislikes' },
   ];
-
   @ViewChild('sortMenu') sortMenu!: OverlayPanel;
 
-  // Boolean to check if the user has reviewed this unit already
-  hasReviewed: boolean = false;
-
-  // Stores the viewport type given from the viewport service
   viewportType: string = 'desktop';
 
   // Skeleton height for the header when it's loading (pixels)
@@ -111,35 +108,45 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
   skeletonHeight: string = this.SKELETON_HEIGHTS.desktop;
   private resizeHandler = () => this.updateSkeletonHeight();
 
-  private authService = inject(AuthService);
+  private userService = inject(UserService);
   private apiService = inject(ApiService);
   private messageService = inject(MessageService);
   private router = inject(Router);
   private viewportService = inject(ViewportService);
 
+  readonly userState$ = combineLatest([
+    this.userService.currentUser$,
+    this.unit$,
+  ]).pipe(
+    map(([user, unit]) => {
+      const state: {
+        user: IUser | null;
+        hasReviewed: boolean;
+        isLoading: boolean;
+      } = {
+        user: null,
+        hasReviewed: false,
+        isLoading: true,
+      };
+      if (!user) return state;
+      if (!unit) return state;
+
+      state.hasReviewed = user
+        ? !!unit.reviews.find((r) => r.author?._id === user._id)
+        : false;
+      state.user = user;
+      state.isLoading = false;
+
+      return state;
+    })
+  );
+
   ngOnInit(): void {
-    this.userSubscription = this.authService.getCurrentUser().subscribe({
-      next: (currentUser: User | null) => {
-        this.user = currentUser;
-
-        // Check if the user has already reviewed this unit
-        if (this.user && this.unit) {
-          this.checkHasReviewed();
-        }
-
-        console.log('UnitReviewHeader | Current User:', this.user);
-      },
-    });
-
-    // Subscribe to the viewport service and get the viewport type
     this.viewportService.viewport$.subscribe((type) => {
       this.viewportType = type;
     });
   }
 
-  /**
-   * ! Runs after view has initialised
-   */
   ngAfterViewInit(): void {
     // Resize listener to update the skeleton height
     this.updateSkeletonHeight();
@@ -151,11 +158,6 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  /**
-   * ! Runs on changes
-   *
-   * Verifies the unit graph again on changes of the `unit` variable.
-   */
   ngOnChanges(changes: SimpleChanges): void {
     /**
      * Check if:
@@ -176,72 +178,11 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  /**
-   * ! Runs on destroy
-   *
-   * - Removes the resize event listener to prevent memory leaks.
-   * - Unsubscribes from the user subscription.
-   */
   ngOnDestroy(): void {
-    // Destroy the resize listener
     window.removeEventListener('resize', this.resizeHandler);
-
-    // Unsubscribe to the current user
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
   }
 
   /* ------------------------------- Validation ------------------------------- */
-
-  /**
-   * * Checks if a user has already reviewed this unit
-   *
-   * It will call the "GET Get User Reviews" API endpoint and check if the user
-   * has reviewed this unit.
-   *
-   * @subscribes getUserReviewsGET()
-   */
-  checkHasReviewed() {
-    if (!this.user || !this.unit || !this.user._id) return;
-
-    const user = this.user;
-    const unit = this.unit;
-
-    // Get the users reviews
-    this.apiService.getUserReviewsGET(user._id.toString()).subscribe({
-      next: (reviewsData: any) => {
-        const reviews = reviewsData.map((data: ReviewData) => new Review(data));
-
-        // Check if user has reviewed this unit
-        this.hasReviewed = reviews.some((userReview: Review) => {
-          if (userReview.hasPopulatedUnit()) {
-            return userReview.getUnitCode() === unit.unitCode;
-          }
-
-          return (
-            userReview.unit &&
-            unit._id &&
-            userReview.unit.toString() === unit._id.toString()
-          );
-        });
-
-        console.log(
-          `User has ${
-            this.hasReviewed ? 'already' : 'not yet'
-          } reviewed this unit.`
-        );
-      },
-      error: (error) => {
-        console.error(
-          'UnitReviewHeader | Error whilst fetching user reviews:',
-          error
-        );
-        // Default to false on error to allow reviews
-        this.hasReviewed = false;
-      },
-    });
-  }
 
   /**
    * * Check if unit has prerequisites and/or parent units
@@ -314,7 +255,8 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showDialog() {
-    if (this.user == null) {
+    const user = this.userService.currentUserValue;
+    if (user == null) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Not Logged In!',
@@ -322,12 +264,11 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
 
-    if (this.writeReviewDialog && this.user)
+    if (this.writeReviewDialog && user) {
       this.writeReviewDialog.openDialog();
-  }
-
-  handleReviewPosted() {
-    this.reviewAdded.emit();
+    } else {
+      console.error('Could not open dialog for some reason');
+    }
   }
 
   navigateToUnitMap() {
