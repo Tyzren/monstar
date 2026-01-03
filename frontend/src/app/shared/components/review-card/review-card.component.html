@@ -23,25 +23,6 @@
           ></p-button>
         </div>
       }
-      <!-- Report review if this is not the current user's review -->
-      @else {
-        <span>Review goes against rules?<br />Report it to us pls.</span>
-        <div class="flex align-items-center gap-2">
-          <p-button
-            (click)="showReportDialog()"
-            label="Report"
-            size="small"
-            severity="warning"
-          ></p-button>
-          <p-button
-            (click)="reject()"
-            label="Cancel"
-            [outlined]="true"
-            size="small"
-            severity="secondary"
-          ></p-button>
-        </div>
-      }
     </div>
   </ng-template>
 </p-confirmPopup>
