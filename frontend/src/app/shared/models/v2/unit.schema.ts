@@ -23,6 +23,8 @@ const OfferingSchema = z.object({
   name: z.string(),
   period: z.string(),
 });
+export interface IOffering extends z.infer<typeof OfferingSchema> {}
+
 const AiOverviewSchema = z.object({
   summary: z.string().optional(),
   generatedAt: z.date().optional(),

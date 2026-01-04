@@ -17,7 +17,8 @@ import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { IUnit, Offering, UnitTag } from '../../models/v2/unit.model';
+import { UnitTag } from '../../models/v2/unit.model';
+import { IOffering, IUnit } from '../../models/v2/unit.schema';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
@@ -50,7 +51,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // This unit's offerings, locations, and teaching periods
   @Input() unit: IUnit | undefined;
-  offerings: Offering[] = [];
+  offerings: IOffering[] = [];
   locations: string[] = [];
   teachingPeriods: string[] = [];
   // Chips container references for checking overflow
