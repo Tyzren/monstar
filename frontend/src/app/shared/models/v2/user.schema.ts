@@ -25,3 +25,6 @@ export const UserSchema = z.object({
 })
 
 export interface IUser extends z.infer<typeof UserSchema> {};
+
+export const authStateEnum = z.enum(['logged out', 'logged in']);
+export type AuthState = z.infer<typeof authStateEnum>;

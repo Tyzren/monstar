@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { IUser } from 'app/shared/models/v2/user.schema';
+import { AuthState, IUser } from 'app/shared/models/v2/user.schema';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
@@ -23,7 +23,19 @@ export class UserService {
     return this._currentUser.getValue();
   }
 
-  /* ---------------------------- State management ---------------------------- */
+  private _authState = new BehaviorSubject<AuthState>('logged out');
+  authState$: Observable<AuthState> = this._authState.asObservable();
+  get currentAuthStateValue(): AuthState {
+    return this._authState.getValue();
+  }
+
+  /* -------------------------- Auth state management ------------------------- */
+
+  setState(state: AuthState): void {
+    this._authState.next(state);
+  }
+
+  /* --------------------- Business logic state management -------------------- */
 
   getId() {
     const currentUser = this._currentUser.value;

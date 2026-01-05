@@ -225,9 +225,7 @@ export class UnitOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
             summary: 'Deleted',
             detail: 'Review removed successfully',
           });
-
           this.userService.removeReview(reviewId);
-
           this.refreshReviews$.next();
         })
       )
