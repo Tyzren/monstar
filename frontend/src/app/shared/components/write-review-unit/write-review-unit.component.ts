@@ -71,7 +71,8 @@ export class WriteReviewUnitComponent implements OnInit {
 
   @Input({ required: true }) unit: IUnit | undefined;
 
-  @Input() review: IUpdateReview = UpdateReviewSchema.safeParse({}).data!;
+  @Input() review: IUpdateReview | undefined = UpdateReviewSchema.safeParse({})
+    .data!;
 
   @Input({ required: true }) editMode: boolean = false;
   @Input() visible: boolean = false;
@@ -344,9 +345,10 @@ export class WriteReviewUnitComponent implements OnInit {
 
     // * Ratings handling
     if (
-      currentState == 'relevancyRating' ||
-      currentState == 'facultyRating' ||
-      currentState == 'contentRating'
+      (currentState == 'relevancyRating' ||
+        currentState == 'facultyRating' ||
+        currentState == 'contentRating') &&
+      this.review
     ) {
       const keyRatingMap: { [key: string]: number } = {
         '1': 0.5,
