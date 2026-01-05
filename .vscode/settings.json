@@ -1,6 +1,9 @@
 {
   "typescript.tsdk": "./frontend/node_modules/typescript/lib",
+  "typescript.validate.enable": true,
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "angular.log": "verbose",
   "prettier.requireConfig": true,
   "eslint.enable": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
