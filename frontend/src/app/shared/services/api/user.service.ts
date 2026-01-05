@@ -100,7 +100,7 @@ export class UserService {
       .pipe(tap((user) => this._currentUser.next(user)));
   }
 
-  googleAuthenticate(idToken: string): Observable<UserResponse> {
+  googleAuthenticate(idToken: string): Observable<IUser> {
     return this.http
       .post<UserResponse>(
         `${this.url}/google/authenticate`,
@@ -108,8 +108,8 @@ export class UserService {
         { withCredentials: true }
       )
       .pipe(
-        tap((response) => {
-          const user = response.data;
+        map((response) => response.data),
+        tap((user) => {
           this._currentUser.next(user);
         })
       );
