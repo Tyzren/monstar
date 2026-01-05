@@ -35,6 +35,8 @@ import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
+import { IUnit } from 'app/shared/models/v2/unit.schema';
+import { IReview, IUpdateReview } from 'app/shared/models/v2/review.schema';
 declare let google: any;
 
 @Component({
@@ -109,8 +111,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   reviews: any[] = [];
 
   // & |==== Review Details ====|
-  unit: Unit | null = null;
-  review: Review = new Review();
+  unit: IUnit | undefined;
+  review: IUpdateReview | undefined;
 
   // & |==== Forms Inputs ====|
   // Login/Signup

@@ -23,7 +23,6 @@ import { NavigationService } from '../../services/navigation.service';
 import { ProfileDialogService } from '../../services/profile-dialog.service';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { NotificationsPopupComponent } from '../notifications/notifications-popup/notifications-popup.component';
-import { ProfileComponent } from '../profile/profile.component';
 
 @Component({
   selector: 'app-navbar',
@@ -36,7 +35,6 @@ import { ProfileComponent } from '../profile/profile.component';
     StyleClassModule,
     AvatarModule,
     DialogModule,
-    ProfileComponent,
     ToastModule,
     TooltipModule,
     BadgeModule,
