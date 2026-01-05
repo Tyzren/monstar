@@ -61,3 +61,10 @@ export const facultiesEnum = z.enum([
   'Pharmacy and Pharmaceutical Sciences',
   'Science',
 ]);
+
+export const unitCardTagEnum = z.enum([
+  'most-reviews',
+  'controversial',
+  'wam-booster',
+]);
+export type IUnitCardEnum = z.infer<typeof unitCardTagEnum>;

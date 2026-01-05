@@ -122,9 +122,9 @@
             <div class="tags">
               @for (tag of unit.tags; track $index) {
                 <p-tag
-                  [value]="getTagDisplay(tag)"
-                  [severity]="getTagSeverity(tag)"
-                  [icon]="getTagIcon(tag)"
+                  [value]="tagMapping[tag].name"
+                  [severity]="tagMapping[tag].severity"
+                  [icon]="tagMapping[tag].icon"
                   [style]="{ 'font-size': '0.7rem' }"
                 />
               }

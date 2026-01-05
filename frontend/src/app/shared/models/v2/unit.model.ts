@@ -1,11 +1,5 @@
 import { IUnit } from "./unit.schema";
 
-export enum UnitTag {
-  MOST_REVIEWS = 'most-reviews',
-  CONTROVERSIAL = 'controversial',
-  WAM_BOOSTER = 'wam-booster',
-}
-
 export interface FilterData {
   offset: number;
   limit: number;

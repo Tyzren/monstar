@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IUnitCardEnum } from 'app/shared/models/v2/enums';
+import { PrimeNgSeverity } from 'app/shared/models/v2/types';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ChipModule } from 'primeng/chip';
@@ -17,7 +19,6 @@ import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { UnitTag } from '../../models/v2/unit.model';
 import { IOffering, IUnit } from '../../models/v2/unit.schema';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 
@@ -134,6 +135,23 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Memoized original period names for performance
   private memoizedOriginalPeriodNames = new Map<string, string[]>();
 
+  tagMapping: Record<
+    IUnitCardEnum,
+    { name: string; severity: PrimeNgSeverity; icon: string }
+  > = {
+    'most-reviews': { name: 'Popular', severity: 'info', icon: 'pi pi-star' },
+    controversial: {
+      name: 'Controversial',
+      severity: 'danger',
+      icon: 'pi pi-exclamation-triangle',
+    },
+    'wam-booster': {
+      name: 'WAM Boost',
+      severity: 'success',
+      icon: 'pi pi-angle-double-up',
+    },
+  };
+
   constructor(private router: Router) {
     // Initalise period order map
     this.periodOrderMap = new Map(
@@ -238,19 +256,14 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   /* -------------- Teaching periods and locations helper methods ------------- */
 
   /**
-   * * Get Original Teaching Period Name
-   *
-   * Gets the original teaching period name given the shortened name.
-   *
-   * @param {string} shortName The shortened name of the teaching period.
-   * @returns {string} The original name of the teaching period.
+   * Get original teaching period name given short name
    */
   getOriginalPeriodName(shortName: string): string {
     return this.getMemoizedOriginalPeriodNames([shortName])[0];
   }
 
   /**
-   * * Get Period Names Tooltip
+   * Get Period Names Tooltip
    *
    * Gets the tooltip for the teaching periods with the original long names.
    *
@@ -264,7 +277,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * * Get Original Teaching Periods Names with Memoization
+   * Get Original Teaching Periods Names with Memoization
    *
    * Gets the original teaching period names with caching for better performance.
    *
@@ -286,7 +299,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * * Check Overflow
+   * Check Overflow
    *
    * Checks if the locations and periods rows are overflowing and sets the
    * visible locations and periods accordingly.
@@ -311,82 +324,14 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /* --------------------------- Tags helper methods -------------------------- */
-
-  /**
-   * * Get Tag Display
-   *
-   * @param {UnitTag} tag The tag to get the display name for
-   * @returns {string} The display name for the tag.
-   */
-  getTagDisplay(tag: UnitTag): string {
-    switch (tag) {
-      case UnitTag.MOST_REVIEWS:
-        return 'Popular';
-      case UnitTag.CONTROVERSIAL:
-        return 'Controversial';
-      case UnitTag.WAM_BOOSTER:
-        return 'WAM Boost';
-      default:
-        return tag;
-    }
-  }
-
-  /**
-   * * Get Tag Severity
-   *
-   * @param {UnitTag} tag The tag to get the severity for
-   * @returns {string} The severity of the tag for styling
-   */
-  getTagSeverity(
-    tag: UnitTag
-  ):
-    | 'success'
-    | 'secondary'
-    | 'info'
-    | 'warning'
-    | 'danger'
-    | 'contrast'
-    | undefined {
-    switch (tag) {
-      case UnitTag.MOST_REVIEWS:
-        return 'info';
-      case UnitTag.CONTROVERSIAL:
-        return 'danger';
-      case UnitTag.WAM_BOOSTER:
-        return 'success';
-      default:
-        return 'info';
-    }
-  }
-
-  /**
-   * * Get Tag Icon
-   *
-   * @param {UnitTag} tag The tag to get the icon for
-   * @returns {string} The icon class for the tag
-   */
-  getTagIcon(tag: UnitTag): string {
-    switch (tag) {
-      case UnitTag.MOST_REVIEWS:
-        return 'pi pi-star';
-      case UnitTag.CONTROVERSIAL:
-        return 'pi pi-exclamation-triangle';
-      case UnitTag.WAM_BOOSTER:
-        return 'pi pi-angle-double-up';
-      default:
-        return '';
-    }
-  }
-
   /* -------------------------- Basic helper methods -------------------------- */
 
-  // * Navigates to the unit overview page for the selected unit.
+  // Navigates to the unit overview page for the selected unit.
   onCardClick(): void {
     this.router.navigate(['/unit', this.unit?.unitCode]);
   }
 
-  // * Returns the string to display for the number of reviews.
+  // Returns the string to display for the number of reviews.
   getReviewsText(): string {
     return this.unit!.reviews.length > 1
       ? this.unit!.reviews.length + ' reviews'
