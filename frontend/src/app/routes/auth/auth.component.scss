@@ -1,0 +1,24 @@
+@import '../../_variables.scss';
+
+.centered-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: $poppins;
+  color: white;
+
+  .heading {
+    margin-bottom: 2rem;
+  }
+
+  .subheading {
+    margin-bottom: 2rem;
+  }
+  
+
+  .helper-message {
+    margin-top: 2rem;
+  }
+}
