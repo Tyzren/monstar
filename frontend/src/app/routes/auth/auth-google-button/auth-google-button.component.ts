@@ -44,8 +44,6 @@ export class AuthGoogleButtonComponent implements OnInit {
   }
 
   initialise() {
-    console.log('rendering google button');
-
     try {
       google.accounts.id.initialize({
         client_id: this.clientId,
@@ -61,7 +59,7 @@ export class AuthGoogleButtonComponent implements OnInit {
       this.initialised = true;
       this.isLoading = false;
     } catch (err) {
-      console.error('Failed to init', err);
+      console.error('Failed to initialise the google auth button', err);
       this.hasError = true;
       this.isLoading = true;
       this.error.emit('Failed to intialise google sign in');
