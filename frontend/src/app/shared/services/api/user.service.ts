@@ -13,7 +13,7 @@ interface UserResponse {
   providedIn: 'root',
 })
 export class UserService {
-  private url = environment.apiV2Url;
+  private url = environment.apiV2Url + '/users';
   private http = inject(HttpClient);
 
   private _currentUser = new BehaviorSubject<IUser | null>(null);
@@ -108,7 +108,7 @@ export class UserService {
 
   me() {
     return this.http
-      .get<IUser>(`${this.url}/users/me`)
+      .get<IUser>(`${this.url}/me`)
       .pipe(tap((user) => this._currentUser.next(user)));
   }
 
