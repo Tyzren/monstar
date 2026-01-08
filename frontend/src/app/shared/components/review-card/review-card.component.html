@@ -31,7 +31,7 @@
 <p-menu #menu [model]="dropdownMenuItems" [popup]="true" appendTo="body"></p-menu>
 
 <!-- === Review Card Component === -->
-@if (review && state) {
+@if (review && review.author) {
   <!-- Container for the whole review card -->
   <div
     class="container mt-5 review-card-container"
@@ -40,7 +40,7 @@
   >
     <div class="review-card position-relative">
       <!-- Buttons for deletion and reporting (shown in top right of review card) -->
-      @if (state.isAuthor) {
+      @if (state && state.isAuthor) {
         <!--Review Modification Button -->
         <div
           class="top-right-button"
@@ -62,7 +62,7 @@
             <p class="d-flex align-items-center user-section">
               <!-- Profile picture -->
               <img
-                [src]="state.profileImg || defaultProfileImg"
+                [src]="review.author.profileImg || defaultProfileImg"
                 alt="Profile Picture"
                 class="mr-2 profile-picture"
                 loading="lazy"
@@ -70,7 +70,7 @@
                 referrerpolicy="no-referrer"
               />
               <!-- Username -->
-              <span>{{ state.username || 'Anonymous' }}</span>
+              <span>{{ review.author.username || 'Anonymous' }}</span>
               <!-- A primeng badge for the year taken -->
               <p-badge
                 [value]="review.year"
@@ -241,7 +241,7 @@
                   <span
                     class="me-2"
                     [style]="{
-                      color: state.liked ? 'rgb(72, 158, 60)' : 'gray',
+                      color: state?.liked ? 'rgb(72, 158, 60)' : 'gray',
                     }"
                     >{{ review.likes }}</span
                   >
@@ -249,24 +249,24 @@
                   <i
                     class="thumbs"
                     [class]="'pi pi-thumbs-up-fill'"
-                    (click)="toggleReaction('like')"
+                    (click)="state ? toggleReaction('like') : null"
                     (mouseover)="hoveringLike = true"
                     (mouseleave)="hoveringLike = false"
                     [ngStyle]="{
-                      color: state.liked
+                      color: state?.liked
                         ? 'rgb(72, 158, 60)'
-                        : state.isAuthor
+                        : state?.isAuthor
                           ? 'rgb(96,96,96)'
                           : 'gray',
                     }"
-                    [pTooltip]="state.isAuthor ? 'Cant like yours :(' : ''"
+                    [pTooltip]="state?.isAuthor ? 'Cant like yours :(' : !state ? 'Login to like' : ''"
                     fitContent="true"
                   ></i>
                   <!-- Dislike count -->
                   <span
                     class="me-2 ml-3"
                     [style]="{
-                      color: state.disliked ? 'rgb(196, 57, 94)' : 'gray',
+                      color: state?.disliked ? 'rgb(196, 57, 94)' : 'gray',
                     }"
                     >{{ review.dislikes }}</span
                   >
@@ -274,19 +274,17 @@
                   <i
                     class="thumbs"
                     [class]="'pi pi-thumbs-down-fill'"
-                    (click)="toggleReaction('dislike')"
+                    (click)="state ? toggleReaction('dislike') : null"
                     (mouseover)="hoveringDislike = true"
                     (mouseleave)="hoveringDislike = false"
                     [style]="{
-                      color: state.disliked
+                      color: state?.disliked
                         ? 'rgb(196, 57, 94)'
-                        : state.isAuthor
+                        : state?.isAuthor
                           ? 'rgb(96,96,96)'
                           : 'gray',
                     }"
-                    [pTooltip]="
-                      state.isAuthor ? 'Cant dislike yours :(' : ''
-                    "
+                    [pTooltip]="state?.isAuthor ? 'Cant dislike yours :(' : !state ? 'Login to dislike' : ''"
                   ></i>
                 </div>
               </div>

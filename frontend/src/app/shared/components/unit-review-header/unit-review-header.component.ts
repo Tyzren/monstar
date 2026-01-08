@@ -196,7 +196,7 @@ export class UnitReviewHeaderComponent implements OnInit, OnDestroy, OnChanges {
   unitHasRequisites(): boolean {
     if (!this.unit) return false;
 
-    if (this.unit.requisites.prerequisites.length > 0) {
+    if (this.unit.requisites?.prerequisites?.length > 0) {
       console.info(`UnitReviewHeader | Unit has requisites.`);
       return true;
     }
