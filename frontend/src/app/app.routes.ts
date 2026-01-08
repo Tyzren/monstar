@@ -13,30 +13,23 @@ import { UnitListComponent } from './routes/unit-list/unit-list.component';
 import { UnitMapComponent } from './routes/unit-map/unit-map.component';
 import { UnitOverviewComponent } from './routes/unit-overview/unit-overview.component';
 import { VerifiedComponent } from './routes/verified/verified.component';
+import { AuthComponent } from '@routes/auth/auth.component';
 
 export const routes: Routes = [
-  // Homepage
   { path: '', component: HomeComponent },
-  // Unit List
+  { path: 'auth', component: AuthComponent },
   { path: 'list', component: UnitListComponent },
-  // Unit Overview
   { path: 'unit/:unitcode', component: UnitOverviewComponent },
-  // Unit Map
   { path: 'map/:unitcode', component: UnitMapComponent },
-  // SETU Data
   ...(environment.enableSetuCards
     ? [{ path: 'setu/:unitCode', component: SetuOverviewComponent }]
     : []),
-  // Email Verification
-  { path: 'verify-email/:token', component: VerifiedComponent },
-  // Reset Password
-  { path: 'reset-password/:token', component: ResetPasswordComponent },
-  // Terms and Conditions Page
   { path: 'terms-and-conditions', component: TermsAndCondsComponent },
-  // About Page
   { path: 'about', component: AboutComponent },
-  // Changelog Page
   { path: 'changelog', component: ChangelogComponent },
+
+  // { path: 'verify-email/:token', component: VerifiedComponent },
+  // { path: 'reset-password/:token', component: ResetPasswordComponent },
 
   // 404 Not Found for all other routes
   { path: '**', component: NotFoundComponent },
