@@ -3,7 +3,7 @@
   <h2 class="heading">Welcome back</h2>
   <p class="subheading">Join MonSTAR just like 983 other students have, read reviews and share your experience.</p>
 
-  <app-auth-google-button />
+  <app-auth-google-button (credentialResponse)="onGoogleCredential($event)" />
 
   <span class="helper-message">Please sign in with your <strong>student.monash.edu</strong> account.</span>
 </div>
