@@ -1,26 +1,27 @@
+import { AsyncPipe } from '@angular/common';
 import {
   Component,
-  EventEmitter,
   HostListener,
+  inject,
   OnInit,
-  Output,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { UserService } from '@services/api/user.service';
+import { IUser } from 'app/shared/models/v2/user.schema';
 import { MessageService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
-import { Dialog, DialogModule } from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
 import { RippleModule } from 'primeng/ripple';
 import { Sidebar, SidebarModule } from 'primeng/sidebar';
 import { StyleClassModule } from 'primeng/styleclass';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { filter } from 'rxjs/operators';
-import { User } from '../../models/user.model';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { NavigationService } from '../../services/navigation.service';
-import { ProfileDialogService } from '../../services/profile-dialog.service';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { NotificationsPopupComponent } from '../notifications/notifications-popup/notifications-popup.component';
 
@@ -39,39 +40,17 @@ import { NotificationsPopupComponent } from '../notifications/notifications-popu
     TooltipModule,
     BadgeModule,
     NotificationsPopupComponent,
+    AsyncPipe,
   ],
   providers: [MessageService],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
-  // Reference to the sidebar child
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
-
-  // Reference to the profile dialog
-  @ViewChild('profileDialog') profileDialog!: Dialog;
-
-  // ! Event emitter for opening/closing the dialog  THIS COULD CAUSE LAG ()_() !!!!!!!!!
-  @Output() dialogClosedEvent = new EventEmitter<void>();
-  @Output() dialogOpenedEvent = new EventEmitter<void>();
-
-  // Visibility state of the sidebar
   sidebarVisible: boolean = false;
 
-  // Username for the sidebar
   username: string | undefined = '';
-
-  // Saves the profile state
-  profileState:
-    | 'logged out'
-    | 'logged in'
-    | 'signed out'
-    | 'signed up'
-    | 'forgot password' = 'signed out';
-  // Title of the profile dialog
-  profileDialogTitle: string = 'Sign Up';
-  // Visibility state of the profile dialog
-  profileDialogVisible: boolean = false;
 
   // The color of the navbar background (changes based on route)
   navbarColor: string = 'var(--primary-color)';
@@ -82,63 +61,49 @@ export class NavbarComponent implements OnInit {
   // The color of the profile icon (changes based on route)
   profileColor: string = 'black';
 
-  // Current user
-  user: User | null = null;
-
-  // Viewport type
   viewportType: ViewportType = 'desktop';
 
-  /**
-   * ! Constructor
-   *
-   * Navigation event listener to update the navbar colour
-   *
-   * @param messageService The message service
-   * @param router The router service
-   * @param viewportService The viewport service
-   */
-  constructor(
-    private messageService: MessageService,
-    private router: Router,
-    private viewportService: ViewportService,
-    private navigationService: NavigationService,
-    private profileDialogService: ProfileDialogService
-  ) {
-    // Subscribes to changes in navigation
+  private messageService = inject(MessageService);
+  private userService = inject(UserService);
+  private viewportService = inject(ViewportService);
+  private navigationService = inject(NavigationService);
+  private router = inject(Router);
+
+  state$: Observable<any> = this.userService.currentUser$.pipe(
+    map((user: IUser | null) => {
+      const state: {
+        isAuthenticated: boolean,
+        user: IUser | null,
+      } = {
+        isAuthenticated: false,
+        user: null,
+      }
+      if (!user) return state;
+      
+      state.isAuthenticated = user ? true : false;
+      state.user = user;
+      return state;
+    })
+  )
+
+  constructor() {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        // Update the navbar color
         this.updateNavbarColor();
       });
   }
 
-  /**
-   * * On Initalisation
-   *
-   * - Updates the navbar color
-   * - Subcribes to viewport changes
-   */
   ngOnInit(): void {
     this.updateNavbarColor();
 
-    // Subscribe to viewport changes
     this.viewportService.viewport$.subscribe((type) => {
       this.viewportType = type;
-    });
-
-    // Subscribe to profile dialog open requests
-    this.profileDialogService.openDialog$.subscribe((shouldOpen) => {
-      if (shouldOpen && !this.profileDialogVisible) {
-        this.showProfileDialog();
-      }
     });
   }
 
   /**
-   * * Updates the navbar color
-   *
-   * This method updates the navbar color based no the current route.
+   * Updates the navbar color based n the current route
    */
   private updateNavbarColor(): void {
     this.navbarColor =
@@ -149,139 +114,32 @@ export class NavbarComponent implements OnInit {
     this.profileColor = this.router.url === '/' ? 'black' : 'white';
   }
 
-  /**
-   * * Keybinds
-   *
-   * This method listens for key presses and performs actions based on the key press.
-   *
-   * - Open and close the profile dialog with CTRL + P
-   * - Open and close the sidebar with CTRL + S
-   *
-   * @param event The keyboard event
-   */
+  clickedProfileIcon() {
+    const user = this.userService.currentUserValue;
+    if (!user) { 
+      this.router.navigate(['/auth']); 
+      return;
+    }
+    console.log('User is logged in so cant navigate to /auth');
+  }
+
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    // If the user presses 'p' then we open the profile dialog
-    if (event.ctrlKey && event.key === 'p') {
-      event.preventDefault();
-
-      if (!this.profileDialogVisible) {
-        this.showProfileDialog();
-        this.sidebarVisible = false;
-      } else {
-        this.profileDialogVisible = false;
-        //this.onDialogClose();
-      }
-    }
-
     // If the user presses 's' then we open the sidebar
     if (event.ctrlKey && event.key === 's') {
       event.preventDefault();
 
       if (!this.sidebarVisible) {
         this.sidebarVisible = true;
-        this.profileDialogVisible = false;
       } else {
         this.sidebarVisible = false;
       }
     }
   }
 
-  /**
-   * * Closes the sidebar
-   */
-  closeCallback(e: any): void {
+  // Closes the sidebar
+  closeSidebar(e: any): void {
     this.sidebarRef.close(e);
-  }
-
-  /**
-   * * Called when the dialog is closed
-   *
-   * This method emits an event to the children that the dialog was closed.
-   * It will also set the profile state to 'logged out' if the user is in the 'signed up' state.
-   *
-   * @event dialogClosedEvent Event emitter for when the dialog is closed.
-   */
-  onDialogClose() {
-    // Emit to children that we closed the dialog
-    this.dialogClosedEvent.emit();
-
-    // Reset the service state
-    this.profileDialogService.closeDialog();
-
-    // If the user is in the signed up state, meaning the profile dialog shows
-    // 'Verify your email', then if we close the dialog the profile dialog
-    // will show the login page next time it is opened.
-    if (this.profileState == 'signed up') {
-      this.profileState = 'logged out';
-    }
-  }
-
-  /**
-   * * Called when the dialog is opened
-   *
-   * This will set the confirm the profile dialog reference and maximise the dialog
-   * if the user is not logged in and the viewport is mobile. Also maximises the dialog
-   * if the user is logged in and the viewport is laptop, tablet, or mobile.
-   *
-   * @event dialogOpenedEvent Event emitter for when the dialog is opened.
-   * @param dialog The dialog that was opened.
-   */
-  onDialogOpen(dialog: Dialog) {
-    this.profileDialog = dialog;
-
-    if (
-      dialog &&
-      this.profileState !== 'logged in' &&
-      this.viewportType === 'mobile'
-    ) {
-      dialog.maximize();
-    }
-
-    if (
-      dialog &&
-      this.profileState === 'logged in' &&
-      (this.viewportType === 'laptop' ||
-        this.viewportType === 'tablet' ||
-        this.viewportType === 'mobile')
-    ) {
-      dialog.maximize();
-    }
-
-    this.dialogOpenedEvent.emit();
-  }
-
-  /**
-   * * Shows the profile dialog
-   */
-  showProfileDialog() {
-    this.profileDialogVisible = true;
-  }
-
-  /**
-   * * Called when the profile auth state is changed.
-   *
-   * This method updates the username in the sidebar based on the auth state.
-   */
-  authStateChange(
-    state:
-      | 'logged out'
-      | 'logged in'
-      | 'signed out'
-      | 'signed up'
-      | 'forgot password'
-  ) {
-    this.profileState = state;
-
-    switch (state) {
-      case 'logged in':
-        this.username = this.user?.username;
-        break;
-
-      case 'logged out':
-        this.username = 'Login (Guest)';
-        break;
-    }
   }
 
   /**
