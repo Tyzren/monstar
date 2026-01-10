@@ -2,14 +2,15 @@
 
 // The primeng modified google button
 :host ::ng-deep .google-custom-btn {
-  background: white;
-  color: #1f1f1f;
+  background: $bg-dark-color;
+  color: white;
   border: 1px solid #747775;
   font-family: $poppins;
   font-weight: 400;
+  font-size: var(--font-size, 1rem);
 
   &:hover {
-    background: #f8f9fa;
+    background: $bg-dark-color-hover;
   }
 }
 

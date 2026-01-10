@@ -3,7 +3,9 @@ import {
   DestroyRef,
   ElementRef,
   EventEmitter,
+  HostBinding,
   inject,
+  Input,
   OnInit,
   Output,
   ViewChild,
@@ -22,6 +24,12 @@ import { ButtonModule } from 'primeng/button';
 export class AuthGoogleButtonComponent implements OnInit {
   @Output() credentialResponse = new EventEmitter<string>();
   @Output() error = new EventEmitter<string>();
+
+  @Input() size: string = '1.3rem';
+  @HostBinding('style.--font-size')
+  get fontSize() {
+    return this.size;
+  }
 
   @ViewChild('hiddenGoogleBtn', { static: true }) hiddenGoogleBtn!: ElementRef;
 
