@@ -43,12 +43,27 @@ export const ReviewSchema: z.ZodType<IReview> = BaseReviewSchema.extend({
   unit: z.union([z.string(), z.lazy(() => UnitSchema), z.null()]),
 });
 
+export const ReviewUnitPopulatedSchema = BaseReviewSchema.extend({
+  unit: UnitSchema,
+});
+export interface IReviewUnitPopulated extends z.infer<
+  typeof ReviewUnitPopulatedSchema
+> {}
+
 export const ReviewAuthorPopulatedSchema = BaseReviewSchema.extend({
   author: UserSchema,
-  unit: z.union([z.string(), z.lazy(() => UnitSchema), z.null()]),
+  unit: z.union([z.string(), UnitSchema, z.null()]),
 });
 export interface IReviewAuthorPopulated extends z.infer<
   typeof ReviewAuthorPopulatedSchema
+> {}
+
+export const ReviewFullyPopulatedSchema = BaseReviewSchema.extend({
+  author: UserSchema,
+  unit: UnitSchema,
+});
+export interface IReviewFullyPopulated extends z.infer<
+  typeof ReviewFullyPopulatedSchema
 > {}
 
 export const CreateReviewSchema = BaseReviewSchema.omit({
