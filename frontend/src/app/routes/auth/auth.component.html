@@ -1,9 +1,38 @@
-<div class="centered-container">
+<div class="split-container">
+  <div class="panel left">
+    <div class="scroll-container">
+      <div class="scroll-content">
+        <!-- First set of reviews -->
+        @for (review of reviews; track 'first-' + $index) {
+          <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
+        }
+        <!-- Duplicate for seamless looping -->
+        @for (review of reviews; track 'second-' + $index) {
+          <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="panel right">
+    <div class="auth-card">
+      <div class="mr-auto">
+        <h3>Hi, Wanna sign in?</h3>
+        <p>Please use your monash student email</p>
+      </div>
 
-  <h2 class="heading">Welcome back</h2>
-  <p class="subheading">Join MonSTAR just like 983 other students have, read reviews and share your experience.</p>
+      <app-auth-google-button
+        (credentialResponse)="onGoogleCredential($event)"
+      />
 
-  <app-auth-google-button (credentialResponse)="onGoogleCredential($event)" />
-
-  <span class="helper-message">Please sign in with your <strong>student.monash.edu</strong> account.</span>
+      <div class="guest-section">
+        <p-divider></p-divider>
+        <div
+          class="browse-as-guest-link flex justify-content-center align-items-center gap-2"
+        >
+          <i class="pi pi-eye-slash"></i>
+          <p class="mb-0">Browse as a guest</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
