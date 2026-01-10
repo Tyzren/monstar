@@ -25,6 +25,11 @@ import { NavigationService } from '../../services/navigation.service';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { NotificationsPopupComponent } from '../notifications/notifications-popup/notifications-popup.component';
 
+export interface State {
+  isAuthenticated: boolean,
+  user: IUser | null,
+}
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -69,12 +74,9 @@ export class NavbarComponent implements OnInit {
   private navigationService = inject(NavigationService);
   private router = inject(Router);
 
-  state$: Observable<any> = this.userService.currentUser$.pipe(
+  state$: Observable<State> = this.userService.currentUser$.pipe(
     map((user: IUser | null) => {
-      const state: {
-        isAuthenticated: boolean,
-        user: IUser | null,
-      } = {
+      const state: State = {
         isAuthenticated: false,
         user: null,
       }

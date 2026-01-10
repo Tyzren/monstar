@@ -36,8 +36,9 @@
       ></app-notifications-popup>
 
       <!-- Profile -->
+      @if (state) {
       <div class="profile mr-2" type="button" (click)="clickedProfileIcon()">
-        @if (state.isAuthenticated) {
+        @if (state.isAuthenticated && state.user) {
           <!-- Avatar shown if logged in -->
           <div
             class="profile-pic pt-1"
@@ -59,6 +60,7 @@
           ></i>
         }
       </div>
+      }
     </div>
   </div>
 </nav>
@@ -103,7 +105,7 @@
           <!-- Avatar -->
           <img
             [src]="
-              state.user.profileImg ||
+              state?.user?.profileImg ||
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'
             "
             alt="Profile Picture"
@@ -112,7 +114,7 @@
 
           <!-- Username -->
           <span class="font-bold mb-1 ml-2">{{
-            state.user.username || 'Login (Guest)'
+            state?.user?.username || 'Login (Guest)'
           }}</span>
         </a>
         <hr class="mx-3 border-top-1 border-none surface-border" />
