@@ -6,7 +6,7 @@
 
 h1 {
   font-family: $ryzes;
-  font-size: 12rem;
+  font-size: var(--title-font-size, 12rem);
   font-weight: bold;
   text-shadow: 8px 4px 0px rgb(0, 0, 0, 0.25);
   position: relative;

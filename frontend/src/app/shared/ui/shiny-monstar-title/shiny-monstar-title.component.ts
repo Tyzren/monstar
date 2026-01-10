@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'app-shiny-monstar-title',
@@ -8,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrl: './shiny-monstar-title.component.scss'
 })
 export class ShinyMonstarTitleComponent {
+  @Input() size: string = '12rem';
 
+  @HostBinding('style.--title-font-size')
+  get fontSize() {
+    return this.size;
+  }
 }
