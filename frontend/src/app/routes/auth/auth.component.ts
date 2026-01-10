@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReviewCardComponent } from '@components/review-card/review-card.component';
 import { UserService } from '@services/api/user.service';
@@ -26,6 +26,13 @@ export class AuthComponent {
   private messageService = inject(MessageService);
 
   private router = inject(Router);
+
+  showLeftPanel = window.innerWidth >= 1130;
+
+  @HostListener('window:resize')
+  onResize() {
+    this.showLeftPanel = window.innerWidth >= 1130;
+  }
 
   reviews: Array<IReviewFullyPopulated> = [
     {

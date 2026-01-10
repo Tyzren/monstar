@@ -1,18 +1,20 @@
 <div class="split-container">
-  <div class="panel left">
-    <div class="scroll-container">
-      <div class="scroll-content">
-        <!-- First set of reviews -->
-        @for (review of reviews; track 'first-' + $index) {
-          <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
-        }
-        <!-- Duplicate for seamless looping -->
-        @for (review of reviews; track 'second-' + $index) {
-          <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
-        }
+  @if (showLeftPanel) {
+    <div class="panel left">
+      <div class="scroll-container">
+        <div class="scroll-content">
+          <!-- First set of reviews -->
+          @for (review of reviews; track 'first-' + $index) {
+            <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
+          }
+          <!-- Duplicate for seamless looping -->
+          @for (review of reviews; track 'second-' + $index) {
+            <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
+          }
+        </div>
       </div>
     </div>
-  </div>
+  }
   <div class="panel right">
     <div class="auth-card">
       <div class="mr-auto">
