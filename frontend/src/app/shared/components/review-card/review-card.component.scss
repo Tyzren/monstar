@@ -622,3 +622,117 @@ h6 {
     }
   }
 }
+
+// * Compact variant - smaller, simplified card for previews
+.review-card-container.compact {
+  // Disable hover scale effect
+  &:hover {
+    transform: none;
+  }
+
+
+  .review-card {
+    padding: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+
+    h5 {
+      font-size: 16px;
+      padding-bottom: 2px;
+      padding-right: 8px;
+    }
+
+    h6 {
+      font-size: 13px;
+    }
+
+    p {
+      font-size: 13px !important;
+      padding-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .top-right-button {
+      display: none;
+    }
+
+    .user-section {
+      margin-top: 0.25rem;
+      margin-bottom: 0.5rem;
+
+      .profile-picture {
+        width: 24px;
+        height: 24px;
+      }
+
+      span {
+        font-size: 13px;
+      }
+
+      ::ng-deep .p-badge {
+        font-size: 11px;
+        min-width: 1.4rem;
+        height: 1.4rem;
+        line-height: 1.4rem;
+      }
+    }
+
+    .overall-section {
+      padding: 8px 12px;
+      border-radius: 10px;
+
+      .heading {
+        font-size: 0.9rem;
+      }
+
+      .stars-overall {
+        width: auto;
+        gap: 0.3rem;
+
+        i {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .main-content-container {
+      .review {
+        min-height: 4rem;
+        padding: 0.6rem;
+        margin-bottom: 0.5rem;
+        margin-right: 0.5rem;
+        border-radius: 10px;
+      }
+
+      // Hide expand/collapse button
+      .btn-link {
+        display: none;
+      }
+
+      .categories {
+        padding: 0.6rem;
+        border-radius: 10px;
+
+        .category-header {
+          font-size: 12px;
+          margin-bottom: 0.25rem;
+        }
+
+        .circles {
+          gap: 3px;
+
+          .circle {
+            width: 10px;
+            height: 10px;
+          }
+        }
+      }
+    }
+
+    .review-column {
+      padding-right: 10px;
+    }
+  }
+}
+

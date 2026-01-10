@@ -35,6 +35,7 @@
   <!-- Container for the whole review card -->
   <div
     class="container mt-5 review-card-container"
+    [class.compact]="variant === 'compact'"
     (mouseenter)="deleteButtonState = 'visible'"
     (mouseleave)="deleteButtonState = 'hidden'"
   >
@@ -230,65 +231,67 @@
               </div>
             </div>
 
-            <div
-              class="col-md-3 col-lg-3 d-flex flex-column justify-content-end actions"
-            >
-              <!-- Report and dislike/like buttons -->
-              <div class="action-buttons-container">
-                <!-- Thumbs up/down -->
-                <div class="thumb-buttons">
-                  <!-- Like count -->
-                  <span
-                    class="me-2"
-                    [style]="{
-                      color: state?.liked ? 'rgb(72, 158, 60)' : 'gray',
-                    }"
-                    >{{ review.likes }}</span
-                  >
-                  <!-- Like button -->
-                  <i
-                    class="thumbs"
-                    [class]="'pi pi-thumbs-up-fill'"
-                    (click)="state ? toggleReaction('like') : null"
-                    (mouseover)="hoveringLike = true"
-                    (mouseleave)="hoveringLike = false"
-                    [ngStyle]="{
-                      color: state?.liked
-                        ? 'rgb(72, 158, 60)'
-                        : state?.isAuthor
-                          ? 'rgb(96,96,96)'
-                          : 'gray',
-                    }"
-                    [pTooltip]="state?.isAuthor ? 'Cant like yours :(' : !state ? 'Login to like' : ''"
-                    fitContent="true"
-                  ></i>
-                  <!-- Dislike count -->
-                  <span
-                    class="me-2 ml-3"
-                    [style]="{
-                      color: state?.disliked ? 'rgb(196, 57, 94)' : 'gray',
-                    }"
-                    >{{ review.dislikes }}</span
-                  >
-                  <!-- Dislike button -->
-                  <i
-                    class="thumbs"
-                    [class]="'pi pi-thumbs-down-fill'"
-                    (click)="state ? toggleReaction('dislike') : null"
-                    (mouseover)="hoveringDislike = true"
-                    (mouseleave)="hoveringDislike = false"
-                    [style]="{
-                      color: state?.disliked
-                        ? 'rgb(196, 57, 94)'
-                        : state?.isAuthor
-                          ? 'rgb(96,96,96)'
-                          : 'gray',
-                    }"
-                    [pTooltip]="state?.isAuthor ? 'Cant dislike yours :(' : !state ? 'Login to dislike' : ''"
-                  ></i>
+            @if (variant !== 'compact') {
+              <div
+                class="col-md-3 col-lg-3 d-flex flex-column justify-content-end actions"
+              >
+                <!-- Report and dislike/like buttons -->
+                <div class="action-buttons-container">
+                  <!-- Thumbs up/down -->
+                  <div class="thumb-buttons">
+                    <!-- Like count -->
+                    <span
+                      class="me-2"
+                      [style]="{
+                        color: state?.liked ? 'rgb(72, 158, 60)' : 'gray',
+                      }"
+                      >{{ review.likes }}</span
+                    >
+                    <!-- Like button -->
+                    <i
+                      class="thumbs"
+                      [class]="'pi pi-thumbs-up-fill'"
+                      (click)="state ? toggleReaction('like') : null"
+                      (mouseover)="hoveringLike = true"
+                      (mouseleave)="hoveringLike = false"
+                      [ngStyle]="{
+                        color: state?.liked
+                          ? 'rgb(72, 158, 60)'
+                          : state?.isAuthor
+                            ? 'rgb(96,96,96)'
+                            : 'gray',
+                      }"
+                      [pTooltip]="state?.isAuthor ? 'Cant like yours :(' : !state ? 'Login to like' : ''"
+                      fitContent="true"
+                    ></i>
+                    <!-- Dislike count -->
+                    <span
+                      class="me-2 ml-3"
+                      [style]="{
+                        color: state?.disliked ? 'rgb(196, 57, 94)' : 'gray',
+                      }"
+                      >{{ review.dislikes }}</span
+                    >
+                    <!-- Dislike button -->
+                    <i
+                      class="thumbs"
+                      [class]="'pi pi-thumbs-down-fill'"
+                      (click)="state ? toggleReaction('dislike') : null"
+                      (mouseover)="hoveringDislike = true"
+                      (mouseleave)="hoveringDislike = false"
+                      [style]="{
+                        color: state?.disliked
+                          ? 'rgb(196, 57, 94)'
+                          : state?.isAuthor
+                            ? 'rgb(96,96,96)'
+                            : 'gray',
+                      }"
+                      [pTooltip]="state?.isAuthor ? 'Cant dislike yours :(' : !state ? 'Login to dislike' : ''"
+                    ></i>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>

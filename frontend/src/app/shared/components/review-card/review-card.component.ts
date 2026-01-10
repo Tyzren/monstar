@@ -21,6 +21,7 @@ import { UserService } from '@services/api/user.service';
 import {
   IReview,
   IReviewAuthorPopulated,
+  IReviewFullyPopulated,
   IUpdateReview,
   UpdateReviewSchema,
 } from 'app/shared/models/v2/review.schema';
@@ -79,8 +80,10 @@ import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit
 export class ReviewCardComponent implements OnInit, OnDestroy {
   Math = Math;
 
+  @Input() variant: 'default' | 'compact' = 'default';
+
   private review$ = new ReplaySubject<IReviewAuthorPopulated>(1);
-  private _review: IReviewAuthorPopulated | undefined;
+  private _review: IReviewAuthorPopulated | IReviewFullyPopulated | undefined;
   @Input({ required: true })
   set review(value: IReviewAuthorPopulated) {
     this._review = value;
