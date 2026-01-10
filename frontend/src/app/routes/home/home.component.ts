@@ -34,6 +34,7 @@ import { Unit } from '../../shared/models/unit.model';
 // Components
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { UnitCardComponent } from '../../shared/components/unit-card/unit-card.component';
+import { ShinyMonstarTitleComponent } from '../../shared/ui/shiny-monstar-title/shiny-monstar-title.component';
 
 // Modules
 import { AccordionModule } from 'primeng/accordion';
@@ -56,6 +57,7 @@ import { NavigationService } from '../../shared/services/navigation.service';
     DividerModule,
     ButtonModule,
     SkeletonModule,
+    ShinyMonstarTitleComponent,
   ],
   animations: [
     // * Animation for subheader text fade in/out
