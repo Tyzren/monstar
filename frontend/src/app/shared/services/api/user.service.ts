@@ -106,10 +106,14 @@ export class UserService {
 
   /* -------------------------------- API calls ------------------------------- */
 
-  me() {
+  me(): Observable<IUser> {
     return this.http
       .get<IUser>(`${this.url}/me`)
       .pipe(tap((user) => this._currentUser.next(user)));
+  }
+
+  getByUsername(username: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.url}/${username}`);
   }
 
   googleAuthenticate(idToken: string): Observable<IUser> {
