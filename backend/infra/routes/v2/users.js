@@ -17,10 +17,10 @@ router.get(
 );
 
 router.get(
-  '/:username',
-  // #swagger.tags = ['User v2']
-  // #swagger.summary = 'Get user by username'
-  UserController.getByUsername
+  '/validate',
+  // #swagger.tags = ['User V2']
+  // #swagger.summary = 'Check if the user has the access_token in their cookies to keep session'
+  UserController.validate
 );
 
 router.post(
@@ -45,13 +45,6 @@ router.post(
   UserController.logout
 );
 
-router.get(
-  '/validate',
-  // #swagger.tags = ['User V2']
-  // #swagger.summary = 'Check if the user has the access_token in their cookies to keep session'
-  UserController.validate
-);
-
 router.post(
   '/upload-avatar',
   userMiddleware,
@@ -59,6 +52,13 @@ router.post(
   // #swagger.tags = ['User V2']
   // #swagger.summary = 'Upload avatar to cloudinary and assign it as user's profileImg'
   UserController.uploadAvatar
+);
+
+router.get(
+  '/:username',
+  // #swagger.tags = ['User v2']
+  // #swagger.summary = 'Get user by username'
+  UserController.getByUsername
 );
 
 module.exports = router;
