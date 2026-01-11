@@ -26,7 +26,7 @@ import {
   META_HOME_OPEN_GRAPH_DESCRIPTION,
   META_HOME_TWITTER_DESCRIPTION,
   META_SITENAME,
-} from '../../shared/constants';
+} from '../../shared/constants/constants';
 
 // Models
 import { Unit } from '../../shared/models/unit.model';

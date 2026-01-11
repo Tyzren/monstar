@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UnitCardComponent } from '@components/unit-card/unit-card.component';
 import { GetUnitService } from '@services/api/get-unit.service';
 import { ViewportService } from '@services/viewport.service';
+import { IUnit } from 'app/shared/models/v2/unit.schema';
 import { ButtonModule } from 'primeng/button';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -35,14 +36,13 @@ import {
   META_BASIC_OPEN_GRAPH_DESCRIPTION,
   META_BASIC_TWITTER_TITLE,
   META_UNIT_LIST_TITLE,
-} from '../../shared/constants';
+} from '../../shared/constants/constants';
 import { SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
 import { scrollToTop } from '../../shared/helpers';
 import {
   FilterData,
   FilteredUnitsResponse,
 } from '../../shared/models/v2/unit.model';
-import { IUnit } from 'app/shared/models/v2/unit.schema';
 
 @Component({
   selector: 'app-unit-list',

@@ -2,6 +2,9 @@ export const NAVBAR_HEIGHT = '57.2px';
 
 export const BASE_URL = 'https://monstar.wired.org.au';
 
+export const DEFAULT_PROFILE_IMG =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s';
+
 /**
  *  ! |========================================================================|
  *  ! | META/SEO CONSTANTS
@@ -85,7 +88,7 @@ export const getMetaUnitOverviewOpenGraphTitle = (
 export const getMetaUnitOverviewOpenGraphDescription = (
   unitCode: string,
   averageRating: number,
-  reviewCount: number,
+  reviewCount: number
 ): string =>
   `See what students think about ${unitCode}. Average rating: ${averageRating}/5 from ${reviewCount} reviews.`;
 

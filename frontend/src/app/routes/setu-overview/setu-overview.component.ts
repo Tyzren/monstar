@@ -22,7 +22,7 @@ import {
   getMetaSetuOverviewTitle,
   getMetaSetuOverviewTwitterDescription,
   getMetaSetuOverviewTwitterTitle,
-} from '../../shared/constants';
+} from '../../shared/constants/constants';
 import { Setu } from '../../shared/models/setu.model';
 import { AuthService } from '../../shared/services/auth.service';
 import { ProfileDialogService } from '../../shared/services/profile-dialog.service';

@@ -58,7 +58,7 @@ import {
   getMetaUnitOverviewTitle,
   getMetaUnitOverviewTwitterDescription,
   getMetaUnitOverviewTwitterTitle,
-} from '../../shared/constants';
+} from '../../shared/constants/constants';
 import { FooterService } from '../../shared/services/footer.service';
 
 @Component({
