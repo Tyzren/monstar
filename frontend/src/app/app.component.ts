@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-// Services
-import { ApiService } from './shared/services/api.service';
-import { FooterService } from './shared/services/footer.service';
-
-// Components
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { FooterComponent } from '@components/footer/footer.component';
+import { NavbarComponent } from '@components/navbar/navbar.component';
+import { FooterService } from '@services/footer.service';
 
 // Vercel Analytics
 import { inject as injectAnalytics } from '@vercel/analytics';
@@ -18,7 +13,7 @@ import { inject as injectAnalytics } from '@vercel/analytics';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, NavbarComponent, FooterComponent, ToastModule],
-  providers: [ApiService, MessageService],
+  providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'], // Fixed the typo from 'styleUrl' to 'styleUrls'
 })
