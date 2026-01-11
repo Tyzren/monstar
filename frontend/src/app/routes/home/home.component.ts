@@ -33,8 +33,8 @@ import { Unit } from '../../shared/models/unit.model';
 
 // Components
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { ShinyMonstarTitleComponent } from '../../shared/components/shiny-monstar-title/shiny-monstar-title.component';
 import { UnitCardComponent } from '../../shared/components/unit-card/unit-card.component';
-import { ShinyMonstarTitleComponent } from '../../shared/ui/shiny-monstar-title/shiny-monstar-title.component';
 
 // Modules
 import { AccordionModule } from 'primeng/accordion';
@@ -266,7 +266,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.popularUnits = unitData.map((data) => new Unit(data));
 
         this.loading = false;
-      }
+      },
     });
   }
 

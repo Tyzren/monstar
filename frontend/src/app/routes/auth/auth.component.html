@@ -1,17 +1,46 @@
+@let state = state$ | async;
+
 <div class="split-container">
   @if (showLeftPanel) {
     <div class="panel left">
       <div class="scroll-container">
-        <div class="scroll-content">
-          <!-- First set of reviews -->
-          @for (review of reviews; track 'first-' + $index) {
-            <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
-          }
-          <!-- Duplicate for seamless looping -->
-          @for (review of reviews; track 'second-' + $index) {
-            <app-review-card [variant]="'compact'" [review]="review" [unit]="review.unit"></app-review-card>
-          }
-        </div>
+        @if (state && state.reviews) {
+          <!-- Most liked reviews -->
+          <div class="scroll-content">
+            <!-- First set of reviews -->
+            @for (review of state.reviews; track 'first-' + $index) {
+              <app-review-card
+                [variant]="'compact'"
+                [review]="review"
+                [unit]="review.unit"
+              ></app-review-card>
+            }
+            <!-- Duplicate for seamless looping -->
+            @for (review of state.reviews; track 'second-' + $index) {
+              <app-review-card
+                [variant]="'compact'"
+                [review]="review"
+                [unit]="review.unit"
+              ></app-review-card>
+            }
+          </div>
+        } @else {
+          <!-- Skeletons -->
+          <div class="scroll-content gap-6">
+            @for (
+              item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+              track 'first-' + $index
+            ) {
+              <p-skeleton height="11rem"></p-skeleton>
+            }
+            @for (
+              item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+              track 'second-' + $index
+            ) {
+              <p-skeleton height="11rem"></p-skeleton>
+            }
+          </div>
+        }
       </div>
     </div>
   }
