@@ -38,7 +38,6 @@ import {
   META_UNIT_LIST_TITLE,
 } from '../../shared/constants/constants';
 import { SORT_OPTIONS_LIST } from '../../shared/constants/sort-options';
-import { scrollToTop } from '../../shared/helpers';
 import {
   FilterData,
   FilteredUnitsResponse,
@@ -325,7 +324,6 @@ export class UnitListComponent implements OnInit, OnDestroy {
     if (event.rows) this.filterData.limit = event.rows;
     localStorage.setItem('rowsPerPage', JSON.stringify(this.filterData.limit));
     this.fetchPaginatedUnits();
-    scrollToTop();
   }
 
   /**
