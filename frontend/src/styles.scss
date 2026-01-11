@@ -55,8 +55,16 @@ body {
 
 .prevent-select {
   -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard syntax */
+}
+
+.no-scroll {
+  overflow-y: hidden !important;
+  height: 100vh !important;
+  position: fixed !important;
+  width: 100% !important;
 }
 
 // Full page container class used by the full page layout directive
