@@ -39,9 +39,9 @@ MonSTAR provides several features for exploring and reviewing Monash subjects:
 
 ## Architecture
 ### System context
-![System Context](docs/1_System_Context.png)
+![System Context](.docs/1_System_Context.png)
 ### Container diagram
-![Container Diagram](docs/2_Container_Diagram.png)
+![Container Diagram](.docs/2_Container_Diagram.png)
 
 ## Contributing
 
