@@ -14,6 +14,15 @@ class UserController {
   });
 
   /**
+   * Get user by username
+   */
+  static getByUsername = asyncHandler(async (req, res) => {
+    const { username } = req.params;
+    const user = await UserService.getByUsername(username);
+    return res.status(200).json(user);
+  });
+
+  /**
    * Login/sign up with google oauth
    */
   static authenticateWithGoogle = asyncHandler(async (req, res) => {

@@ -30,6 +30,28 @@ class UserRepository {
     });
   }
 
+  /**
+   * Find a user by username (excludes sensitive fields)
+   *
+   * @param {String} username
+   * @returns {Promise<IUser|null>}
+   */
+  static async findByUsername(username) {
+    return await User.findOne(
+      { username },
+      {
+        password: 0,
+        refreshToken: 0,
+        refreshTokenExpires: 0,
+        verificationToken: 0,
+        verificationTokenExpires: 0,
+        resetPasswordToken: 0,
+        resetPasswordExpires: 0,
+        googleID: 0,
+      }
+    );
+  }
+
   /* -------------------------------- Creation -------------------------------- */
 
   /**

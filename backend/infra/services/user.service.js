@@ -137,6 +137,18 @@ class UserService {
   };
 
   /**
+   * Gets a user by username
+   *
+   * @param {String} username
+   * @returns {Promise<IUser>}
+   */
+  static getByUsername = async (username) => {
+    const user = await UserRepository.findByUsername(username);
+    if (!user) throw new Error404NotFound('User not found');
+    return user;
+  };
+
+  /**
    * Uploads user avatar to cloudinary
    *
    * @param {String} userId

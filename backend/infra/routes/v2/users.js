@@ -16,6 +16,13 @@ router.get(
   UserController.me
 );
 
+router.get(
+  '/:username',
+  // #swagger.tags = ['User v2']
+  // #swagger.summary = 'Get user by username'
+  UserController.getByUsername
+);
+
 router.post(
   '/google/authenticate',
   // #swagger.tags = ['User V2']
