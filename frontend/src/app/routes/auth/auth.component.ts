@@ -70,4 +70,8 @@ export class AuthComponent {
         }),
     });
   }
+
+  onBrowseAsGuestClick() {
+    return this.router.navigate(['/list']);
+  }
 }
