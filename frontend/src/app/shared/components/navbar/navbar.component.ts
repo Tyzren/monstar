@@ -122,7 +122,7 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/auth']); 
       return;
     }
-    console.log('User is logged in so cant navigate to /auth');
+    return this.router.navigate(['/user/' + user.username]);
   }
 
   @HostListener('document:keydown', ['$event'])
