@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const { CreateError } = require('@utilities/error');
 
-const userMiddleware = (err, req, res, next) => {
+const userMiddleware = (req, res, next) => {
   const token = req.cookies.access_token;
   if (!token) return next(CreateError(401, 'You are not authenticated!'));
 

@@ -1,5 +1,5 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, HostListener, inject } from '@angular/core';
+import { AsyncPipe, DOCUMENT } from '@angular/common';
+import { Component, HostListener, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReviewCardComponent } from '@components/review-card/review-card.component';
 import { ShinyMonstarTitleComponent } from '@components/shiny-monstar-title/shiny-monstar-title.component';
@@ -31,13 +31,22 @@ interface State {
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit, OnDestroy {
   private userService = inject(UserService);
   private messageService = inject(MessageService);
-
+  private renderer = inject(Renderer2);
+  private document = inject(DOCUMENT);
   private router = inject(Router);
 
   showLeftPanel = window.innerWidth >= 1130;
+
+  ngOnInit(): void {
+    this.renderer.addClass(this.document.body, 'no-scroll');
+  }
+
+  ngOnDestroy(): void {
+    this.renderer.removeClass(this.document.body, 'no-scroll');
+  }
 
   @HostListener('window:resize')
   onResize() {
