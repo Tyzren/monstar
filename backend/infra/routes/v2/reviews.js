@@ -15,6 +15,13 @@ router.get(
 );
 
 router.get(
+  '/popular',
+  // #swagger.tags = ['Reviews V2']
+  // #swagger.summary = 'Get N most liked reviews'
+  ReviewController.getMostLiked
+)
+
+router.get(
   '/:unit',
   // #swagger.tags = ['Reviews V2']
   // #swagger.summary = 'Get all reviews for a specific unit'

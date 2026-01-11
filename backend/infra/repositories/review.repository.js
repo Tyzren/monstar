@@ -22,6 +22,19 @@ class ReviewRepository {
   }
 
   /**
+   * Find N most liked reviews
+   *
+   * @param {Number} n Number of results wanted
+   */
+  static async findMostLiked(n) {
+    return await Review.find()
+      .sort({ likes: -1 })
+      .limit(n)
+      .populate('author')
+      .populate('unit');
+  }
+
+  /**
    * Find all reviews for a specific unit
    *
    * @param {ObjectId} unitId

@@ -24,6 +24,15 @@ class ReviewService {
   };
 
   /**
+   * Fetch N most liked reviews
+   *
+   * @param {Number} n - Number of results
+   */
+  static fetchMostLiked = async (n = 10) => {
+    return await ReviewRepository.findMostLiked(n);
+  }
+
+  /**
    * Fetch all reviews for a specific unit
    *
    * @param {String} unitCode
