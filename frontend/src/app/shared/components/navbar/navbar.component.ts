@@ -57,13 +57,9 @@ export class NavbarComponent implements OnInit {
 
   username: string | undefined = '';
 
-  // The color of the navbar background (changes based on route)
   navbarColor: string = 'var(--primary-color)';
-  // The color of the title (changes based on route)
   titleColor: string = 'var(--primary-color)';
-  // The color of the hamburger menu icon (changes based on route)
   hamburgColor: string = 'black';
-  // The color of the profile icon (changes based on route)
   profileColor: string = 'black';
 
   viewportType: ViewportType = 'desktop';
@@ -145,7 +141,7 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * * Method to create a toast
+   * Method to create a toast
    *
    * This method creates a toast with the provided event data.
    *
@@ -165,7 +161,7 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * * Navigates to a page (but scrolls to top)
+   * Navigates to a page (but scrolls to top)
    */
   navigateTo(route: string) {
     this.navigationService.navigateTo([route]);
