@@ -1,3 +1,18 @@
+@let state = state$ | async;
+
 <div class="page-container">
-  
+  <div class="left">
+    <div class="user-header">
+      <img class="profile-img" [src]="state?.profileImg" />
+      <span class="username">{{ state?.username ?? 'username not found' }}</span>
+    </div>
+    <p class="bio">
+      My name is jenul how are you?
+    </p>
+    <div class="field">
+      <i class="pi pi-graduation-cap"></i>
+      Bachelor of Computer Science
+    </div>
+  </div>
+  <div class="right">testing</div>
 </div>
