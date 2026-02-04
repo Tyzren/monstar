@@ -1,19 +1,24 @@
+[![stars](https://custom-icon-badges.demolab.com/github/stars/wiredmonash/monstar?logo=star&style=flat)](https://github.com/wiredmonash/monstar/stargazers "stars")
+[![issues](https://custom-icon-badges.demolab.com/github/issues-raw/wiredmonash/monstar?logo=issue)](https://github.com/wiredmonash/monstar/issues "issues")
+[![pull requests](https://custom-icon-badges.demolab.com/github/issues-pr-closed/wiredmonash/monstar?color=purple&logo=git-pull-request&logoColor=white)](https://github.com/wiredmonash/monstar/pulls "pull requests")
+[![code size](https://custom-icon-badges.demolab.com/github/languages/code-size/wiredmonash/monstar?logo=file-code&logoColor=white)](https://github.com/wiredmonash/monstar "code size")
+
 <p align="center">
   <img alt="MonSTAR banner" src="frontend/public/banner.png" />
 </p>
 
-<h4 align="center">
-  A digital platform built for students at Monash University. Real unit reviews from students, provided with historical SETU data.
-</h4>
+<p align="center">
+  <i>A digital platform built for students at Monash University. Real unit reviews from students.</i>
+</p>
 
 <h3 align="center">
-  <a href="https://monstar.wired.org.au">🌍 Website</a>
+  <a href="https://monstar.wired.org.au">Website</a>
   <span> · </span>
-  <a href="./CONTRIBUTING.md">🤝 Contributing</a>
+  <a href="./CONTRIBUTING.md">Contributing</a>
   <span> · </span>
-  <a href="https://github.com/wired-projects/monstar/issues">🚩 Issues</a>
+  <a href="https://github.com/wired-projects/monstar/issues">Issues</a>
   <span> · </span>
-  <a href="https://monstar.wired.org.au/changelog">📋 Changelog</a>
+  <a href="https://monstar.wired.org.au/changelog">Changelog</a>
 </h3>
 
 <br/>
