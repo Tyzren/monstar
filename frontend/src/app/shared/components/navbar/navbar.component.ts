@@ -57,10 +57,10 @@ export class NavbarComponent implements OnInit {
 
   username: string | undefined = '';
 
-  navbarColor: string = 'var(--primary-color)';
+  navbarColor: string = 'var(--fg-dark-color)';
   titleColor: string = 'var(--primary-color)';
-  hamburgColor: string = 'black';
-  profileColor: string = 'black';
+  hamburgColor: string = 'white';
+  profileColor: string = 'white';
 
   viewportType: ViewportType = 'desktop';
 
