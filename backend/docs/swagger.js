@@ -1,17 +1,16 @@
-const fs = require('fs');
-
-const m2s = require('mongoose-to-swagger');
-const swaggerAutogen = require('swagger-autogen')();
-const swaggerUi = require('swagger-ui-express');
-
-const Notification = require('../models/notification');
-const Review = require('../models/review');
-const SETU = require('../models/setu');
-const Unit = require('../models/unit');
-const User = require('../models/user');
-
 const setupSwagger = async (app) => {
   if (!process.env.DEVELOPMENT) return;
+
+  const fs = require('fs');
+  const m2s = require('mongoose-to-swagger');
+  const swaggerAutogen = require('swagger-autogen')();
+  const swaggerUi = require('swagger-ui-express');
+
+  const Notification = require('../models/notification');
+  const Review = require('../models/review');
+  const SETU = require('../models/setu');
+  const Unit = require('../models/unit');
+  const User = require('../models/user');
 
   const doc = {
     info: {
