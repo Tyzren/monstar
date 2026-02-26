@@ -1,6 +1,21 @@
 {
   "records": [
     {
+      "year": 2026,
+      "entries": [
+        {
+          "month": 2,
+          "content": {
+            "New Login and Profile Page": [
+              "We migrated from a ugly profile dialog to a full page layout.",
+              "Added a new full page login page.",
+              "Added new full page profile pages for all users, you can view other peoples profiles and their contributions."
+            ]
+          }
+        }
+      ]
+    },
+    {
       "year": 2025,
       "entries": [
         {
