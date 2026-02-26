@@ -24,7 +24,6 @@ import { TooltipModule } from 'primeng/tooltip';
 // App specific services and models
 import { Setu } from '../../models/setu.model';
 import { AuthService } from '../../services/auth.service';
-import { ProfileDialogService } from '../../services/profile-dialog.service';
 import { SetuService } from '../../services/setu.service';
 
 @Component({
@@ -73,7 +72,6 @@ export class SetuCardComponent implements OnChanges, OnInit {
 
   constructor(
     private setuService: SetuService,
-    private profileDialogService: ProfileDialogService
   ) {}
 
   ngOnInit(): void {
@@ -228,12 +226,5 @@ export class SetuCardComponent implements OnChanges, OnInit {
     if (this.unitCode) {
       window.open(`/setu/${this.unitCode.toLowerCase()}`, '_blank');
     }
-  }
-
-  /**
-   * Opens the profile dialog for login
-   */
-  openProfileDialog(): void {
-    this.profileDialogService.openDialog();
   }
 }

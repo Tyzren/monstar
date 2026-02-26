@@ -25,7 +25,6 @@ import {
 } from '../../shared/constants/constants';
 import { Setu } from '../../shared/models/setu.model';
 import { AuthService } from '../../shared/services/auth.service';
-import { ProfileDialogService } from '../../shared/services/profile-dialog.service';
 import { SetuService } from '../../shared/services/setu.service';
 import {
   ViewportService,
@@ -89,7 +88,6 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
     private setuService: SetuService,
     private viewportService: ViewportService,
     private authService: AuthService,
-    private profileDialogService: ProfileDialogService,
     private meta: Meta,
     private titleService: Title
   ) {}
@@ -352,13 +350,6 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
     });
 
     console.log('[SETU Overview] Meta tags updated');
-  }
-
-  /**
-   * Opens the profile dialog for login
-   */
-  openProfileDialog(): void {
-    this.profileDialogService.openDialog();
   }
 
   /**
