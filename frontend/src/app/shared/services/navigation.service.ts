@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NavigationService {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   /**
    * * Resets the scroll position of the main content container
@@ -17,20 +16,20 @@ export class NavigationService {
       // Option 1: Main app content container
       const appRoot = document.querySelector('app-root');
       if (appRoot) appRoot.scrollTop = 0;
-      
+
       // Option 2: Body and HTML elements
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
-      
+
       // Option 3: Common container names
       const containers = [
-        '.main-content', 
-        '.content-container', 
+        '.main-content',
+        '.content-container',
         '.app-content',
-        '.scrollable-content'
+        '.scrollable-content',
       ];
-      
-      containers.forEach(selector => {
+
+      containers.forEach((selector) => {
         const el = document.querySelector(selector);
         if (el) el.scrollTop = 0;
       });

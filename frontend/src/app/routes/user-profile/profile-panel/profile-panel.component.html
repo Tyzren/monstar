@@ -1,0 +1,23 @@
+<div class="profile-panel">
+  <div class="user-header">
+    <img class="profile-img" [src]="state.profileImg" />
+    <span class="username">{{ state.username ?? 'username not found' }}</span>
+  </div>
+  @if (state.isCurrentUser) {
+    <p style="text-align: center; color: grey">
+      More personalisation stuff coming here soon!
+    </p>
+  }
+
+  <!-- <p class="bio">
+    My name is jenul how are you?
+  </p>
+  <div class="field">
+    <i class="pi pi-graduation-cap"></i>
+    Bachelor of Computer Science
+  </div> -->
+
+  @if (state.isCurrentUser) {
+    <app-logout-button (click)="logoutPressed.emit()"></app-logout-button>
+  }
+</div>

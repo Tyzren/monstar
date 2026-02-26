@@ -1,0 +1,64 @@
+# yaml-language-server: $schema../schema.json
+
+contexts:
+  - name: Monash University Course Structure
+    domainVisionStatement: The course structure.
+    terms: 
+      - name: unit
+        definition: A subject offered for a course at Monash University.
+        examples: 
+          - FIT1045 Introduction to Programming.
+      - name: course
+        definition: A course offered at Monash University.
+        examples:
+          - C2001 Bachelor of Computer Science.
+      - name: prerequisite
+        definition: A unit that must be completed before commencing another.
+        examples:
+          - To start FIT1008, you must first complete FIT1045.
+      - name: corequisite
+        definition: Similar to prerequisites but you're allowed to also take the unit concurrently, not just beforehand.
+        examples:
+          - To study LAW5001, you must first complete LAW5000 or study it concurrently with LAW5001.
+      - name: prohibition
+        definition: A unit that is not allowed to be completed or taken when commencing another unit.
+        examples:
+          - You can not have done/take FIT1054 to take FIT1008.
+
+  - name: Grading & Administration
+    domainVisionStatement: Rules regarding assessment, scoring, and critical dates.
+    terms:
+      - name: wam
+        definition: Weighted Average Mark. A precise calculation (0-100) reflecting academic performance across all units.
+        examples:
+          - A WAM of 85+ is required for the Dean's List.
+        aliases:
+          - weighted average mark
+
+      - name: gpa
+        definition: Grade Point Average. A 4.0 scale calculation distinct from WAM, often used for medical entry or international exchange.
+        aliases:
+          - grade point average
+        
+      - name: hurdle
+        definition: An assessment task that MUST be passed (usually 45% or 50%) to pass the unit, regardless of the total final mark.
+        examples:
+          - If you get 40% on the Hurdle Exam but 60% overall, you will receive a maximum mark of 45 N.
+      
+      - name: census date
+        definition: The final deadline to withdraw from a unit without incurring academic or financial penalty.
+        examples:
+          - Usually March 31st for Semester 1.
+
+      - name: credit points
+        definition: The weight of a unit. Most Monash units are 6 credit points.
+        examples:
+          - A standard semester load is 24 credit points (4 units).
+
+      - name: handbook
+        definition: The official Monash registry of all units, courses, and rules for a given year. The "Source of Truth".
+
+  - name: Teaching Evaluation
+    terms: 
+      - name: setu
+        definition: Student evaluation of teaching and units.

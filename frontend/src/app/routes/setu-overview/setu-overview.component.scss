@@ -1,4 +1,4 @@
-@import "../../_variables.scss";
+@import 'variables';
 
 // Wrapper for authenticated content with blur protection
 .setu-content-wrapper {
@@ -254,7 +254,9 @@
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); // Base elevation for all cards
         transform: translateY(0);
-        transition: transform 0.2s ease, box-shadow 0.2s ease,
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease,
           border-color 0.2s ease;
 
         &:hover {
@@ -408,7 +410,9 @@
 
     .historical-card {
       height: 100%;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 
       &:hover {
         transform: translateY(-4px); // Slightly reduced to prevent clipping
@@ -435,7 +439,9 @@
         );
         border: 1px solid rgba(226, 136, 226, 0.2);
         border-radius: 8px;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease,
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease,
           background 0.2s ease;
         height: 100%;
 

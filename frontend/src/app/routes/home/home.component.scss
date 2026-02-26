@@ -1,4 +1,4 @@
-@import "../../_variables.scss";
+@import 'variables';
 
 // * Hero Section
 .hero-section {
@@ -24,7 +24,7 @@
 
   // Shimmer effect
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -62,7 +62,7 @@
 
     // Subtle backdrop for improved readability
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       inset: 0;
       left: 50%;
@@ -78,47 +78,6 @@
       }
       @media (max-width: 400px) {
         width: 350px;
-      }
-    }
-
-    // Header
-    h1 {
-      font-family: $ryzes;
-      font-size: 12rem;
-      font-weight: bold;
-      text-shadow: 8px 4px 0px rgb(0, 0, 0, 0.25);
-      position: relative;
-      margin: 0;
-      line-height: 1;
-
-      @media (max-width: 768px) {
-        font-size: 7rem;
-      }
-
-      .star-gradient {
-        position: relative;
-        background: linear-gradient(
-          110deg,
-          #a020a0 0%,
-          #d066d0 20%,
-          #e288e2 40%,
-          #ffffff 50%,
-          #e288e2 60%,
-          #d066d0 80%,
-          #a020a0 100%
-        );
-        background-size: 200% 100%;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shimmer-slide 3s linear infinite,
-          breathing-glow 2s ease-in-out infinite;
-        filter: drop-shadow(0 0 10px rgba(226, 136, 226, 0.8))
-          drop-shadow(0 0 30px rgba(226, 136, 226, 0.5))
-          drop-shadow(0 0 50px rgba(226, 136, 226, 0.3));
-
-        // Enhance contrast and sharpness
-        text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
       }
     }
 
@@ -155,14 +114,16 @@
       rgba(255, 255, 255, 0)
     );
     border-radius: 50%;
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1),
-      0 0 0 8px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 1),
+    box-shadow:
+      0 0 0 4px rgba(255, 255, 255, 0.1),
+      0 0 0 8px rgba(255, 255, 255, 0.1),
+      0 0 20px rgba(255, 255, 255, 1),
       0 0 40px rgba(255, 255, 255, 0.4);
     animation: shooting-star 3s linear infinite;
 
     &::after {
       // Add trailing effect
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
@@ -257,32 +218,6 @@
       opacity: 0; // Fully faded out
     }
   }
-
-  // Shimmer effect - light sweeps across
-  @keyframes shimmer-slide {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
-  // Breathing glow effect
-  @keyframes breathing-glow {
-    0%,
-    100% {
-      filter: drop-shadow(0 0 10px rgba(226, 136, 226, 0.6))
-        drop-shadow(0 0 30px rgba(226, 136, 226, 0.3))
-        drop-shadow(0 0 50px rgba(226, 136, 226, 0.1));
-    }
-    50% {
-      filter: drop-shadow(0 0 20px rgba(226, 136, 226, 0.6))
-        drop-shadow(0 0 40px rgba(226, 136, 226, 0.4))
-        drop-shadow(0 0 60px rgba(226, 136, 226, 0.2))
-        drop-shadow(0 0 80px rgba(226, 136, 226, 0.1));
-    }
-  }
 }
 
 // Floating emotes
@@ -306,14 +241,18 @@
   // Give each emote a different animation path and timing
   &:nth-child(1) {
     top: 15%;
-    animation: fade-in 0.5s forwards, float-right 25s linear infinite,
+    animation:
+      fade-in 0.5s forwards,
+      float-right 25s linear infinite,
       float-up-down 8s ease-in-out infinite;
     animation-delay: 0s;
   }
 
   &:nth-child(2) {
     top: 35%;
-    animation: fade-in 0.5s forwards, float-right 22s linear infinite,
+    animation:
+      fade-in 0.5s forwards,
+      float-right 22s linear infinite,
       float-up-down 6s ease-in-out infinite;
     animation-delay: 0s;
     transform: scale(0.8);
@@ -321,7 +260,9 @@
 
   &:nth-child(3) {
     top: 60%;
-    animation: fade-in 0.5s forwards, float-right 28s linear infinite,
+    animation:
+      fade-in 0.5s forwards,
+      float-right 28s linear infinite,
       float-up-down 9s ease-in-out infinite;
     animation-delay: 0s;
     transform: scale(1.2);
@@ -329,14 +270,18 @@
 
   &:nth-child(4) {
     top: 60%;
-    animation: fade-in 0.5s forwards, float-left 24s linear infinite,
+    animation:
+      fade-in 0.5s forwards,
+      float-left 24s linear infinite,
       float-up-down 7s ease-in-out infinite;
     animation-delay: 0s;
   }
 
   &:nth-child(5) {
     top: 35%;
-    animation: fade-in 0.5s forwards, float-left 30s linear infinite,
+    animation:
+      fade-in 0.5s forwards,
+      float-left 30s linear infinite,
       float-up-down 10s ease-in-out infinite;
     animation-delay: 0s;
     transform: scale(0.9);
@@ -344,7 +289,9 @@
 
   &:nth-child(6) {
     top: 15%;
-    animation: fade-in 0.5s forwards, float-left 28s linear infinite,
+    animation:
+      fade-in 0.5s forwards,
+      float-left 28s linear infinite,
       float-up-down 8s ease-in-out infinite;
     animation-delay: 0s;
     transform: scale(0.9);
@@ -419,7 +366,7 @@
 
     &::before,
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       width: 100px;
@@ -468,7 +415,9 @@
     min-width: 180px;
     padding: 1rem 2rem;
     text-decoration: none;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
     flex-shrink: 0;
 
     &:hover {
@@ -573,12 +522,17 @@ h2 {
 
 // * Accordion
 ::ng-deep .p-accordion {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1); // Slight shadow
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.1); // Slight shadow
   border-radius: 10px; // Adds rounded corners to enhance the floaty effect
-  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; // Adds smooth transition for box-shadow
+  transition:
+    box-shadow 0.3s ease-in-out,
+    transform 0.3s ease-in-out; // Adds smooth transition for box-shadow
 
   &:hover {
-    box-shadow: 0 8px 16px rgba(226, 136, 226, 0.25),
+    box-shadow:
+      0 8px 16px rgba(226, 136, 226, 0.25),
       0 10px 24px rgba(226, 136, 226, 0.25); // Purple and larger shadow on hover
     transform: translateY(
       -3px

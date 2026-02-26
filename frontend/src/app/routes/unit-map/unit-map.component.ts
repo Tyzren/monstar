@@ -1,22 +1,27 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Location } from '@angular/common';
-import { OrganizationChartModule } from 'primeng/organizationchart';
-import { ApiService } from '../../shared/services/api.service';
+import { Location, UpperCasePipe } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Edge, NgxGraphModule, NgxGraphZoomOptions } from '@swimlane/ngx-graph';
 import * as shape from 'd3-shape';
-import { Subject } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
+import { OrganizationChartModule } from 'primeng/organizationchart';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
-import { CardModule } from 'primeng/card';
+import { Subject } from 'rxjs';
 import { Unit } from '../../shared/models/unit.model';
-import { UpperCasePipe } from '@angular/common';
-import { DividerModule } from 'primeng/divider';
+import { ApiService } from '../../shared/services/api.service';
 
 /**
  * * Unit Node Interface
- * 
+ *
  * An interface for the nodes in the unit graph
  */
 interface UnitNode {
@@ -25,7 +30,7 @@ interface UnitNode {
   data: {
     type: 'prerequisite' | 'current' | 'parent';
     name: string;
-  }
+  };
 }
 
 /**
@@ -36,7 +41,7 @@ interface UnitNode {
 interface UnitEdge extends Edge {
   data?: {
     type: 'prerequisite' | 'parent';
-  }
+  };
 }
 
 @Component({
@@ -50,10 +55,10 @@ interface UnitEdge extends Edge {
     TooltipModule,
     CardModule,
     UpperCasePipe,
-    DividerModule
+    DividerModule,
   ],
   templateUrl: './unit-map.component.html',
-  styleUrl: './unit-map.component.scss'
+  styleUrl: './unit-map.component.scss',
 })
 export class UnitMapComponent implements OnInit, OnDestroy {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
@@ -73,7 +78,6 @@ export class UnitMapComponent implements OnInit, OnDestroy {
   prerequisiteUnitCodes: string[] | null = null;
   parentUnitCodes: string[] | null = null;
 
-
   /**
    * === Constructor ===
    */
@@ -81,12 +85,11 @@ export class UnitMapComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private router: Router,
     private location: Location
-  ) { }
-
+  ) {}
 
   /**
    * * On Init
-   * 
+   *
    * - Checks if the page has been loaded before
    * - Fetch and build the unit graph if the page has been loaded for the first time
    */
@@ -96,7 +99,7 @@ export class UnitMapComponent implements OnInit, OnDestroy {
 
   /**
    * * On Destory
-   * 
+   *
    * - Remove the flag from local storage
    */
   ngOnDestroy(): void {
@@ -105,14 +108,14 @@ export class UnitMapComponent implements OnInit, OnDestroy {
 
   /**
    * * Fetch and Build Unit Graph
-   * 
-   * Fetches the current unit and its prerequisites and parent units, then build 
+   *
+   * Fetches the current unit and its prerequisites and parent units, then build
    * the graph.
-   * 
-   * The graph is built by adding the current unit as the root node, prereqs as 
+   *
+   * The graph is built by adding the current unit as the root node, prereqs as
    * 'prerequisite' nodes, and parent units as 'parent' nodes.
-   * 
-   * The edges are then added between the current unit and its prerequisites, 
+   *
+   * The edges are then added between the current unit and its prerequisites,
    * and the current unit and its parent units.
    */
   fetchAndBuildUnitGraph() {
@@ -134,8 +137,8 @@ export class UnitMapComponent implements OnInit, OnDestroy {
           label: unit.unitCode.toUpperCase(),
           data: {
             type: 'current',
-            name: unit.name
-          }
+            name: unit.name,
+          },
         };
         // ? Debug log: Current node
         // console.log('Current node:', currentNode);
@@ -145,34 +148,38 @@ export class UnitMapComponent implements OnInit, OnDestroy {
         let prereqEdges: UnitEdge[] = [];
 
         // Only process prerequisites if they exist
-        if (unit.requisites?.prerequisites && unit.requisites.prerequisites.length > 0) {
+        if (
+          unit.requisites?.prerequisites &&
+          unit.requisites.prerequisites.length > 0
+        ) {
           // Add prerequisite nodes
           prereqNodes = unit.requisites.prerequisites
-            .flatMap(group => group.units)
-            .map(code => ({
+            .flatMap((group) => group.units)
+            .map((code) => ({
               id: code,
               label: code.toUpperCase(),
-              data: { type: 'prerequisite', name: code }
+              data: { type: 'prerequisite', name: code },
             }));
 
           // Save the prerequisite unit codes
-          this.prerequisiteUnitCodes = prereqNodes.map(node => ' ' + node.label);
+          this.prerequisiteUnitCodes = prereqNodes.map(
+            (node) => ' ' + node.label
+          );
           // Save the prerequisite number required
           this.prerequisiteNumReq = unit.requisites.prerequisites[0].NumReq;
 
           // Add prerequisite edges
-          prereqEdges = prereqNodes.map(node => ({
+          prereqEdges = prereqNodes.map((node) => ({
             id: `${node.id}-${currentNode.id}`,
             source: node.id,
             target: currentNode.id,
-            data: { type: 'prerequisite' }
+            data: { type: 'prerequisite' },
           }));
         }
 
         // Set initial nodes and edges
         this.nodes = [currentNode, ...prereqNodes];
         this.edges = prereqEdges;
-
 
         // Fetch the units that are required by the current unit
         this.apiService.getUnitsRequiringUnitGET(unit.unitCode).subscribe({
@@ -181,27 +188,27 @@ export class UnitMapComponent implements OnInit, OnDestroy {
             // console.log('Parent units:', parentUnits);
 
             // Add parent nodes
-            const parentNodes: UnitNode[] = parentUnits.map(parent => ({
+            const parentNodes: UnitNode[] = parentUnits.map((parent) => ({
               id: parent.unitCode,
               label: parent.unitCode.toUpperCase(),
               data: {
                 type: 'parent',
-                name: parent.name
-              }
+                name: parent.name,
+              },
             }));
 
             // Save the parent unit codes
-            this.parentUnitCodes = parentNodes.map(node => ' ' + node.label);
+            this.parentUnitCodes = parentNodes.map((node) => ' ' + node.label);
 
             // ? Debug log: Parent nodes
             // console.log('Parent nodes:', parentNodes);
 
             // Add edges from current node to parent nodes
-            const parentEdges: UnitEdge[] = parentNodes.map(node => ({
+            const parentEdges: UnitEdge[] = parentNodes.map((node) => ({
               id: `${currentNode.id}-${node.id}`,
               source: currentNode.id,
               target: node.id,
-              data: { type: 'parent' }
+              data: { type: 'parent' },
             }));
 
             // ? Debug log: Parent edges
@@ -219,9 +226,9 @@ export class UnitMapComponent implements OnInit, OnDestroy {
 
             // Center the graph
             this.centerGraph();
-          }
+          },
         });
-      }
+      },
     });
 
     // Zoom to fit

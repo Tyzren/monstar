@@ -1,4 +1,4 @@
-@import '../../../_variables.scss';
+@import 'variables';
 
 // * Review card
 .review-card-container {
@@ -10,6 +10,13 @@
     transform: scale(1.02);
   }
 
+  // On touch devices, always show the delete button since hover never fires
+  @media (hover: none) {
+    .top-right-button {
+      opacity: 1 !important;
+    }
+  }
+
   .review-card {
     font-family: $poppins;
     margin-top: 20px;
@@ -19,7 +26,7 @@
     padding: 20px;
     color: #000;
     position: relative;
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
 
     h5 {
@@ -50,6 +57,21 @@
       padding: 0;
       margin-top: 0.75rem;
       margin-bottom: 1rem;
+      cursor: pointer;
+      width: fit-content;
+
+      span {
+        color: purple;
+        text-decoration: underline;
+        text-decoration-color: rgba(purple, 0.45);
+        text-underline-offset: 2px;
+        transition: color 0.2s ease, text-decoration-color 0.2s ease;
+      }
+
+      &:hover span {
+        color: darken(purple, 12%);
+        text-decoration-color: purple;
+      }
 
       .profile-picture {
         width: 32px;
@@ -57,7 +79,7 @@
         border-radius: 50%;
         object-fit: cover;
       }
-  
+
       // Review year in user part
       .review-year {
         color: #474b4f;
@@ -86,10 +108,10 @@
       .stars-overall {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center; 
+        justify-content: center;
         align-items: center;
         gap: 0.6rem;
-        
+
         i {
           color: $primary-color;
           font-size: 30px;
@@ -136,7 +158,7 @@
         .circles {
           display: flex;
           gap: 4px;
-          
+
           .circle {
             width: 12px;
             height: 12px;
@@ -147,11 +169,11 @@
           .full-circle {
             background-color: $primary-color;
           }
-  
+
           .half-circle {
             background-color: $primary-color-hover;
           }
-  
+
           .empty-circle {
             background-color: rgb(96, 96, 96);
           }
@@ -160,7 +182,7 @@
         // Rating stars
         .stars {
           display: flex;
-          justify-content: space-between; 
+          justify-content: space-between;
           width: 100%;
 
           i {
@@ -189,7 +211,7 @@
             .thumbs {
               font-size: 1.5rem;
               transition: transform 0.3s ease-in-out;
-            
+
               &:hover {
                 color: white;
                 transform: scale(1.4);
@@ -238,7 +260,7 @@ p {
   padding-top: 10px;
 }
 
-// Heading 5 
+// Heading 5
 h5 {
   margin-bottom: 0px;
   padding-bottom: 5px;
@@ -305,7 +327,7 @@ h6 {
 
   .stars-overall {
     width: 220px;
-    
+
     i {
       font-size: 26px;
     }
@@ -375,7 +397,7 @@ h6 {
 
   .stars-overall {
     width: 150px;
-    
+
     i {
       font-size: 24px;
       margin: 0 0.3rem;
@@ -403,7 +425,7 @@ h6 {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-    } 
+    }
 
     .overall-section {
       flex: 0 0 auto;
@@ -492,7 +514,7 @@ h6 {
 
   .stars-overall {
     width: 180px;
-    
+
     i {
       font-size: 22px;
       margin: 0 0.25rem;
@@ -620,5 +642,141 @@ h6 {
     .review-year {
       font-size: 0.75rem;
     }
+  }
+}
+
+// * Compact + Profile variants - smaller, simplified card
+.review-card-container.compact,
+.review-card-container.profile {
+  .review-card {
+    padding: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+
+    h5 {
+      font-size: 16px;
+      padding-bottom: 2px;
+      padding-right: 8px;
+    }
+
+    h6 {
+      font-size: 13px;
+    }
+
+    p {
+      font-size: 13px !important;
+      padding-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .top-right-button {
+      display: none;
+    }
+
+    .user-section {
+      margin-top: 0.25rem;
+      margin-bottom: 0.5rem;
+
+      .profile-picture {
+        width: 24px;
+        height: 24px;
+      }
+
+      span {
+        font-size: 13px;
+      }
+
+      ::ng-deep .p-badge {
+        font-size: 11px;
+        min-width: 1.4rem;
+        height: 1.4rem;
+        line-height: 1.4rem;
+      }
+    }
+
+    .overall-section {
+      padding: 8px 12px;
+      border-radius: 10px;
+
+      .heading {
+        font-size: 0.9rem;
+      }
+
+      .stars-overall {
+        width: auto;
+        gap: 0.3rem;
+
+        i {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .main-content-container {
+      .review {
+        min-height: 4rem;
+        padding: 0.6rem;
+        margin-bottom: 0.5rem;
+        margin-right: 0.5rem;
+        border-radius: 10px;
+      }
+
+      // Hide expand/collapse button
+      .btn-link {
+        display: none;
+      }
+
+      .categories {
+        padding: 0.6rem;
+        border-radius: 10px;
+
+        .category-header {
+          font-size: 12px;
+          margin-bottom: 0.25rem;
+        }
+
+        .circles {
+          gap: 3px;
+
+          .circle {
+            width: 10px;
+            height: 10px;
+          }
+        }
+      }
+    }
+
+    .review-column {
+      padding-right: 10px;
+    }
+  }
+}
+
+// * Profile-only: show delete button, smaller reaction buttons to fit two-column grid
+.review-card-container.profile {
+  .review-card .top-right-button {
+    display: block;
+  }
+
+  .thumb-buttons {
+    .thumbs {
+      font-size: 1rem;
+    }
+
+    span {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// * Compact-only: disable hover scale and hide delete button
+.review-card-container.compact {
+  &:hover {
+    transform: none;
+  }
+
+  .review-card .top-right-button {
+    display: none;
   }
 }

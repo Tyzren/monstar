@@ -1,17 +1,26 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { CardModule } from 'primeng/card';
-import { FormsModule } from '@angular/forms';
-import { RatingModule } from 'primeng/rating';
-import { ButtonModule } from 'primeng/button';
 import { CommonModule, UpperCasePipe } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TruncatePipe } from "../../pipes/truncate.pipe";
-import { TooltipModule } from 'primeng/tooltip';
+import { IUnitCardEnum } from 'app/shared/models/v2/enums';
+import { PrimeNgSeverity } from 'app/shared/models/v2/types';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { ChipModule } from 'primeng/chip';
-import { Unit } from '../../models/unit.model';
+import { RatingModule } from 'primeng/rating';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
-import { UnitTag } from '../../models/unit.model';
+import { TooltipModule } from 'primeng/tooltip';
+import { IOffering, IUnit } from '../../models/v2/unit.schema';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-unit-card',
@@ -28,12 +37,11 @@ import { UnitTag } from '../../models/unit.model';
     ChipModule,
     SkeletonModule,
     TagModule,
-],
+  ],
   templateUrl: './unit-card.component.html',
   styleUrls: ['./unit-card.component.scss'],
 })
 export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
-  // Provide Math to the template
   Math = Math;
 
   // The approximate height of a single row in the chips rows
@@ -42,24 +50,24 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Loading state of the card
   loading: boolean = true;
 
-  // & This unit's offerings, locations, and teaching periods
-  @Input() unit: Unit | undefined;
-  offerings: any[] = [];
-  locations: any[] = [];
-  teachingPeriods: any[] = [];
+  // This unit's offerings, locations, and teaching periods
+  @Input() unit: IUnit | undefined;
+  offerings: IOffering[] = [];
+  locations: string[] = [];
+  teachingPeriods: string[] = [];
   // Chips container references for checking overflow
   @ViewChild('locationsRow') locationsRow!: ElementRef;
   @ViewChild('periodsRow') periodsRow!: ElementRef;
 
-  // & Overflow bools for locations and periods
+  // Overflow bools for locations and periods
   locationChipsOverflow = false;
   periodChipsOverflow = false;
 
-  // & Visible locations and periods
+  // Visible locations and periods
   visibleLocations: string[] = [];
   visiblePeriods: string[] = [];
 
-  // & Teaching periods
+  // Teaching periods
   private reversePeriodsMap: Record<string, string> = {};
   private periodNames: Record<string, string> = {
     // Regular semesters
@@ -71,7 +79,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     'Second semester - alternate': 'Sem 2 Alt',
     'First semester (Northern)': 'Sem 1 North',
     'Second semester (Northern)': 'Sem 2 North',
-    
+
     // Summer/Winter
     'Summer semester A': 'Summer A',
     'Summer semester B': 'Summer B',
@@ -79,7 +87,7 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     'Summer semester B - alternate': 'Summer B Alt',
     'Winter semester': 'Winter',
     'Winter semester - alternate': 'Winter Alt',
-    
+
     // Terms/Trimesters
     'Term 1': 'Term 1',
     'Term 2': 'Term 2',
@@ -87,39 +95,39 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     'Trimester 1': 'Tri 1',
     'Trimester 2': 'Tri 2',
     'Trimester 3': 'Tri 3',
-    
+
     // Teaching periods
     'Teaching period 2': 'TP 2',
     'Teaching period 3': 'TP 3',
     'Teaching period 4': 'TP 4',
     'Teaching period 5': 'TP 5',
     'Teaching period 6': 'TP 6',
-    
+
     // MBA
     'MBA teaching period 1': 'MBA 1',
     'MBA teaching period 2': 'MBA 2',
-    
+
     // Research
     'Research quarter 1': 'RQ 1',
     'Research quarter 2': 'RQ 2',
-    
+
     // Monash Indonesia
     'Monash Indonesia term 1': 'MI Term 1',
     'Monash Indonesia term 2': 'MI Term 2',
     'Monash Indonesia term 3': 'MI Term 3',
     'Monash Indonesia term 4': 'MI Term 4',
-    
+
     // Full year
     'Full year': 'Full Year',
     'Full year extended': 'Full Year Ext',
-    
+
     // Combined periods
     'Summer semester A to First semester': 'Summer A-Sem 1',
     'Second semester to Summer semester A': 'Sem 2-Summer A',
     'Second semester to First semester': 'Sem 2-Sem 1',
-    
+
     // Special cases
-    'October intake teaching period, Malaysia campus': 'Oct MY'
+    'October intake teaching period, Malaysia campus': 'Oct MY',
   };
   private periodOrderMap: Map<string, number>;
   private shortNameCache: Map<string, string>;
@@ -127,52 +135,44 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Memoized original period names for performance
   private memoizedOriginalPeriodNames = new Map<string, string[]>();
 
+  tagMapping: Record<
+    IUnitCardEnum,
+    { name: string; severity: PrimeNgSeverity; icon: string }
+  > = {
+    'most-reviews': { name: 'Popular', severity: 'info', icon: 'pi pi-star' },
+    controversial: {
+      name: 'Controversial',
+      severity: 'danger',
+      icon: 'pi pi-exclamation-triangle',
+    },
+    'wam-booster': {
+      name: 'WAM Boost',
+      severity: 'success',
+      icon: 'pi pi-angle-double-up',
+    },
+  };
 
-  /**
-   * === Constructor ===
-   * 
-   * Initialises the period order map and short name cache.
-   */
-  constructor(
-    private router: Router
-  ) {
+  constructor(private router: Router) {
     // Initalise period order map
     this.periodOrderMap = new Map(
-      Object.values(this.periodNames)
-        .map((name, index) => [name, index])
+      Object.values(this.periodNames).map((name, index) => [name, index])
     );
 
     // Precompute shortened names
     this.shortNameCache = new Map(
-      Object.entries(this.periodNames).map(([original, short]) => [original, short])
+      Object.entries(this.periodNames).map(([original, short]) => [
+        original,
+        short,
+      ])
     );
   }
 
+  /* ---------------------------- Life cycle hooks ---------------------------- */
 
-  /** 
-   *  ! |======================================================================|
-   *  ! | ANGULAR LIFE CYCLE HOOKS
-   *  ! |======================================================================|
-   */
-
-  /**
-   * * Runs on Component Initialisation
-   * 
-   * Calls the processUnitData method to extract needed data from the unit object.
-   * If the unit has no offerings, sets the teaching periods to ['No Offerings in 2025']
-   * 
-   * @async
-   * @returns {Promise<void>} A promise that resolves when the component initialisation is complete.
-   */
   async ngOnInit(): Promise<void> {
     await this.processUnitData();
   }
 
-  /**
-   * * After View Initialisation
-   * 
-   * Waits for the view to render before checking for overflow in the locations and periods rows.
-   */
   ngAfterViewInit(): void {
     // Wait for the view to render before checking for overflow
     requestAnimationFrame(() => {
@@ -180,35 +180,26 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * * On Destroy
-   * 
-   * Clears the memoization cache.
-   */
   ngOnDestroy(): void {
     this.memoizedOriginalPeriodNames.clear();
   }
 
-  /** 
-   *  ! |======================================================================|
-   *  ! | UNIT DATA PROCESSING
-   *  ! |======================================================================|
-   */
+  /* -------------------------- Unit data processing -------------------------- */
 
   /**
    * * Process Unit Data
-   * 
-   * Processes the unit data to extract the offerings, locations, and teaching 
-   * periods. 
-   * 
+   *
+   * Processes the unit data to extract the offerings, locations, and teaching
+   * periods.
+   *
    * Also creates a reverse mapping for the period names mapping.
-   * 
+   *
    * Time Complexity: O(n + mlog(m) + klog(k) + p) where
    * - n = number of offerings
    * - m = number of unique periods
-   * - k = number of unique locations 
+   * - k = number of unique locations
    * - p = size of periodNames object
-   * 
+   *
    * @async
    * @private
    * @returns {Promise<void>} A promise that resolves when the data has been processed.
@@ -225,9 +216,11 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.offerings = this.unit!.offerings;
 
     // & Get the teaching periods of the offerings (no duplicates)
-    this.teachingPeriods = [...new Set(this.offerings.map(offering => offering.period))]
+    this.teachingPeriods = [
+      ...new Set(this.offerings.map((offering) => offering.period)),
+    ]
       // Use cache lookup to get shortened names for better performance
-      .map(period => this.shortNameCache.get(period) || period)
+      .map((period) => this.shortNameCache.get(period) || period)
       // Sort by length first, then by order in periodNames
       .sort((a, b) => {
         // First sort by length
@@ -241,7 +234,9 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // & Get the locations of the offerings (no duplicates)
-    this.locations = [...new Set(this.offerings.map(offering => offering.location))]
+    this.locations = [
+      ...new Set(this.offerings.map((offering) => offering.location)),
+    ]
       // Sort by length first, then alphabetically
       .sort((a, b) => {
         const lengthDiff = a.length - b.length;
@@ -249,49 +244,43 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // & Create reverse mappings for period names
-    this.reversePeriodsMap = Object.entries(this.periodNames)
-      .reduce((acc, [original, short]) => ({
+    this.reversePeriodsMap = Object.entries(this.periodNames).reduce(
+      (acc, [original, short]) => ({
         ...acc,
-        [short]: original
-      }), {});
+        [short]: original,
+      }),
+      {}
+    );
   }
 
-
-  /** 
-   *  ! |======================================================================|
-   *  ! | TEACHING PERIODS AND LOCATIONS HELPER METHODS
-   *  ! |======================================================================|
-   */
+  /* -------------- Teaching periods and locations helper methods ------------- */
 
   /**
-   * * Get Original Teaching Period Name
-   * 
-   * Gets the original teaching period name given the shortened name.
-   * 
-   * @param {string} shortName The shortened name of the teaching period.
-   * @returns {string} The original name of the teaching period.
+   * Get original teaching period name given short name
    */
   getOriginalPeriodName(shortName: string): string {
     return this.getMemoizedOriginalPeriodNames([shortName])[0];
   }
 
   /**
-   * * Get Period Names Tooltip
-   * 
+   * Get Period Names Tooltip
+   *
    * Gets the tooltip for the teaching periods with the original long names.
-   * 
+   *
    * @returns {String} The tooltip for the teaching periods.
    */
   getPeriodNamesTooltip(): string {
-    const hiddenPeriods = this.teachingPeriods.filter(p => !this.visiblePeriods.includes(p));
+    const hiddenPeriods = this.teachingPeriods.filter(
+      (p) => !this.visiblePeriods.includes(p)
+    );
     return this.getMemoizedOriginalPeriodNames(hiddenPeriods).join('\n');
   }
 
   /**
-   * * Get Original Teaching Periods Names with Memoization
-   * 
+   * Get Original Teaching Periods Names with Memoization
+   *
    * Gets the original teaching period names with caching for better performance.
-   * 
+   *
    * @param {string[]} shortNames The list of shortened names of the teaching periods
    * @returns {string[]} The list of original names of the teaching periods
    */
@@ -300,16 +289,19 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     const key = shortNames.sort().join('|');
 
     if (!this.memoizedOriginalPeriodNames.has(key)) {
-      this.memoizedOriginalPeriodNames.set(key, shortNames.map(short => this.reversePeriodsMap[short] || short));
+      this.memoizedOriginalPeriodNames.set(
+        key,
+        shortNames.map((short) => this.reversePeriodsMap[short] || short)
+      );
     }
 
     return this.memoizedOriginalPeriodNames.get(key)!;
   }
 
   /**
-   * * Check Overflow
-   * 
-   * Checks if the locations and periods rows are overflowing and sets the 
+   * Check Overflow
+   *
+   * Checks if the locations and periods rows are overflowing and sets the
    * visible locations and periods accordingly.
    */
   private checkOverflow(): void {
@@ -327,79 +319,24 @@ export class UnitCardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (periodsRowHeight > this.SINGLE_ROW_HEIGHT) {
       // Only show the first two periods
       this.visiblePeriods = this.teachingPeriods.slice(0, 2);
-      
+
       this.periodChipsOverflow = true;
     }
   }
 
+  /* -------------------------- Basic helper methods -------------------------- */
 
-  /** 
-   *  ! |======================================================================|
-   *  ! | TAGS HELPER METHODS
-   *  ! |======================================================================|
-   */
-
-  /**
-   * * Get Tag Display 
-   * 
-   * @param {UnitTag} tag The tag to get the display name for
-   * @returns {string} The display name for the tag.
-   */
-  getTagDisplay(tag: UnitTag): string {
-    switch (tag) {
-      case UnitTag.MOST_REVIEWS: return 'Popular';
-      case UnitTag.CONTROVERSIAL: return 'Controversial';
-      case UnitTag.WAM_BOOSTER: return 'WAM Boost';
-      default: return tag;
-    }
-  }
-
-  /**
-   * * Get Tag Severity
-   * 
-   * @param {UnitTag} tag The tag to get the severity for
-   * @returns {string} The severity of the tag for styling
-   */
-  getTagSeverity(tag: UnitTag): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
-    switch (tag) {
-      case UnitTag.MOST_REVIEWS: return 'info';
-      case UnitTag.CONTROVERSIAL: return 'danger';
-      case UnitTag.WAM_BOOSTER: return 'success';
-      default: return 'info';
-    }
-  }
-
-  /**
-   * * Get Tag Icon
-   * 
-   * @param {UnitTag} tag The tag to get the icon for
-   * @returns {string} The icon class for the tag
-   */
-  getTagIcon(tag: UnitTag): string {
-    switch (tag) {
-      case UnitTag.MOST_REVIEWS: return 'pi pi-star';
-      case UnitTag.CONTROVERSIAL: return 'pi pi-exclamation-triangle';
-      case UnitTag.WAM_BOOSTER: return 'pi pi-angle-double-up';
-      default: return '';
-    }
-  }
-
-
-  /** 
-   *  ! |======================================================================|
-   *  ! | BASIC HELPER METHODS
-   *  ! |======================================================================|
-   */
-
-  // * Navigates to the unit overview page for the selected unit.
+  // Navigates to the unit overview page for the selected unit.
   onCardClick(): void {
     this.router.navigate(['/unit', this.unit?.unitCode]);
   }
 
-  // * Returns the string to display for the number of reviews.
+  // Returns the string to display for the number of reviews.
   getReviewsText(): string {
-    return this.unit!.reviews.length > 1 
-    ? this.unit!.reviews.length + ' reviews' 
-    : this.unit!.reviews.length > 0 ? '1 review' : 'No reviews'
+    return this.unit!.reviews.length > 1
+      ? this.unit!.reviews.length + ' reviews'
+      : this.unit!.reviews.length > 0
+        ? '1 review'
+        : 'No reviews';
   }
 }

@@ -1,10 +1,7 @@
 @if (!unit) {
   <!-- Show skeleton while unit is loading -->
-  <p-skeleton
-    height="12rem"
-    borderRadius="16px"
-  />
-} @else if (aiOverview && aiOverview.summary && aiOverview.summary.trim()) {
+  <p-skeleton height="12rem" borderRadius="16px" />
+} @else if (aiOverview && aiOverview.summary?.trim()) {
   <!-- Show AI overview card when data exists -->
   <div class="ai-overview-highlight">
     <p-card class="ai-overview-card">
@@ -16,11 +13,11 @@
           <!-- Title -->
           <div class="ai-overview-title">
             <h3>AI Overview</h3>
-            
+
             <span class="ai-overview-date">
               @if (window.innerWidth <= 500 && window.innerWidth > 350) {
                 {{ getFormattedDate() }}
-              } @else if (window.innerWidth <= 350) { 
+              } @else if (window.innerWidth <= 350) {
                 {{ getFormattedDate('short') }}
               } @else {
                 Generated {{ getFormattedDate() }}
@@ -34,7 +31,7 @@
               <!-- Model icon -->
               <i [class]="getModelIcon()"></i>
               <!-- Model name -->
-              <span>{{ aiOverview.model.replaceAll('-', ' ')}}</span>
+              <span>{{ aiOverview.model.replaceAll('-', ' ') }}</span>
             </div>
           }
         </div>

@@ -1,14 +1,38 @@
-// Module Imports
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const { cloudinary } = require('../utils/cloudinary');
 
-// Model imports
-const Review = require('./review.js');
-const Unit = require('./unit.js');
-const Notification = require('./notification.js');
+const Notification = require('@models/notification');
+const Review = require('@models/review');
+const Unit = require('@models/unit');
+const { cloudinary } = require('@providers/cloudinary.provider');
 
-// User Schema
+/**
+ * @typedef {Object} IUser
+ * @property {import('mongoose').Types.ObjectId} _id - User ID
+ * @property {string} email - User email address
+ * @property {string} [username] - Username (optional)
+ * @property {string} [password] - Hashed password (optional)
+ * @property {boolean} isGoogleUser - Whether user authenticated via Google
+ * @property {string} [googleID] - Google OAuth ID
+ * @property {import('mongoose').Types.Array<import('mongoose').Types.ObjectId>} reviews - Array of review IDs
+ * @property {string} [profileImg] - Cloudinary URL for profile image
+ * @property {boolean} admin - Admin status
+ * @property {boolean} verified - Email verification status
+ * @property {string} [verificationToken] - Email verification token
+ * @property {Date} [verificationTokenExpires] - Verification token expiry
+ * @property {number} verificationEmailsSent - Count of verification emails sent
+ * @property {Date} [lastVerificationEmail] - Timestamp of last verification email
+ * @property {string} [resetPasswordToken] - Password reset token
+ * @property {Date} [resetPasswordExpires] - Reset token expiry
+ * @property {number} resetPasswordEmailsSent - Count of reset emails sent
+ * @property {Date} [lastResetPasswordEmail] - Timestamp of last reset email
+ * @property {string} [refreshToken] - Hashed refresh token
+ * @property {Date} [refreshTokenExpires] - Refresh token expiry
+ * @property {import('mongoose').Types.Array<import('mongoose').Types.ObjectId>} likedReviews - Reviews user has liked
+ * @property {import('mongoose').Types.Array<import('mongoose').Types.ObjectId>} dislikedReviews - Reviews user has disliked
+ * @property {import('mongoose').Types.Array<import('mongoose').Types.ObjectId>} notifications - User notifications
+ */
+
 const userSchema = new Schema({
   email: { type: String, required: true },
   username: { type: String, required: false },
@@ -50,7 +74,7 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-// * Middleware for findOneAndDelete
+// Middleware for findOneAndDelete
 userSchema.pre('findOneAndDelete', async function (next) {
   try {
     const user = await this.model.findOne(this.getFilter());
@@ -61,7 +85,7 @@ userSchema.pre('findOneAndDelete', async function (next) {
   }
 });
 
-// * Middleware for remove
+// Middleware for remove
 userSchema.pre('remove', async function (next) {
   try {
     await handleUserDeletion(this);
@@ -190,6 +214,5 @@ async function handleUserDeletion(user) {
   }
 }
 
-// Export User model
 const User = mongoose.model('User', userSchema);
 module.exports = User;

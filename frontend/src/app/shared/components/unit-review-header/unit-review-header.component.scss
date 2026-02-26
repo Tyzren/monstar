@@ -1,4 +1,4 @@
-@import '../../../_variables.scss';
+@import 'variables';
 
 .unit-review-header {
   max-width: 1200px;
@@ -7,7 +7,7 @@
   background-color: $fg-dark-color;
   padding: 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-family: $poppins;  
+  font-family: $poppins;
   border-radius: 16px;
 
   // * Default layout: a single row with three children
@@ -24,7 +24,7 @@
     justify-content: center;
     gap: 0.5rem;
     max-width: 14rem;
-    
+
     .unit-info {
       .unit-code {
         display: flex;
@@ -72,7 +72,7 @@
         i {
           font-size: 1.5rem;
           margin-right: 0.5rem;
-          color: $primary-color; 
+          color: $primary-color;
         }
       }
 
@@ -102,7 +102,7 @@
       border-radius: 16px;
       background-color: $bg-dark-color;
       min-width: 160px;
-      
+
       p {
         margin: 0;
         font-weight: bold;
@@ -113,7 +113,7 @@
       i {
         font-size: 0.9rem;
       }
-      
+
       .stars {
         display: flex;
         gap: 0.5rem;
@@ -122,7 +122,7 @@
           color: $primary-color;
         }
       }
-      
+
       .rating-value {
         font-size: 1rem;
         font-weight: bold;
@@ -131,22 +131,20 @@
     }
   }
 
-  // === Right Section: Actions === 
+  // === Right Section: Actions ===
   .actions {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     align-items: center;
     margin-top: 1rem;
-    margin: 0 auto; 
+    margin: 0 auto;
 
     p-overlayPanel {
       display: none;
       position: absolute;
     }
   }
-
-
 
   // === Media Queries for a Responsive Design ===
 
@@ -167,12 +165,11 @@
     margin-right: 0rem !important;
     gap: 0.15rem;
 
-
-    .header-content { 
+    .header-content {
       .unit-info {
         .unit-code {
           font-size: 2rem; // Reduced from 2.5rem
-          
+
           .pi-external-link {
             font-size: 0.7rem; // Reduced from 0.8rem
             transform: translateY(-8px); // Adjusted from -12px
@@ -216,7 +213,7 @@
         }
 
         // :host ::ng-deep .p-knob {
-        //   width: 70px !important; 
+        //   width: 70px !important;
         //   height: 70px !important;
         // }
 
@@ -227,7 +224,6 @@
         // .rating-value {
         //   font-size: 0.9rem;
         // }
-        
       }
     }
 
@@ -259,7 +255,7 @@
     }
     .actions {
       flex-basis: 100%;
-      order: 2;  // Make sure it drops below the two sections above
+      order: 2; // Make sure it drops below the two sections above
       margin-top: 1rem;
       flex-direction: row;
     }
@@ -272,7 +268,8 @@
   @media (max-width: 976px) {
     flex-direction: column;
     align-items: center;
-    .header-content, .detailed-ratings {
+    .header-content,
+    .detailed-ratings {
       width: 100%;
     }
 
@@ -326,7 +323,7 @@
       /* Third rating section spans both columns and is centered */
       .rating-section:nth-child(3) {
         grid-column: 1 / -1;
-        justify-self: center
+        justify-self: center;
       }
     }
   }

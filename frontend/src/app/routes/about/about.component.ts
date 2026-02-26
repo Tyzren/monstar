@@ -1,9 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-  GitHubService,
   GitHubContributor,
+  GitHubService,
 } from '../../shared/services/github.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-about',
@@ -18,7 +18,7 @@ export class AboutComponent implements OnInit {
   error: string = '';
   totalContributions: number = 0;
 
-  constructor(private githubService: GitHubService) { }
+  constructor(private githubService: GitHubService) {}
 
   ngOnInit(): void {
     this.loadContributors();

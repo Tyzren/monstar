@@ -1,267 +1,313 @@
+@let state = state$ | async;
+
 <!-- === Confirmation Popup === -->
 <p-confirmPopup #confirmPopupRef>
-    <ng-template pTemplate="headless" let-message let-test>
-        <div class="border-round p-3">
-            <!-- Delete review if this is the current user's review -->
-            @if (currentUser?.email == review.author.email) {
-                <span>{{ message.message }}</span>
-                <div class="flex align-items-center gap-2 mt-3">
-                    <p-button (click)="accept()" label="Delete" size="small" severity="danger"></p-button>
-                    <p-button (click)="reject()" label="Cancel" [outlined]="true" size="small" severity="secondary"></p-button>
-                </div>
-            } 
-            <!-- Report review if this is not the current user's review -->
-            @else {
-                <span>Review goes against rules?<br/>Report it to us pls.</span>
-                <div class="flex align-items-center gap-2">
-                    <p-button (click)="showReportDialog()" label="Report" size="small" severity="warning"></p-button>
-                    <p-button (click)="reject()" label="Cancel" [outlined]="true" size="small" severity="secondary"></p-button>
-                </div>
-            }
+  <ng-template pTemplate="headless" let-message let-test>
+    <div class="border-round p-3">
+      <!-- Delete review if this is the current user's review -->
+      @if (state && state.isAuthor) {
+        <span>{{ message.message }}</span>
+        <div class="flex align-items-center gap-2 mt-3">
+          <p-button
+            (click)="accept()"
+            label="Delete"
+            size="small"
+            severity="danger"
+          ></p-button>
+          <p-button
+            (click)="reject()"
+            label="Cancel"
+            [outlined]="true"
+            size="small"
+            severity="secondary"
+          ></p-button>
         </div>
-    </ng-template>
+      }
+    </div>
+  </ng-template>
 </p-confirmPopup>
 
 <!-- Presents the user with the option to delete or update their review-->
-<p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
+<p-menu #menu [model]="dropdownMenuItems" [popup]="true" appendTo="body"></p-menu>
 
 <!-- === Review Card Component === -->
-@if (review) {
-    <!-- Container for the whole review card -->
-    <div class="container mt-5 review-card-container" (mouseenter)="deleteButtonState='visible';" (mouseleave)="deleteButtonState='hidden';">
-        <div class="review-card position-relative">
-            <!-- ! Buttons for deletion and reporting (shown in top right of review card) -->
-            @if (currentUser?.email == review.author.email) {
-                <!--Review Modification Button -->
-                <div class="top-right-button" [@fadeInOut]="deleteButtonState" (click)="menu.toggle($event)">
-                    <i class="pi pi-ellipsis-v"></i>
+@if (review && review.author) {
+  <!-- Container for the whole review card -->
+  <div
+    class="container review-card-container"
+    [class.mt-5]="variant !== 'profile'"
+    [class.compact]="variant === 'compact'"
+    [class.profile]="variant === 'profile'"
+    (mouseenter)="deleteButtonState = 'visible'"
+    (mouseleave)="deleteButtonState = 'hidden'"
+  >
+    <div class="review-card position-relative">
+      <!-- Buttons for deletion and reporting (shown in top right of review card) -->
+      @if (state && state.isAuthor) {
+        <!--Review Modification Button -->
+        <div
+          class="top-right-button"
+          [@fadeInOut]="deleteButtonState"
+          (click)="menu.toggle($event)"
+        >
+          <i class="pi pi-ellipsis-v"></i>
+        </div>
+      }
+
+      <div class="row">
+        <!-- * Left Side (Anonymous, Semester, Overall Rating) -->
+        <div class="col-md-4 review-column header-container">
+          <div class="main-details">
+            <!-- Title -->
+            <h5>{{ review.title || 'No Title' }}</h5>
+
+            <!-- User -->
+            <p
+              class="d-flex align-items-center user-section"
+              [routerLink]="['/user', review.author.username]"
+            >
+              <!-- Profile picture -->
+              <img
+                [src]="review.author.profileImg || defaultProfileImg"
+                alt="Profile Picture"
+                class="mr-2 profile-picture"
+                loading="lazy"
+                crossOrigin="anonymous"
+                referrerpolicy="no-referrer"
+              />
+              <!-- Username -->
+              <span>{{ review.author.username || 'Anonymous' }}</span>
+              <!-- A primeng badge for the year taken -->
+              <p-badge
+                [value]="review.year"
+                [style]="{ 'background-color': 'white' }"
+                class="ms-2"
+              ></p-badge>
+            </p>
+          </div>
+
+          <!-- Overall Rating (only shown for desktop or laptop viewport widths) -->
+          @if (viewportType === 'desktop' || viewportType === 'laptop') {
+            <div class="overall-section">
+              <!-- Heading -->
+              <h5 class="heading">Overall Rating</h5>
+              <!-- Stars -->
+              <div class="d-flex justify-content-center">
+                <div class="stars-overall">
+                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                    <i
+                      class="bi"
+                      [ngClass]="{
+                        'bi-star-fill':
+                          Math.floor(review.overallRating) >= star,
+                        'bi-star-half':
+                          Math.floor(review.overallRating) < star &&
+                          Math.ceil(review.overallRating) >= star,
+                        'bi-star': Math.ceil(review.overallRating) < star,
+                      }"
+                    ></i>
+                  </ng-container>
                 </div>
-            } @else if (currentUser) {
-                <div class="top-right-button" [@fadeInOut]="deleteButtonState" (click)="confirmDeletion($event)">
-                    <i class="pi pi-flag"></i>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- * Right Side (Review Heading, Categories, Stars, Description) -->
+        <div
+          class="col-md-8 main-content-container"
+          [ngClass]="
+            viewportType === 'mobile' || viewportType === 'tablet' ? '' : 'px-4'
+          "
+        >
+          <!-- Review Description -->
+          <p
+            class="review"
+            [innerHTML]="
+              review.description
+                | HighlightUnitPipe: (expanded ? undefined : 350)
+            "
+          ></p>
+
+          <!-- Expand/Collapse Button -->
+          @if (review.description.length > 350) {
+            <button class="btn btn-link p-0 mb-3" (click)="toggleExpand()">
+              <i
+                [class]="expanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"
+              ></i>
+              {{ expanded ? 'Show Less' : 'Show More' }}
+            </button>
+          }
+
+          <div class="row categories">
+            <!-- Overall Rating (only shown in tablet or mobile viewport widths) -->
+            @if (viewportType === 'tablet' || viewportType === 'mobile') {
+              <div class="col-12 overall-category-container">
+                <div class="category overall">
+                  <!-- Category header -->
+                  <h6 class="category-header">Overall</h6>
+                  <!-- Stars for overall rating -->
+                  <div class="circles">
+                    @for (circle of [1, 2, 3, 4, 5]; track $index) {
+                      <i
+                        class="circle"
+                        [ngClass]="{
+                          'full-circle':
+                            Math.floor(review.overallRating) >= circle,
+                          'half-circle':
+                            Math.floor(review.overallRating) < circle &&
+                            Math.ceil(review.overallRating) >= circle,
+                          'empty-circle':
+                            Math.ceil(review.overallRating) < circle,
+                        }"
+                      ></i>
+                    }
+                  </div>
                 </div>
+              </div>
             }
 
-            <div class="row">
-                <!-- * Left Side (Anonymous, Semester, Overall Rating) -->
-                <div class="col-md-4 review-column header-container">
-                    <div class="main-details">
-                        <!-- Title -->
-                        <h5>{{ review.title || 'No Title' }}</h5>
-                        
-                        <!-- User -->
-                        <p class="d-flex align-items-center user-section">
-                            <!-- Profile picture -->
-                            <img
-                                [src]="review.author.profileImg || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'"
-                                alt="Profile Picture"
-                                class="mr-2 profile-picture"
-                                loading="lazy"
-                                crossOrigin="anonymous"
-                                referrerpolicy="no-referrer"
-                                (error)="review.author.profileImg = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'"
-                            />
-                            <!-- Username -->
-                            <span>{{ review.author.username || 'Anonymous' }}</span>
-                            <!-- A primeng badge for the year taken -->
-                            <p-badge 
-                                [value]="review.year" 
-                                [style]="{ 'background-color': 'white' }"
-                                class="ms-2"
-                            ></p-badge>
-                        </p>
-                    </div>
-                    
-                    <!-- Overall Rating (only shown for desktop or laptop viewport widths) -->
-                    @if (viewportType === 'desktop' || viewportType === 'laptop') {
-                        <div class="overall-section">
-                            <!-- Heading -->
-                            <h5 class="heading">Overall Rating</h5>
-                            <!-- Stars -->
-                            <div class="d-flex justify-content-center">
-                                <div class="stars-overall">
-                                    <ng-container *ngFor="let star of [1,2,3,4,5]">
-                                        <i
-                                            class="bi"
-                                            [ngClass]="{
-                                            'bi-star-fill': Math.floor(review.overallRating) >= star,
-                                            'bi-star-half': Math.floor(review.overallRating) < star && Math.ceil(review.overallRating) >= star,
-                                            'bi-star': Math.ceil(review.overallRating) < star
-                                            }"
-                                        ></i>
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </div>
-                    }
+            <!-- Content Category -->
+            <div class="category content">
+              <!-- Category header -->
+              <h6 class="category-header">Enjoyment</h6>
+              <!-- Circles for Content Rating -->
+              <div>
+                <div class="circles">
+                  @for (circle of [1, 2, 3, 4, 5]; track $index) {
+                    <i
+                      class="circle"
+                      [ngClass]="{
+                        'full-circle':
+                          Math.floor(review.contentRating) >= circle,
+                        'half-circle':
+                          Math.floor(review.contentRating) < circle &&
+                          Math.ceil(review.contentRating) >= circle,
+                        'empty-circle':
+                          Math.ceil(review.contentRating) < circle,
+                      }"
+                    ></i>
+                  }
                 </div>
-
-                <!-- * Right Side (Review Heading, Categories, Stars, Description) -->
-                <div 
-                    class="col-md-8 main-content-container" 
-                    [ngClass]="viewportType === 'mobile' || viewportType === 'tablet' ? '' : 'px-4'"
-                > 
-                    <!-- Review Description -->
-                    <p class="review" [innerHTML]="review.description | HighlightUnitPipe : (expanded ? undefined : 350)"></p>
-
-                    <!-- Expand/Collapse Button -->
-                    @if (review.description.length > 350) {
-                        <button class="btn btn-link p-0 mb-3" (click)="toggleExpand()">
-                            <i [class]="expanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
-                            {{ expanded ? 'Show Less' : 'Show More' }}
-                        </button>
-                    }
-
-                    <div class="row categories">
-                        <!-- Overall Rating (only shown in tablet or mobile viewport widths) -->
-                        @if (viewportType === 'tablet' || viewportType === 'mobile') {
-                            <div class="col-12 overall-category-container">
-                                <div class="category overall">
-                                    <!-- Category header -->
-                                    <h6 class="category-header">Overall</h6>
-                                    <!-- Stars for overall rating -->
-                                    <div class="circles">
-                                        @for (circle of [1,2,3,4,5]; track $index) {
-                                            <i
-                                            class="circle"
-                                            [ngClass]="{
-                                                'full-circle': Math.floor(review.overallRating) >= circle,
-                                                'half-circle': Math.floor(review.overallRating) < circle && Math.ceil(review.overallRating) >= circle,
-                                                'empty-circle': Math.ceil(review.overallRating) < circle
-                                            }"
-                                            ></i>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                        <!-- Content Category -->
-                        <div class="category content">
-                            <!-- Category header -->
-                            <h6 class="category-header">Enjoyment</h6>
-                            <!-- Circles for Content Rating -->
-                            <div >
-                                <div class="circles">
-                                    @for (circle of [1,2,3,4,5]; track $index) {
-                                        <i 
-                                            class="circle"
-                                            [ngClass]="{
-                                            'full-circle': Math.floor(review.contentRating) >= circle,
-                                            'half-circle': Math.floor(review.contentRating) < circle && Math.ceil(review.contentRating) >= circle,
-                                            'empty-circle': Math.ceil(review.contentRating) < circle
-                                            }"
-                                        ></i>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Faculty Category -->
-                        <div class="category faculty">
-                            <!-- Category header -->
-                            <h6 class="category-header">Simplicity</h6>
-                            <!-- Circles for faculty rating -->
-                            <div class="circles">
-                                @for (circle of [1,2,3,4,5]; track $index) {
-                                    <i
-                                        class="circle"
-                                        [ngClass]="{
-                                            'full-circle': Math.floor(review.facultyRating) >= circle,
-                                            'half-circle': Math.floor(review.facultyRating) < circle && Math.ceil(review.facultyRating) >= circle,
-                                            'empty-circle': Math.ceil(review.facultyRating) < circle
-                                        }"
-                                    ></i>
-                                }
-                            </div>
-                        </div>
-
-                        <!-- Relevancy Category -->
-                        <div class="category relevancy">
-                            <!-- Category header -->
-                            <h6 class="category-header">Usefulness</h6>
-                            <!-- Circles for relevancy rating -->
-                            <div class="circles">
-                                @for (circle of [1,2,3,4,5]; track $index) {
-                                    <i
-                                        class="circle"
-                                        [ngClass]="{
-                                            'full-circle': Math.floor(review.relevancyRating) >= circle,
-                                            'half-circle': Math.floor(review.relevancyRating) < circle && Math.ceil(review.relevancyRating) >= circle,
-                                            'empty-circle': Math.ceil(review.relevancyRating) < circle
-                                        }"
-                                    ></i>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 col-lg-3 d-flex flex-column justify-content-end actions">
-                            <!-- Report and dislike/like buttons -->
-                            <div class="action-buttons-container">
-                                <!-- Thumbs up/down -->
-                                <div class="thumb-buttons">
-                                    <!-- Like count -->
-                                    <span 
-                                        class="me-2"
-                                        [style]="{
-                                            'color': liked ? 'rgb(72, 158, 60)' : 'gray'
-                                        }"
-                                    >{{ review.likes }}</span>
-                                    <!-- Like button -->
-                                    <i 
-                                        class="thumbs" 
-                                        [class]="'pi pi-thumbs-up-fill'" 
-                                        (click)="toggleLike()" 
-                                        (mouseover)="hoveringLike = true"
-                                        (mouseleave)="hoveringLike = false"
-                                        [ngStyle]="{ 
-                                            'color': liked ? 'rgb(72, 158, 60)' : (currentUser ? (currentUser.email == review.author.email ? 'rgb(96,96,96)' : 'gray') : 'rgb(96,96,96)'),
-                                        }"
-                                        [pTooltip]="currentUser?._id === review.author._id ? 'Cant like yours :(' : ''"
-                                        fitContent="true"
-                                    ></i>
-                                    <!-- Dislike count -->
-                                    <span 
-                                        class="me-2 ml-3"
-                                        [style]="{
-                                            'color': disliked ? 'rgb(196, 57, 94)' : 'gray'
-                                        }"
-                                    >{{ review.dislikes }}</span>
-                                    <!-- Dislike button -->
-                                    <i 
-                                        class="thumbs"  
-                                        [class]="'pi pi-thumbs-down-fill'" 
-                                        (click)="toggleDislike()"
-                                        (mouseover)="hoveringDislike = true"
-                                        (mouseleave)="hoveringDislike = false"
-                                        [style]="{ 
-                                            'color': disliked ? 'rgb(196, 57, 94)' : (currentUser ? (currentUser.email == review.author.email ? 'rgb(96,96,96)' : 'gray') : 'rgb(96,96,96)'),
-                                        }"
-                                        [pTooltip]="currentUser?._id === review.author._id ? 'Cant dislike yours :(' : ''"
-                                    ></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+
+            <!-- Faculty Category -->
+            <div class="category faculty">
+              <!-- Category header -->
+              <h6 class="category-header">Simplicity</h6>
+              <!-- Circles for faculty rating -->
+              <div class="circles">
+                @for (circle of [1, 2, 3, 4, 5]; track $index) {
+                  <i
+                    class="circle"
+                    [ngClass]="{
+                      'full-circle': Math.floor(review.facultyRating) >= circle,
+                      'half-circle':
+                        Math.floor(review.facultyRating) < circle &&
+                        Math.ceil(review.facultyRating) >= circle,
+                      'empty-circle': Math.ceil(review.facultyRating) < circle,
+                    }"
+                  ></i>
+                }
+              </div>
+            </div>
+
+            <!-- Relevancy Category -->
+            <div class="category relevancy">
+              <!-- Category header -->
+              <h6 class="category-header">Usefulness</h6>
+              <!-- Circles for relevancy rating -->
+              <div class="circles">
+                @for (circle of [1, 2, 3, 4, 5]; track $index) {
+                  <i
+                    class="circle"
+                    [ngClass]="{
+                      'full-circle':
+                        Math.floor(review.relevancyRating) >= circle,
+                      'half-circle':
+                        Math.floor(review.relevancyRating) < circle &&
+                        Math.ceil(review.relevancyRating) >= circle,
+                      'empty-circle':
+                        Math.ceil(review.relevancyRating) < circle,
+                    }"
+                  ></i>
+                }
+              </div>
+            </div>
+
+            @if (variant !== 'compact') {
+              <div
+                class="col-md-3 col-lg-3 d-flex flex-column justify-content-end actions"
+              >
+                <!-- Report and dislike/like buttons -->
+                <div class="action-buttons-container">
+                  <!-- Thumbs up/down -->
+                  <div class="thumb-buttons">
+                    <!-- Like count -->
+                    <span
+                      class="me-2"
+                      [style]="{
+                        color: state?.liked ? 'rgb(72, 158, 60)' : 'gray',
+                      }"
+                      >{{ review.likes }}</span
+                    >
+                    <!-- Like button -->
+                    <i
+                      class="thumbs"
+                      [class]="'pi pi-thumbs-up-fill'"
+                      (click)="state ? toggleReaction('like') : null"
+                      (mouseover)="hoveringLike = true"
+                      (mouseleave)="hoveringLike = false"
+                      [ngStyle]="{
+                        color: state?.liked
+                          ? 'rgb(72, 158, 60)'
+                          : state?.isAuthor
+                            ? 'rgb(96,96,96)'
+                            : 'gray',
+                      }"
+                      [pTooltip]="state?.isAuthor ? 'Cant like yours :(' : !state ? 'Login to like' : ''"
+                      fitContent="true"
+                    ></i>
+                    <!-- Dislike count -->
+                    <span
+                      class="me-2 ml-3"
+                      [style]="{
+                        color: state?.disliked ? 'rgb(196, 57, 94)' : 'gray',
+                      }"
+                      >{{ review.dislikes }}</span
+                    >
+                    <!-- Dislike button -->
+                    <i
+                      class="thumbs"
+                      [class]="'pi pi-thumbs-down-fill'"
+                      (click)="state ? toggleReaction('dislike') : null"
+                      (mouseover)="hoveringDislike = true"
+                      (mouseleave)="hoveringDislike = false"
+                      [style]="{
+                        color: state?.disliked
+                          ? 'rgb(196, 57, 94)'
+                          : state?.isAuthor
+                            ? 'rgb(96,96,96)'
+                            : 'gray',
+                      }"
+                      [pTooltip]="state?.isAuthor ? 'Cant dislike yours :(' : !state ? 'Login to dislike' : ''"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- === Child component: Edit Review -->
-    <app-write-review-unit
-        [unit]="unit"
-        [user]="currentUser"
-        [review]="reviewEdit"
-        [editMode]="true"
-        (reviewEdited)="handleReviewEdited()"
-    ></app-write-review-unit>
-    
-
-
-    <!-- === Child component: Report Review === -->
-    <app-report-review
-        [review]="review"
-        [currentUser]="currentUser"
-    ></app-report-review>
+  <!-- === Child component: Edit Review -->
+  <app-write-review-unit
+    [unit]="unit"
+    [review]="reviewEdit"
+    [editMode]="true"
+    (reviewUpdate)="this.reviewEdited.emit($event)"
+  ></app-write-review-unit>
 }

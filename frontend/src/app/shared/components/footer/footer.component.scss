@@ -76,12 +76,12 @@
 
   .social-icons {
     width: 100%;
-    
+
     .header-text {
       font-size: 16px;
       margin-bottom: 12px;
     }
-    
+
     a {
       margin: 0 8px;
       font-size: 22px; // Slightly larger icons for better touch targets
@@ -93,11 +93,11 @@
     text-align: center;
     font-size: 12px;
     line-height: 1.6;
-    
+
     br {
       display: none; // Remove line breaks for a more compact layout
     }
-    
+
     a {
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
@@ -111,7 +111,7 @@
     margin: 0 5px;
     font-size: 20px;
   }
-  
+
   .detail {
     font-size: 11px;
   }

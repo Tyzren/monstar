@@ -1,18 +1,23 @@
 <li class="flex align-items-center gap-2">
   <!-- Profile image -->
-  <img 
-    [src]="notification.data.user.profileImg || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'" 
-    style="width: 32px; border-radius: 50%" 
+  <img
+    [src]="
+      notification.data.user.profileImg ||
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'
+    "
+    style="width: 32px; border-radius: 50%"
     loading="lazy"
     crossOrigin="anonymous"
     referrerpolicy="no-referrer"
-    (error)="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s'"
+    (error)="
+      ('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s')
+    "
   />
   <!-- Text -->
-  <div 
-    (click)="goToUnitPage()" 
-    style="cursor: pointer" 
-    pTooltip="Go to review" 
+  <div
+    (click)="goToUnitPage()"
+    style="cursor: pointer"
+    pTooltip="Go to review"
     tooltipPosition="top"
   >
     <div class="text-sm text-color-secondary">
@@ -25,7 +30,7 @@
   >
     <i
       class="pi pi-times"
-      style="color: rgb(246, 12, 101); cursor: pointer;"
+      style="color: rgb(246, 12, 101); cursor: pointer"
       (click)="removeNotification()"
     ></i>
   </div>

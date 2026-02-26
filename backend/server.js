@@ -1,28 +1,22 @@
 /* ----------------------- Load environment variables ----------------------- */
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
+require('module-alias/register');
 
 /* ----------------------------- Module imports ----------------------------- */
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const cookieParser = require('cookie-parser');
-const csrf = require('csurf');
 const path = require('path');
 
-/* ------------------------- Project module imports ------------------------- */
-const tagManager = require('./services/tagManager.service');
-const { setupSwagger } = require('./docs/swagger');
-const { dbConnect } = require('./services/mongodb.service');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const csrf = require('csurf');
+const express = require('express');
 
-/* ----------------------------- Router imports ----------------------------- */
-const UnitRouter = require('./routes/units');
-const UnitsV2Router = require('./routes/v2/units');
-const ReviewRouter = require('./routes/reviews');
-const AuthRouter = require('./routes/auth');
-const NotificationRouter = require('./routes/notifications');
-const GitHubRouter = require('./routes/github');
-const SetuRouter = require('./routes/setus');
-const AdminRouter = require('./routes/admin');
+const { setupSwagger } = require('@docs/swagger');
+const errorMiddleware = require('@middleware/error.middleware');
+const { dbConnect } = require('@providers/mongodb.provider');
+const tagManager = require('@providers/tagManager.provider');
+
+/* --------------------------- Initialize Express --------------------------- */
+const app = express();
 
 /* ------------------------ Environment configuration ----------------------- */
 const isDevelopment = process.env.DEVELOPMENT === 'true';
@@ -76,15 +70,17 @@ app.use(async (req, res, next) => {
 });
 
 /* --------------------------------- Routes --------------------------------- */
-app.use('/api/v1/units', UnitRouter);
-app.use('/api/v2/units', UnitsV2Router);
-app.use('/api/v1/reviews', ReviewRouter);
-app.use('/api/v1/auth', AuthRouter);
-app.use('/api/v1/notifications', NotificationRouter);
-app.use('/api/v1/github', GitHubRouter);
-app.use('/api/v1/setus', SetuRouter);
+app.use('/api/v1/units', require('./infra/routes/v1/units'));
+app.use('/api/v2/units', require('./infra/routes/v2/units'));
+app.use('/api/v1/reviews', require('./infra/routes/v1/reviews'));
+app.use('/api/v2/reviews', require('./infra/routes/v2/reviews'));
+app.use('/api/v1/auth', require('./infra/routes/v1/auth'));
+app.use('/api/v2/users', require('./infra/routes/v2/users'));
+app.use('/api/v1/notifications', require('./infra/routes/v1/notifications'));
+app.use('/api/v1/github', require('./infra/routes/v1/github'));
+app.use('/api/v1/setus', require('./infra/routes/v1/setus'));
 if (isDevelopment && !isProductionMachine) {
-  app.use('/api/admin', AdminRouter);
+  app.use('/api/admin', require('./infra/routes/v1/admin'));
 }
 
 /* ---------------------------- Swagger ui setup ---------------------------- */
@@ -98,16 +94,7 @@ if (!isDevelopment) {
 }
 
 /* ------------------------ Error handling middleware ----------------------- */
-app.use((obj, req, res, next) => {
-  const statusCode = obj.status || 500;
-  const message = obj.message || 'Internal server error';
-  return res.status(statusCode, {
-    success: [200, 201, 204].some((a) => a === obj.status) ? true : false,
-    status: statusCode,
-    message: message,
-    data: obj.data,
-  });
-});
+app.use(errorMiddleware);
 
 /* -------------------------------- Services -------------------------------- */
 // TODO: Use vercel-cron for jobs, node-cron doesn't work on vercel.
@@ -121,10 +108,12 @@ if (require.main === module) {
 
   dbConnect()
     .then(async () => {
-      try {
-        await tagManager.updateMostReviewsTag(1);
-      } catch (e) {
-        console.error('Initial tag update failed', e);
+      if (!isDevelopment && isProductionMachine) {
+        try {
+          await tagManager.updateMostReviewsTag(1);
+        } catch (e) {
+          console.error('Initial tag update failed', e);
+        }
       }
 
       app.listen(PORT, (err) => {

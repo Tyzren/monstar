@@ -1,0 +1,70 @@
+@let state = state$ | async;
+
+<div class="split-container">
+  @if (showLeftPanel) {
+    <div class="panel left">
+      <div class="scroll-container">
+        @if (state && state.reviews) {
+          <!-- Most liked reviews -->
+          <div class="scroll-content">
+            <!-- First set of reviews -->
+            @for (review of state.reviews; track 'first-' + $index) {
+              <app-review-card
+                [variant]="'compact'"
+                [review]="review"
+                [unit]="review.unit"
+              ></app-review-card>
+            }
+            <!-- Duplicate for seamless looping -->
+            @for (review of state.reviews; track 'second-' + $index) {
+              <app-review-card
+                [variant]="'compact'"
+                [review]="review"
+                [unit]="review.unit"
+              ></app-review-card>
+            }
+          </div>
+        } @else {
+          <!-- Skeletons -->
+          <div class="scroll-content gap-6">
+            @for (
+              item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+              track 'first-' + $index
+            ) {
+              <p-skeleton height="11rem"></p-skeleton>
+            }
+            @for (
+              item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+              track 'second-' + $index
+            ) {
+              <p-skeleton height="11rem"></p-skeleton>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+  <div class="panel right">
+    <div class="auth-card">
+      <div class="mr-auto">
+        <h3>Hi, Wanna sign in?</h3>
+        <p>Please use your monash student email</p>
+      </div>
+
+      <app-auth-google-button
+        (credentialResponse)="onGoogleCredential($event)"
+      />
+
+      <div class="guest-section">
+        <p-divider></p-divider>
+        <div
+          class="browse-as-guest-link flex justify-content-center align-items-center gap-2"
+          (click)="onGuestLinkClick()"
+        >
+          <i class="pi pi-eye-slash"></i>
+          <p class="mb-0">Browse as a guest</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

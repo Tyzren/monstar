@@ -3,12 +3,12 @@ import { Types } from 'mongoose';
 export class Notification {
   _id: Types.ObjectId;
   data: ReviewData;
-  navigateTo: String;
+  navigateTo: string;
   isRead: boolean;
   constructor(
     _id: Types.ObjectId,
     data: ReviewData,
-    navigateTo: String,
+    navigateTo: string,
     isRead: boolean
   ) {
     this._id = _id;
@@ -19,12 +19,12 @@ export class Notification {
 }
 
 export class ReviewData {
-  message: String;
+  message: string;
   user: {
-    profileImg: String;
-    username: String;
+    profileImg: string;
+    username: string;
   };
-  constructor(message: String, user: any) {
+  constructor(message: string, user: any) {
     this.message = message;
     this.user = user;
   }

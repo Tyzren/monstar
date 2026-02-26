@@ -1,0 +1,247 @@
+[
+  {
+    "_id": {
+      "$oid": "678e359d39d199c3f6b3b44f"
+    },
+    "email": "rzha1234@student.monash.edu",
+    "username": "rzha1234",
+    "isGoogleUser": true,
+    "googleID": "REDACTED",
+    "reviews": [
+      {
+        "$oid": "679304b10983749bc7ee4619"
+      },
+      {
+        "$oid": "67ab315583656a75c19b183d"
+      },
+      {
+        "$oid": "67ab352483656a75c19b1853"
+      },
+      {
+        "$oid": "67ab846083656a75c19b1a0f"
+      },
+      {
+        "$oid": "67ace2823004f1f8e6d8f6be"
+      },
+      {
+        "$oid": "67af635ad2224dbd4b0016b5"
+      }
+    ],
+    "profileImg": "https://lh3.googleusercontent.com/a/ACg8ocJsJQp8L6olW145i3xzzwXF3Ywm954iPTnq19L-9SANlp-PKA=s96-c",
+    "admin": false,
+    "verified": true,
+    "verificationEmailsSent": 0,
+    "likedReviews": [
+      {
+        "$oid": "6767b52d58c0b5f554e080e7"
+      },
+      {
+        "$oid": "67a09b4c98169fffa207be22"
+      }
+    ],
+    "dislikedReviews": [],
+    "__v": 12,
+    "notifications": [
+      {
+        "$oid": "67ce3511fee346e200b237fc"
+      },
+      {
+        "$oid": "67ce3516fee346e200b2381a"
+      },
+      {
+        "$oid": "67d010c812b83f8663c29d17"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "679196d09f43c367d007afad"
+    },
+    "email": "jfer0069@student.monash.edu",
+    "username": "jenulferdinand",
+    "isGoogleUser": true,
+    "googleID": "REDACTED",
+    "reviews": [
+      {
+        "$oid": "679850ee8806e92bccd557ba"
+      },
+      {
+        "$oid": "67a1b5c4d1bbd8aefbe3aba9"
+      },
+      {
+        "$oid": "67a6c3221a125d802d337ba8"
+      },
+      {
+        "$oid": "67bc7c034e9f1329f06f6eea"
+      },
+      {
+        "$oid": "67d0173e12b83f8663c2a2f9"
+      },
+      {
+        "$oid": "67ea84fb34a5858bfaa67b47"
+      },
+      {
+        "$oid": "68036b9b433032434e9386b3"
+      }
+    ],
+    "profileImg": "https://res.cloudinary.com/dd1a4cx9e/image/upload/v1740984064/user_avatars/aae8gdsjzdqo2exg4vej.jpg",
+    "admin": true,
+    "verified": true,
+    "verificationEmailsSent": 0,
+    "likedReviews": [
+      {
+        "$oid": "67795a882dde4e399450bc9e"
+      },
+      {
+        "$oid": "67cd89dcbca7eb46bf18d714"
+      },
+      {
+        "$oid": "67ab315583656a75c19b183d"
+      },
+      {
+        "$oid": "67ab846083656a75c19b1a0f"
+      },
+      {
+        "$oid": "67ab352483656a75c19b1853"
+      },
+      {
+        "$oid": "67cc1e227351236e854ab598"
+      }
+    ],
+    "dislikedReviews": [],
+    "__v": 106,
+    "resetPasswordEmailsSent": 0,
+    "notifications": [
+      {
+        "$oid": "67cd8720bca7eb46bf18d6cd"
+      },
+      {
+        "$oid": "67cd8758bca7eb46bf18d6e2"
+      },
+      {
+        "$oid": "67cd875fbca7eb46bf18d6f7"
+      },
+      {
+        "$oid": "67cd89b8bca7eb46bf18d70c"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "67622aa2c0c291209417bc4a"
+    },
+    "email": "ldoo0010@student.monash.edu",
+    "password": "$2b$10$A3talSPaPZJGPo.5f6deU.PKPdqAcap8HG7Qjl2Ak3f4x.7B1fn7W",
+    "reviews": [
+      {
+        "$oid": "679243fe9ec01364d82a99a3"
+      }
+    ],
+    "admin": false,
+    "verified": false,
+    "verificationToken": "53a1c8fa0d09cb7f2a546d229fdfe3502fa84858632207579bd8443ec78b1567",
+    "username": "ldoo0010",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67caae0922baed3b40fc2fbf"
+    },
+    "email": "dwir1234@student.monash.edu",
+    "username": "dwir1234",
+    "isGoogleUser": true,
+    "googleID": "REDACTED",
+    "reviews": [],
+    "profileImg": "https://lh3.googleusercontent.com/a/ACg8ocJ3zBxzaFIAJOCW12E8jdTTSGMuGl2hW4Jf-KDV857fq-WjmQ=s96-c",
+    "admin": false,
+    "verified": true,
+    "verificationEmailsSent": 0,
+    "resetPasswordEmailsSent": 0,
+    "likedReviews": [],
+    "dislikedReviews": [],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cbdf7ed28ed75584e25aa3"
+    },
+    "email": "rsar1234@student.monash.edu",
+    "username": "rsar1234",
+    "isGoogleUser": true,
+    "googleID": "REDACTED",
+    "reviews": [
+      {
+        "$oid": "67cc1e227351236e854ab598"
+      }
+    ],
+    "profileImg": "https://lh3.googleusercontent.com/a/ACg8ocKYRMfssSWlZNCrSUxxXpP841EIOoLIzP70j6RMZ16csTxmHA=s96-c",
+    "admin": false,
+    "verified": true,
+    "verificationEmailsSent": 0,
+    "resetPasswordEmailsSent": 0,
+    "likedReviews": [
+      {
+        "$oid": "67ab352483656a75c19b1853"
+      },
+      {
+        "$oid": "67bc7c034e9f1329f06f6eea"
+      }
+    ],
+    "dislikedReviews": [],
+    "notifications": [
+      {
+        "$oid": "67cd4f55ec755ab9b68de911"
+      },
+      {
+        "$oid": "6862773951fffc08438dcee0"
+      }
+    ],
+    "__v": 37
+  },
+  {
+    "_id": {
+      "$oid": "67cd867724bc548ccd2f52ac"
+    },
+    "email": "mdem1234@student.monash.edu",
+    "username": "mdem1234",
+    "isGoogleUser": true,
+    "googleID": "REDACTED",
+    "reviews": [
+      {
+        "$oid": "67cd89dcbca7eb46bf18d714"
+      }
+    ],
+    "profileImg": "https://lh3.googleusercontent.com/a/ACg8ocJsX6Rp90R1L35S31dBHiDPXGrKxfcl0BYysjPcGWirOwA4MA=s96-c",
+    "admin": false,
+    "verified": true,
+    "verificationEmailsSent": 0,
+    "resetPasswordEmailsSent": 0,
+    "likedReviews": [
+      {
+        "$oid": "67ab315583656a75c19b183d"
+      },
+      {
+        "$oid": "67ab846083656a75c19b1a0f"
+      },
+      {
+        "$oid": "67bc7c034e9f1329f06f6eea"
+      },
+      {
+        "$oid": "67ca4e87992731f84fbd8b16"
+      },
+      {
+        "$oid": "67ca53c595822c350f6d73e1"
+      },
+      {
+        "$oid": "67a6c3221a125d802d337ba8"
+      }
+    ],
+    "dislikedReviews": [],
+    "__v": 13,
+    "notifications": [
+      {
+        "$oid": "67cd89ed966592048e8ad215"
+      }
+    ]
+  }
+]

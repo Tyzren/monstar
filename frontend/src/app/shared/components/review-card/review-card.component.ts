@@ -1,24 +1,44 @@
-import { CommonModule, NgOptimizedImage, SlicePipe } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { ApiService } from '../../services/api.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { CommonModule, SlicePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { ModifyReviewService } from '@services/api/modify-review.service';
+import { UserService } from '@services/api/user.service';
+import {
+  IReview,
+  IReviewAuthorPopulated,
+  IReviewFullyPopulated,
+  IUpdateReview,
+  UpdateReviewSchema,
+} from 'app/shared/models/v2/review.schema';
+import { IUnit } from 'app/shared/models/v2/unit.schema';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ConfirmationService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/user.model';
-import { Subscription } from 'rxjs';
-import { TooltipModule } from 'primeng/tooltip';
-import { ReportReviewComponent } from './report-review/report-review.component';
-import { ViewportService, ViewportType } from '../../services/viewport.service';
 import { BadgeModule } from 'primeng/badge';
-import { WriteReviewUnitComponent } from "../write-review-unit/write-review-unit.component";
-import { Review } from '../../models/review.model';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
 import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TooltipModule } from 'primeng/tooltip';
+import { combineLatest, map, ReplaySubject, Subscription } from 'rxjs';
 import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
+import { ViewportService, ViewportType } from '../../services/viewport.service';
+import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit.component';
 
 @Component({
   selector: 'app-review-card',
@@ -32,14 +52,12 @@ import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
     ButtonModule,
     MenuModule,
     TooltipModule,
-    ReportReviewComponent,
     BadgeModule,
     WriteReviewUnitComponent,
-    HighlightUnitPipe
+    HighlightUnitPipe,
+    RouterLink,
   ],
-  providers: [
-    ConfirmationService,
-  ],
+  providers: [ConfirmationService],
   templateUrl: './review-card.component.html',
   styleUrl: './review-card.component.scss',
   animations: [
@@ -48,59 +66,51 @@ import { HighlightUnitPipe } from '../../pipes/highlight-unit.pipe';
       state(
         'hidden',
         style({
-          opacity: 0
+          opacity: 0,
         })
       ),
       state(
         'visible',
         style({
-          opacity: 1
+          opacity: 1,
         })
       ),
-      transition('hidden <=> visible', animate('300ms ease-in-out'))
-    ])
-  ]
+      transition('hidden <=> visible', animate('300ms ease-in-out')),
+    ]),
+  ],
 })
 export class ReviewCardComponent implements OnInit, OnDestroy {
-  // Report dialog component
-  private _reportReviewDialog!: ReportReviewComponent;
-
-  // Providing to template
   Math = Math;
-  console = console;
 
-  // Accept review data from the parent component
-  @Input() review: any; 
+  @Input() variant: 'default' | 'compact' | 'profile' = 'default';
 
-  // Event emitter for when the review is deleted (used in unit overview to refresh the reviews shown)
-  @Output() reviewDeleted = new EventEmitter<void>();
+  private review$ = new ReplaySubject<IReviewAuthorPopulated>(1);
+  private _review: IReviewAuthorPopulated | IReviewFullyPopulated | undefined;
+  @Input({ required: true })
+  set review(value: IReviewAuthorPopulated) {
+    this._review = value;
+    this.review$.next(value);
+  }
+  get review(): IReviewAuthorPopulated | undefined {
+    return this._review;
+  }
 
-  // Event emitter for when the review is edited (used in unit overview to refresh the reviews shown)
-  @Output() reviewEdited = new EventEmitter<void>();
+  @Input({ required: true }) unit: IUnit | undefined;
 
-  // Child that is the confirmation popup on deletion
+  @Output() reviewDeleted = new EventEmitter<string>();
+  @Output() reviewEdited = new EventEmitter<IUpdateReview>();
+
   @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
 
-  // Child component: report review dialog
-  @ViewChild(ReportReviewComponent)
-  set reportReviewDialog(content: ReportReviewComponent) {
-    if (content) {
-      this._reportReviewDialog = content;
-    }
-  }
-  get reportReviewDialog(): ReportReviewComponent {
-    return this._reportReviewDialog;
-  }
-
   // Child component: write review unit dialog
-  @ViewChild(WriteReviewUnitComponent) writeReviewDialog!: WriteReviewUnitComponent;
-  
-  items: MenuItem[] | undefined;
+  @ViewChild(WriteReviewUnitComponent)
+  writeReviewDialog!: WriteReviewUnitComponent;
+
+  dropdownMenuItems: MenuItem[] | undefined;
 
   // Expand state
   expanded: boolean = false;
 
-  // Liking
   liked: boolean = false;
   hoveringLike: boolean = false;
   likes: number = 0;
@@ -112,140 +122,93 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   // Delete button visibility state
   deleteButtonState: 'visible' | 'hidden' = 'hidden';
 
-  // Current user
-  currentUser: User | null = null;
-  private userSubscription: Subscription = new Subscription();
+  defaultProfileImg =
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWwfGUCDwrZZK12xVpCOqngxSpn0BDpq6ewQ&s';
 
-  // Viewport type
+  private viewportSubscription: Subscription = new Subscription();
   viewportType: ViewportType = 'desktop';
 
-  // The unit that is being edited
-  unit: any = null;
-
-  // Review that is being edited
-  reviewEdit: Review = new Review();
-
-  startEditReview(review: any) {
-    this.reviewEdit = new Review({
-      _id: review._id,
-      title: review.title,
-      semester: review.semester,
-      grade: review.grade,
-      year: review.year,
-      overallRating: review.overallRating,
-      relevancyRating: review.relevancyRating,
-      facultyRating: review.facultyRating,
-      contentRating: review.contentRating,
-      description: review.description
+  // Inputted to child in template (write-review-unit)
+  reviewEdit: IUpdateReview = UpdateReviewSchema.safeParse({}).data!;
+  startEditReview(review: IReviewAuthorPopulated) {
+    this.reviewEdit = UpdateReviewSchema.parse({
+      ...review,
+      author: typeof review.author === 'object' ? review.author._id : review.author,
     });
-
-    this.unit = review.unit;
-
     if (this.writeReviewDialog) {
       this.writeReviewDialog.openDialog();
     }
   }
 
-  handleReviewEdited() {
-    this.reviewEdited.emit();
-  }
+  private userService = inject(UserService);
+  private modifyReviewService = inject(ModifyReviewService);
+  private confirmationService = inject(ConfirmationService);
+  private viewportService = inject(ViewportService);
 
+  readonly state$ = combineLatest([
+    this.userService.currentUser$,
+    this.review$,
+  ]).pipe(
+    map(([user, review]) => {
+      if (!user) return null;
+      if (!review) return null;
+      return {
+        reviewLikes: review.likes,
+        reviewDislikes: review.dislikes,
 
+        liked: user.likedReviews.includes(review._id) ?? false,
+        disliked: user.dislikedReviews.includes(review._id) ?? false,
+        isAuthor:
+          user._id ===
+          (typeof review.author === 'object'
+            ? review.author._id
+            : review.author),
+        profileImg: review.author.profileImg,
+        username: review.author.username,
+        email: review.author.email,
+      };
+    })
+  );
 
-  /**
-   * ! Constructor 
-   *
-   */
-  constructor (
-    private apiService: ApiService,
-    private authService: AuthService,
-    private confirmationService: ConfirmationService,
-    private viewportService: ViewportService
-  ) { }
-
-
-
-  /** 
-   * ! |=======================================================================|
-   * ! | LIFECYCLE HOOKS                                                       |
-   * ! |=======================================================================|
-   */
-
-  /**
-   * * Runs on initialisation
-   * 
-   * - Sets the likes and dislikes count for the review
-   */
   ngOnInit(): void {
-    // Get like and dislike count from review
-    this.likes = this.review.likes;
-    this.dislikes = this.review.dislikes;
-
-    // Subscribe to the current user from auth service
-    this.userSubscription = this.authService.getCurrentUser().subscribe({
-      next: (currentUser: User | null) => {
-        // Store the current user for this component
-        this.currentUser = currentUser;
-
-        // Set the liked and disliked state of the review
-        this.liked = this.currentUser?.likedReviews.includes(this.review._id) || false;
-        this.disliked = this.currentUser?.dislikedReviews.includes(this.review._id) || false;
-
-        // ? Debug log change of current user
-        // console.log('ReviewCard | Current User:', this.currentUser);
+    this.viewportSubscription = this.viewportService.viewport$.subscribe(
+      (type) => {
+        this.viewportType = type;
       }
-    });
+    );
 
-    // Subscribe to viewport changes
-    this.viewportService.viewport$.subscribe(type => {
-      this.viewportType = type;
-    });
-
-    // List of items for the menu
-    this.items = [
+    this.dropdownMenuItems = [
       {
         label: 'Edit',
         icon: 'pi pi-pencil',
         command: () => {
+          if (!this.review) return;
           this.startEditReview(this.review);
-        }
+        },
       },
       {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => {
           this.deleteReview();
-        }
-      }
+        },
+      },
     ];
   }
 
-  /**
-   * * Runs on destroy
-   * 
-   * Unsubscribes from the currentUser subscription
-   */
   ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
+    this.viewportSubscription.unsubscribe();
   }
 
+  /* ----------------------------- Review deletion ---------------------------- */
 
+  accept() {
+    this.confirmPopup.accept();
+  }
+  reject() {
+    this.confirmPopup.reject();
+  }
 
-  /** 
-   * ! |=======================================================================|
-   * ! | REVIEW DELETION                                                       |
-   * ! |=======================================================================|
-   */
-  
-  /** 
-   * * Choices on confirmation popup (either delete or cancel)
-   */
-  accept() { this.confirmPopup.accept(); }
-  reject() { this.confirmPopup.reject(); }
-
-  /**
-   * * Subscribes to the confirmation service on deletion
-   */
   confirmDeletion(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
@@ -253,141 +216,46 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
       accept: () => {
         this.deleteReview();
       },
-      reject: () => { }
+      reject: () => {},
     });
   }
 
-  /**
-   * * Deletes a review from the DB using API Service Method
-   * 
-   * This deletes a review by it's MongoDB ID. If successful, it emits the 
-   * reviewDeleted event so that 'unit-overview' can refresh the reviews.
-   */
   deleteReview() {
-    // Call the api service method to delete a review
-    this.apiService.deleteReviewByIdDELETE(this.review._id).subscribe({
-      next: (message) => {
-        // Emit the event that we deleted a review
-        this.reviewDeleted.emit();
-
-        // Remove this review from the current user's reviews array
-        this.currentUser?.reviews.splice(this.currentUser.reviews.indexOf(this.review._id), 1); 
-
-        // ? Debug log
-        // console.log(message);
-      },
-      error: (error) => {
-        // ? Debug log 
-        // console.log(error);
-      }
-    });
+    if (!this.review) return;
+    this.reviewDeleted.emit(this.review._id);
   }
 
+  /* -------------------------- Liking and disliking -------------------------- */
 
-  /** 
-   * ! |=======================================================================|
-   * ! | LIKING AND DISLIKING                                                  |
-   * ! |=======================================================================|
-   */
+  toggleReaction(reactionType: 'like' | 'dislike') {
+    if (!this.review) return;
+    const reviewId = this.review._id;
+    const rollback = this.userService.toggleReaction(reviewId, reactionType);
+    const userId = this.userService.getId();
+    if (!userId) {
+      console.error('User id was not retrieved');
+      return;
+    }
 
-  /**
-   * * Method to toggle the like state
-   */
-  toggleLike() {
-    if (!this.currentUser) return;
-    if (this.currentUser._id === this.review.author._id) return;
-
-    this.apiService.toggleReactionPATCH(
-      this.review._id, 
-      this.currentUser._id.toString(), 
-      'like'
-    ).subscribe({
-      next: (response: any) => {
-        this.review.likes = response.review.likes;
-        this.review.dislikes = response.review.dislikes;
-        
-        // Update reaction states based on server response
-        this.liked = response.reactions.liked;
-        this.disliked = response.reactions.disliked;
-
-        // Update the user's liked/disliked reviews lists
-        if (this.liked) {
-          this.currentUser?.addLikedReview(this.review._id);
-          
-          if (this.disliked) {
-            this.currentUser?.removeDislikedReview(this.review._id);
-          }
-        } else {
-          this.currentUser?.removeLikedReview(this.review._id);
-        }
-
-        // console.log(`Review like toggled successfully:`, response);
-      },
-      error: (error) => {
-        // console.error('Error while toggling like:', error);
-      }
-    });
+    this.modifyReviewService
+      .toggleReaction(reviewId, userId, reactionType)
+      .subscribe({
+        next: (updatedReview: IReview) => {
+          this.review = {
+            ...this.review,
+            likes: updatedReview.likes,
+            dislikes: updatedReview.dislikes,
+          } as IReviewAuthorPopulated;
+        },
+        error: () => {
+          if (rollback) rollback();
+        },
+      });
   }
 
-  /**
-   * * Method to toggle the dislike state
-   */
-  toggleDislike() {
-    if (!this.currentUser) return;
-    if (this.currentUser._id === this.review.author._id) return;
+  /* ----------------------------- Helper methods ----------------------------- */
 
-    this.apiService.toggleReactionPATCH(
-      this.review._id, 
-      this.currentUser._id.toString(), 
-      'dislike'
-    ).subscribe({
-      next: (response) => {
-        this.review.likes = response.review.likes;
-        this.review.dislikes = response.review.dislikes;
-        
-        // Update reaction states based on server response
-        this.liked = response.reactions.liked;
-        this.disliked = response.reactions.disliked;
-        
-        if (this.disliked) {
-          this.currentUser?.addDislikedReview(this.review._id);
-          
-          if (this.liked) {
-            this.currentUser?.removeLikedReview(this.review._id);
-          }
-        } else {
-          this.currentUser?.removeDislikedReview(this.review._id);
-        }
-
-        // console.log(`Review dislike toggled successfully:`, response);
-      },
-      error: (error) => {
-        // console.error('Error while toggling dislike:', error);
-      }
-    });
-  }
-
-
-
-  /** 
-   * ! |=======================================================================|
-   * ! | HELPER METHODS                                                        |
-   * ! |=======================================================================|
-   */
-
-  /**
-   * * Method to toggle the expand/collapse state
-   */
   toggleExpand() {
     this.expanded = !this.expanded;
-  }
-
-  /**
-   * * Shows dialog to report review
-   */
-  showReportDialog() {
-    if (this.currentUser && this.reportReviewDialog) {
-      this.reportReviewDialog.openDialog();
-    }
   }
 }

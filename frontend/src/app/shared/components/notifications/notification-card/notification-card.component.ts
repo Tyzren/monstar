@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Notification } from '../../../models/notification.model';
 import { TooltipModule } from 'primeng/tooltip';
+import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'app-notification-card',

@@ -1,15 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-// Services
-import { ApiService } from './shared/services/api.service';
-import { FooterService } from './shared/services/footer.service';
-
-// Components
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { PrimeNGConfig, MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { FooterComponent } from '@components/footer/footer.component';
+import { NavbarComponent } from '@components/navbar/navbar.component';
+import { FooterService } from '@services/footer.service';
 
 // Vercel Analytics
 import { inject as injectAnalytics } from '@vercel/analytics';
@@ -18,9 +13,9 @@ import { inject as injectAnalytics } from '@vercel/analytics';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, NavbarComponent, FooterComponent, ToastModule],
-  providers: [ApiService, MessageService],
+  providers: [MessageService],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'] // Fixed the typo from 'styleUrl' to 'styleUrls'
+  styleUrls: ['./app.component.scss'], // Fixed the typo from 'styleUrl' to 'styleUrls'
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
@@ -36,7 +31,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // Subscribe to footer visibility changes
-    this.footerService.showFooter$.subscribe(show => {
+    this.footerService.showFooter$.subscribe((show) => {
       this.showFooter = show;
     });
 

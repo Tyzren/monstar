@@ -6,14 +6,8 @@ import { CardModule } from 'primeng/card';
 @Component({
   selector: 'app-not-found',
   standalone: true,
-  imports: [
-    CardModule,
-    ButtonModule,
-    RouterLink,
-  ],
+  imports: [CardModule, ButtonModule, RouterLink],
   templateUrl: './not-found.component.html',
-  styleUrl: './not-found.component.scss'
+  styleUrl: './not-found.component.scss',
 })
-export class NotFoundComponent {
-
-}
+export class NotFoundComponent {}

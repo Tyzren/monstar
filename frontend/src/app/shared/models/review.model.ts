@@ -1,6 +1,6 @@
-import { Unit } from "./unit.model";
-import { User } from "./user.model";
-import { Types } from "mongoose";
+import { Unit } from './unit.model';
+import { User } from './user.model';
+import { Types } from 'mongoose';
 
 // Define interface for review data
 export interface ReviewData {
@@ -81,7 +81,9 @@ export class Review {
 
   // Utility method to check if unit is populated
   hasPopulatedUnit(): boolean {
-    return this.unit instanceof Object && !(this.unit instanceof Types.ObjectId);
+    return (
+      this.unit instanceof Object && !(this.unit instanceof Types.ObjectId)
+    );
   }
 
   // Utility method to get unit code safely
@@ -97,10 +99,14 @@ export class Review {
   isValid(): boolean {
     return (
       this.year > 0 &&
-      this.overallRating >= 0 && this.overallRating <= 5 &&
-      this.relevancyRating >= 0 && this.relevancyRating <= 5 &&
-      this.facultyRating >= 0 && this.facultyRating <= 5 &&
-      this.contentRating >= 0 && this.contentRating <= 5 &&
+      this.overallRating >= 0 &&
+      this.overallRating <= 5 &&
+      this.relevancyRating >= 0 &&
+      this.relevancyRating <= 5 &&
+      this.facultyRating >= 0 &&
+      this.facultyRating <= 5 &&
+      this.contentRating >= 0 &&
+      this.contentRating <= 5 &&
       this.description.trim().length > 0
     );
   }
@@ -118,20 +124,23 @@ export class Review {
 
   /**
    * * Calculates the overall rating based on the other ratings
-   * 
+   *
    * - If no ratings are provided, overall rating is set to 0
    * - Otherwise, the overall rating is the average of the provided ratings
    * - The overall rating is rounded to 1 decimal place
    */
   calcOverallRating(): void {
-    const validRatings = [this.relevancyRating, this.facultyRating, this.contentRating]
-      .filter(rating => rating > 0);
-    
+    const validRatings = [
+      this.relevancyRating,
+      this.facultyRating,
+      this.contentRating,
+    ].filter((rating) => rating > 0);
+
     if (validRatings.length === 0) {
       this.overallRating = 0;
       return;
     }
-    
+
     const sum = validRatings.reduce((acc, curr) => acc + curr, 0);
     this.overallRating = Number((sum / validRatings.length).toFixed(1));
   }

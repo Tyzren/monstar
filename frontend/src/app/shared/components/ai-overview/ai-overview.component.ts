@@ -1,66 +1,47 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 
 // PrimeNG modules
 import { CardModule } from 'primeng/card';
 import { TooltipModule } from 'primeng/tooltip';
 
 // App specific models
-import { AiOverview } from '../../models/ai-overview.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  AiOverview,
+  IUnitDeeplyPopulated,
+} from 'app/shared/models/v2/unit.schema';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ViewportService, ViewportType } from '../../services/viewport.service';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-ai-overview',
   standalone: true,
-  imports: [
-    CommonModule,
-    CardModule,
-    TooltipModule,
-    SkeletonModule
-  ],
+  imports: [CommonModule, CardModule, TooltipModule, SkeletonModule],
   templateUrl: './ai-overview.component.html',
-  styleUrl: './ai-overview.component.scss'
+  styleUrl: './ai-overview.component.scss',
 })
-export class AiOverviewComponent implements OnInit, OnDestroy {
-  @Input() unit: any = null;
-
+export class AiOverviewComponent implements OnInit {
   window = window;
-
   viewportType: ViewportType = 'desktop';
 
-  /**
-   * * Gets AI overview from unit data
-   */
+  @Input() unit: IUnitDeeplyPopulated | undefined;
+
   get aiOverview(): AiOverview | null {
     return this.unit?.aiOverview || null;
   }
 
-  private destroy$ = new Subject<void>();
-
-  constructor(
-    private viewportService: ViewportService
-  ) { }
+  private destroyRef = inject(DestroyRef);
+  private viewportService = inject(ViewportService);
 
   ngOnInit(): void {
-    // Subscribe to viewport service
     this.viewportService.viewport$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((type) => {
         this.viewportType = type;
       });
-
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  /**
-   * * Formats the generated date for display
-   */
   getFormattedDate(format: 'short' | 'default' = 'default'): string {
     if (!this.aiOverview?.generatedAt) return '';
 
@@ -72,20 +53,23 @@ export class AiOverviewComponent implements OnInit, OnDestroy {
       const dd = date.getDay();
 
       let ddStr, mmStr;
-      if (dd < 10) { ddStr = '0' + dd; }
-      if (mm < 10) { mmStr = '0' + mm; }
+      if (dd < 10) {
+        ddStr = '0' + dd;
+      }
+      if (mm < 10) {
+        mmStr = '0' + mm;
+      }
 
       return ddStr + '/' + mmStr + '/' + yyyy;
     }
 
     return date.toLocaleDateString('en-AU', {
-      year: 'numeric', month: 'long', day: 'numeric'
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   }
 
-  /**
-   * * Gets the icon for the AI model
-   */
   getModelIcon(): string {
     if (!this.aiOverview?.model) return '';
 
@@ -94,7 +78,6 @@ export class AiOverviewComponent implements OnInit, OnDestroy {
       return 'pi pi-google';
     }
 
-    // Default icon for unknown models
     return 'pi pi-sparkles';
   }
 }

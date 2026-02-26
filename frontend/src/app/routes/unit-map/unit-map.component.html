@@ -1,58 +1,58 @@
 <!-- === Bottom Toolbar === -->
 @if (!isLoading) {
-<div class="toolbar-container">
-  <p-toolbar
-    class="toolbar"
-    styleClass="shadow-2"
-    [style]="{ 'border-radius': '3rem' }"
-  >
-    <!-- ! Start group (Simple sorting order dropdown) -->
-    <div class="p-toolbar-group-start">
-      <p-button
-        pTooltip="Reset Graph"
-        tooltipPosition="top"
-        tooltipZIndex="9999"
-        icon="pi pi-replay"
-        rounded="true"
-        (click)="resetGraph()"
-      />
-    </div>
+  <div class="toolbar-container">
+    <p-toolbar
+      class="toolbar"
+      styleClass="shadow-2"
+      [style]="{ 'border-radius': '3rem' }"
+    >
+      <!-- ! Start group (Simple sorting order dropdown) -->
+      <div class="p-toolbar-group-start">
+        <p-button
+          pTooltip="Reset Graph"
+          tooltipPosition="top"
+          tooltipZIndex="9999"
+          icon="pi pi-replay"
+          rounded="true"
+          (click)="resetGraph()"
+        />
+      </div>
 
-    <!-- ! Center group (dynamic search bar)-->
-    <div class="p-toolbar-group-center">
-      <p-button
-        pTooltip="Center Graph"
-        tooltipPosition="top"
-        tooltipZIndex="9999"
-        icon="pi pi-arrow-down-left-and-arrow-up-right-to-center"
-        rounded="true"
-        (click)="centerGraph()"
-      />
+      <!-- ! Center group (dynamic search bar)-->
+      <div class="p-toolbar-group-center">
+        <p-button
+          pTooltip="Center Graph"
+          tooltipPosition="top"
+          tooltipZIndex="9999"
+          icon="pi pi-arrow-down-left-and-arrow-up-right-to-center"
+          rounded="true"
+          (click)="centerGraph()"
+        />
 
-      <p-button
-        class="ml-2"
-        pTooltip="Zoom to Fit"
-        tooltipPosition="top"
-        tooltipZIndex="9999"
-        icon="pi pi-expand"
-        rounded="true"
-        (click)="resetZoom()"
-      />
-    </div>
+        <p-button
+          class="ml-2"
+          pTooltip="Zoom to Fit"
+          tooltipPosition="top"
+          tooltipZIndex="9999"
+          icon="pi pi-expand"
+          rounded="true"
+          (click)="resetZoom()"
+        />
+      </div>
 
-    <!-- ! End group (Advanced filtering options) -->
-    <div class="p-toolbar-group-end">
-      <p-button
-        pTooltip="Toggle Layout"
-        tooltipPosition="top"
-        tooltipZIndex="9999"
-        icon="pi pi-wave-pulse"
-        rounded="true"
-        (click)="toggleLayout()"
-      />
-    </div>
-  </p-toolbar>
-</div>
+      <!-- ! End group (Advanced filtering options) -->
+      <div class="p-toolbar-group-end">
+        <p-button
+          pTooltip="Toggle Layout"
+          tooltipPosition="top"
+          tooltipZIndex="9999"
+          icon="pi pi-wave-pulse"
+          rounded="true"
+          (click)="toggleLayout()"
+        />
+      </div>
+    </p-toolbar>
+  </div>
 }
 
 <!-- === Background, Graph, and Loading Overlay === -->
@@ -111,7 +111,7 @@
               class="unit-info-value"
               [style]="{ color: 'rgba(34, 197, 94, 0.75)' }"
             >
-              {{ prerequisiteUnitCodes ? prerequisiteUnitCodes : "None" }}
+              {{ prerequisiteUnitCodes ? prerequisiteUnitCodes : 'None' }}
             </dd>
           </div>
           <!-- Prerequisite Number Required -->
@@ -124,7 +124,7 @@
               No. of Prerequisites 🛈
             </dt>
             <dd class="unit-info-value">
-              {{ prerequisiteNumReq > 0 ? prerequisiteNumReq : "None" }} of the
+              {{ prerequisiteNumReq > 0 ? prerequisiteNumReq : 'None' }} of the
               above
             </dd>
           </div>
@@ -247,11 +247,11 @@
 
   <!-- ! The loading overlay screen (this must be put here) -->
   @if (isLoading) {
-  <div class="loading-overlay">
-    <div class="loader">
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      <span>Loading Unit Map...</span>
+    <div class="loading-overlay">
+      <div class="loader">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <span>Loading Unit Map...</span>
+      </div>
     </div>
-  </div>
   }
 </div>

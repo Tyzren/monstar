@@ -2,9 +2,7 @@
 <div class="hero-section">
   <div class="hero-content">
     <!-- BIG Title -->
-    <h1 class="prevent-select" aria-label="Welcome to MonSTAR">
-      Mon<span class="star-gradient">STAR</span>
-    </h1>
+    <app-shiny-monstar-title></app-shiny-monstar-title>
 
     <!-- Description -->
     <div class="subheader-container">
@@ -44,9 +42,11 @@
 
   <!-- Floating Emotes -->
   <div class="floating-emotes-container">
-    @if (emoteLoadingComplete) { @for (emote of emotes; track $index) {
-    <img [src]="emote" class="floating-emote" loading="lazy" />
-    } }
+    @if (emoteLoadingComplete) {
+      @for (emote of emotes; track $index) {
+        <img [src]="emote" class="floating-emote" loading="lazy" />
+      }
+    }
   </div>
 </div>
 
@@ -64,37 +64,38 @@
     <div class="sponsors-track-container">
       <div class="sponsors-track">
         @for (sponsor of sponsors; track sponsor.name) {
-        <a
-          [href]="sponsor.url"
-          target="_blank"
-          rel="noopener noreferrer"
-          [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
-          class="sponsor-item"
-        >
-          @if (sponsor.logoType === 'image') {
-          <img
-            [src]="sponsor.imagePath"
-            [alt]="sponsor.name + ' logo'"
-            class="sponsor-image"
-          />
-          }
-        </a>
-        } @for (sponsor of sponsors; track sponsor.name + '-duplicate') {
-        <a
-          [href]="sponsor.url"
-          target="_blank"
-          rel="noopener noreferrer"
-          [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
-          class="sponsor-item"
-        >
-          @if (sponsor.logoType === 'image') {
-          <img
-            [src]="sponsor.imagePath"
-            [alt]="sponsor.name + ' logo'"
-            class="sponsor-image"
-          />
-          }
-        </a>
+          <a
+            [href]="sponsor.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
+            class="sponsor-item"
+          >
+            @if (sponsor.logoType === 'image') {
+              <img
+                [src]="sponsor.imagePath"
+                [alt]="sponsor.name + ' logo'"
+                class="sponsor-image"
+              />
+            }
+          </a>
+        }
+        @for (sponsor of sponsors; track sponsor.name + '-duplicate') {
+          <a
+            [href]="sponsor.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'Visit ' + sponsor.name + ' website'"
+            class="sponsor-item"
+          >
+            @if (sponsor.logoType === 'image') {
+              <img
+                [src]="sponsor.imagePath"
+                [alt]="sponsor.name + ' logo'"
+                class="sponsor-image"
+              />
+            }
+          </a>
         }
       </div>
     </div>
@@ -112,46 +113,46 @@
   </h2>
   <!-- Popular Units Carousel -->
   @if (loading) {
-  <!-- Show skeletons if loading -->
-  <p-carousel
-    [value]="[1, 2, 3, 4, 5, 6]"
-    [numVisible]="3"
-    [numScroll]="1"
-    [circular]="true"
-    [autoplayInterval]="4500"
-    [responsiveOptions]="responsiveOptions"
-    styleClass="custom-carousel"
-  >
-    <ng-template pTemplate="item">
-      <p-skeleton
-        width="20rem"
-        height="15rem"
-        styleClass="mx-auto"
-        [style]="{
-          'margin-bottom': '2em',
-          'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.2)'
-        }"
-      ></p-skeleton>
-    </ng-template>
-  </p-carousel>
+    <!-- Show skeletons if loading -->
+    <p-carousel
+      [value]="[1, 2, 3, 4, 5, 6]"
+      [numVisible]="3"
+      [numScroll]="1"
+      [circular]="true"
+      [autoplayInterval]="4500"
+      [responsiveOptions]="responsiveOptions"
+      styleClass="custom-carousel"
+    >
+      <ng-template pTemplate="item">
+        <p-skeleton
+          width="20rem"
+          height="15rem"
+          styleClass="mx-auto"
+          [style]="{
+            'margin-bottom': '2em',
+            'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.2)',
+          }"
+        ></p-skeleton>
+      </ng-template>
+    </p-carousel>
   } @else {
-  <!-- Show popular units if loaded -->
-  <p-carousel
-    [value]="popularUnits"
-    [numVisible]="3"
-    [numScroll]="1"
-    [circular]="true"
-    [showNavigators]="true"
-    [showIndicators]="true"
-    [responsiveOptions]="responsiveOptions"
-    styleClass="custom-carousel"
-  >
-    <ng-template let-unit pTemplate="item">
-      <div class="carousel-item-wrapper">
-        <app-unit-card [unit]="unit"></app-unit-card>
-      </div>
-    </ng-template>
-  </p-carousel>
+    <!-- Show popular units if loaded -->
+    <p-carousel
+      [value]="popularUnits"
+      [numVisible]="3"
+      [numScroll]="1"
+      [circular]="true"
+      [showNavigators]="true"
+      [showIndicators]="true"
+      [responsiveOptions]="responsiveOptions"
+      styleClass="custom-carousel"
+    >
+      <ng-template let-unit pTemplate="item">
+        <div class="carousel-item-wrapper">
+          <app-unit-card [unit]="unit"></app-unit-card>
+        </div>
+      </ng-template>
+    </p-carousel>
   }
 
   <!-- Divider -->

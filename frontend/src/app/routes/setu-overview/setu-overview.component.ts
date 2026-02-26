@@ -1,24 +1,35 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Setu } from '../../shared/models/setu.model';
-import { ViewportService, ViewportType } from '../../shared/services/viewport.service';
-import { Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SetuService } from '../../shared/services/setu.service';
-import { AuthService } from '../../shared/services/auth.service';
-import { ProfileDialogService } from '../../shared/services/profile-dialog.service';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { CarouselModule } from 'primeng/carousel';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CardModule } from 'primeng/card';
-import { SkeletonModule } from 'primeng/skeleton';
-import { TooltipModule } from 'primeng/tooltip';
-import { ButtonModule } from 'primeng/button';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { CarouselModule } from 'primeng/carousel';
 import { DividerModule } from 'primeng/divider';
 import { KnobModule } from 'primeng/knob';
-import { BASE_URL, getMetaSetuOverviewDescription, getMetaSetuOverviewKeywords, getMetaSetuOverviewOpenGraphDescription, getMetaSetuOverviewOpenGraphTitle, getMetaSetuOverviewTitle, getMetaSetuOverviewTwitterDescription, getMetaSetuOverviewTwitterTitle } from '../../shared/constants';
-import { Meta, Title } from '@angular/platform-browser';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TooltipModule } from 'primeng/tooltip';
+import { Subject, takeUntil } from 'rxjs';
+import {
+  BASE_URL,
+  getMetaSetuOverviewDescription,
+  getMetaSetuOverviewKeywords,
+  getMetaSetuOverviewOpenGraphDescription,
+  getMetaSetuOverviewOpenGraphTitle,
+  getMetaSetuOverviewTitle,
+  getMetaSetuOverviewTwitterDescription,
+  getMetaSetuOverviewTwitterTitle,
+} from '../../shared/constants/constants';
+import { Setu } from '../../shared/models/setu.model';
+import { AuthService } from '../../shared/services/auth.service';
+import { SetuService } from '../../shared/services/setu.service';
+import {
+  ViewportService,
+  ViewportType,
+} from '../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-setu-overview',
@@ -77,16 +88,16 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
     private setuService: SetuService,
     private viewportService: ViewportService,
     private authService: AuthService,
-    private profileDialogService: ProfileDialogService,
     private meta: Meta,
     private titleService: Title
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // Subscribe to auth state
-    this.authService.getCurrentUser()
+    this.authService
+      .getCurrentUser()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
+      .subscribe((user) => {
         this.isAuthenticated = user !== null;
         // Prevent body scrolling when not authenticated
         this.updateBodyScrollLock();
@@ -271,11 +282,9 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
     return tooltips[criteriaKey] || 'SETU evaluation criteria';
   }
 
-
-
-  /** 
+  /**
    *  ! |======================================================================|
-   *  ! | META TAGS                                                            
+   *  ! | META TAGS
    *  ! |======================================================================|
    */
 
@@ -290,33 +299,57 @@ export class SetuOverviewComponent implements OnInit, OnDestroy {
 
     const selectedSetu = this.getSelectedSetu();
     const aggregateScore = selectedSetu?.getAggregateScore();
-    const season = selectedSetu ? this.getSeasonDisplay(selectedSetu.Season) : undefined;
+    const season = selectedSetu
+      ? this.getSeasonDisplay(selectedSetu.Season)
+      : undefined;
     const pageUrl = `${BASE_URL}/setu/${this.unitCode}`;
 
     // Basic meta tags
-    this.titleService.setTitle(getMetaSetuOverviewTitle(this.unitCode.toUpperCase()));
-    this.meta.updateTag({ name: 'description', content: getMetaSetuOverviewDescription(this.unitCode.toUpperCase(), season) });
-    this.meta.updateTag({ name: 'keywords', content: getMetaSetuOverviewKeywords(this.unitCode.toUpperCase()) });
+    this.titleService.setTitle(
+      getMetaSetuOverviewTitle(this.unitCode.toUpperCase())
+    );
+    this.meta.updateTag({
+      name: 'description',
+      content: getMetaSetuOverviewDescription(
+        this.unitCode.toUpperCase(),
+        season
+      ),
+    });
+    this.meta.updateTag({
+      name: 'keywords',
+      content: getMetaSetuOverviewKeywords(this.unitCode.toUpperCase()),
+    });
 
     // Open Graph tags for social sharing
-    this.meta.updateTag({ property: 'og:title', content: getMetaSetuOverviewOpenGraphTitle(this.unitCode.toUpperCase()) });
-    this.meta.updateTag({ property: 'og:description', content: getMetaSetuOverviewOpenGraphDescription(this.unitCode.toUpperCase(), aggregateScore) });
+    this.meta.updateTag({
+      property: 'og:title',
+      content: getMetaSetuOverviewOpenGraphTitle(this.unitCode.toUpperCase()),
+    });
+    this.meta.updateTag({
+      property: 'og:description',
+      content: getMetaSetuOverviewOpenGraphDescription(
+        this.unitCode.toUpperCase(),
+        aggregateScore
+      ),
+    });
     this.meta.updateTag({ property: 'og:url', content: pageUrl });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
 
     // Twitter Card tags
     this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
-    this.meta.updateTag({ name: 'twitter:title', content: getMetaSetuOverviewTwitterTitle(this.unitCode.toUpperCase()) });
-    this.meta.updateTag({ name: 'twitter:description', content: getMetaSetuOverviewTwitterDescription(this.unitCode.toUpperCase(), aggregateScore) });
+    this.meta.updateTag({
+      name: 'twitter:title',
+      content: getMetaSetuOverviewTwitterTitle(this.unitCode.toUpperCase()),
+    });
+    this.meta.updateTag({
+      name: 'twitter:description',
+      content: getMetaSetuOverviewTwitterDescription(
+        this.unitCode.toUpperCase(),
+        aggregateScore
+      ),
+    });
 
     console.log('[SETU Overview] Meta tags updated');
-  }
-
-  /**
-   * Opens the profile dialog for login
-   */
-  openProfileDialog(): void {
-    this.profileDialogService.openDialog();
   }
 
   /**

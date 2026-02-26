@@ -1,0 +1,18 @@
+@import 'mixins';
+
+.logout-button-container {
+  display: flex;
+  justify-content: center;
+  background-color: rgb(197, 54, 54);
+  border-radius: 1rem;
+  padding: 1rem;
+
+  &:hover {
+    cursor: pointer;
+    @include button-hover;
+  }
+
+  .text-container {
+    
+  }
+}

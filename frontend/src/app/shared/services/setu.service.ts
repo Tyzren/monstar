@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Setu, SetuData } from '../models/setu.model';
 import { environment } from '../../../environments/environment';
+import { Setu, SetuData } from '../models/setu.model';
 
 @Injectable({
   providedIn: 'root',

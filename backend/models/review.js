@@ -1,47 +1,43 @@
-// Module Imports
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-// Review Schema
+/**
+ * @typedef {Object} IReview
+ * @property {import('mongoose').Types.ObjectId} _id - Review ID
+ * @property {string} title - Review title
+ * @property {string} semester - Semester taken (e.g., "S1", "S2")
+ * @property {number} year - Year taken
+ * @property {string} grade - Grade received
+ * @property {number} overallRating - Overall rating (0-5)
+ * @property {number} relevancyRating - Relevancy rating (0-5)
+ * @property {number} facultyRating - Faculty rating (0-5)
+ * @property {number} contentRating - Content rating (0-5)
+ * @property {string} description - Review description
+ * @property {number} likes - Number of likes
+ * @property {number} dislikes - Number of dislikes
+ * @property {import('mongoose').Types.ObjectId} unit - Unit ID reference
+ * @property {import('mongoose').Types.ObjectId} author - User ID reference
+ * @property {Date} createdAt - Creation timestamp
+ * @property {Date} updatedAt - Last update timestamp
+ */
+
 const reviewSchema = new Schema(
   {
-    // Review title
     title: { type: String, required: true },
-
-    // Semester taken
     semester: { type: String, required: true },
-
-    // Year taken
     year: { type: Number, required: true },
-
-    // Grade obtained for unit
     grade: { type: String, required: true },
 
-    // Overall rating given to the unit
     overallRating: { type: Number, required: true, min: 0, max: 5 },
-
-    // Relevancy rating
     relevancyRating: { type: Number, required: true, min: 0, max: 5 },
-
-    // Faculty rating
     facultyRating: { type: Number, required: true, min: 0, max: 5 },
-
-    // Content rating
     contentRating: { type: Number, required: true, min: 0, max: 5 },
 
-    // Review body text
     description: { type: String, required: true },
-
-    // Likes
     likes: { type: Number, min: 0, default: 0 },
-
-    // Dislikes
     dislikes: { type: Number, min: 0, default: 0 },
 
-    // Reference to the unit being reviewed
     unit: { type: mongoose.Schema.Types.ObjectId, ref: 'Unit', required: true },
-
-    // Reference to the user who wrote the review
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -62,6 +58,5 @@ reviewSchema.pre('save', function (next) {
   next();
 });
 
-// Export the Review model
 const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;
