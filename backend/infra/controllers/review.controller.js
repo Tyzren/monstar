@@ -43,15 +43,45 @@ class ReviewController {
    */
   static createReview = asyncHandler(async (req, res) => {
     const unitCode = req.params.unit.toLowerCase();
+    const authUserId = req.user?.id || req.user?._id;
+    const requestBody = req.body || {};
+    const requestedAuthorId = requestBody.author || requestBody.review_author;
 
-    // Verify that the author in the request body matches the authenticated user
-    if (req.body.review_author.toString() !== req.user.id.toString()) {
+    if (!authUserId) {
+      return res.status(401).json({
+        error: 'You are not authenticated',
+      });
+    }
+
+    // Verify that the author in the request body (if provided) matches token user
+    if (
+      requestedAuthorId &&
+      requestedAuthorId.toString() !== authUserId.toString()
+    ) {
       return res.status(403).json({
         error: 'You are not authorized to create a review for this unit',
       });
     }
 
-    const review = await ReviewService.createReview(unitCode, req.body);
+    // TODO: FIX THIS SLOP
+    // Normalize payload to current review schema and enforce author from token
+    const review = await ReviewService.createReview(unitCode, {
+      ...requestBody,
+      title: requestBody.title ?? requestBody.review_title,
+      semester: requestBody.semester ?? requestBody.review_semester,
+      grade: requestBody.grade ?? requestBody.review_grade,
+      year: requestBody.year ?? requestBody.review_year,
+      overallRating:
+        requestBody.overallRating ?? requestBody.review_overall_rating,
+      relevancyRating:
+        requestBody.relevancyRating ?? requestBody.review_relevancy_rating,
+      facultyRating:
+        requestBody.facultyRating ?? requestBody.review_faculty_rating,
+      contentRating:
+        requestBody.contentRating ?? requestBody.review_content_rating,
+      description: requestBody.description ?? requestBody.review_description,
+      author: authUserId,
+    });
     return res.status(201).json(review);
   });
 
