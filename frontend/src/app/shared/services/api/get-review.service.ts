@@ -21,4 +21,8 @@ export class GetReviewService {
       { params }
     );
   }
+
+  getReviewsByUser(userId: string): Observable<Array<IReviewFullyPopulated>> {
+    return this.http.get<Array<IReviewFullyPopulated>>(`${this.url}/reviews/user/${userId}`);
+  }
 }

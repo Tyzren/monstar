@@ -10,6 +10,13 @@
     transform: scale(1.02);
   }
 
+  // On touch devices, always show the delete button since hover never fires
+  @media (hover: none) {
+    .top-right-button {
+      opacity: 1 !important;
+    }
+  }
+
   .review-card {
     font-family: $poppins;
     margin-top: 20px;
@@ -50,6 +57,12 @@
       padding: 0;
       margin-top: 0.75rem;
       margin-bottom: 1rem;
+      cursor: pointer;
+      width: fit-content;
+
+      &:hover span {
+        text-decoration: underline;
+      }
 
       .profile-picture {
         width: 32px;
@@ -623,13 +636,9 @@ h6 {
   }
 }
 
-// * Compact variant - smaller, simplified card for previews
-.review-card-container.compact {
-  // Disable hover scale effect
-  &:hover {
-    transform: none;
-  }
-
+// * Compact + Profile variants - smaller, simplified card
+.review-card-container.compact,
+.review-card-container.profile {
   .review-card {
     padding: 14px;
     margin-top: 10px;
@@ -732,5 +741,33 @@ h6 {
     .review-column {
       padding-right: 10px;
     }
+  }
+}
+
+// * Profile-only: show delete button, smaller reaction buttons to fit two-column grid
+.review-card-container.profile {
+  .review-card .top-right-button {
+    display: block;
+  }
+
+  .thumb-buttons {
+    .thumbs {
+      font-size: 1rem;
+    }
+
+    span {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// * Compact-only: disable hover scale and hide delete button
+.review-card-container.compact {
+  &:hover {
+    transform: none;
+  }
+
+  .review-card .top-right-button {
+    display: none;
   }
 }

@@ -34,8 +34,10 @@
 @if (review && review.author) {
   <!-- Container for the whole review card -->
   <div
-    class="container mt-5 review-card-container"
+    class="container review-card-container"
+    [class.mt-5]="variant !== 'profile'"
     [class.compact]="variant === 'compact'"
+    [class.profile]="variant === 'profile'"
     (mouseenter)="deleteButtonState = 'visible'"
     (mouseleave)="deleteButtonState = 'hidden'"
   >
@@ -60,7 +62,10 @@
             <h5>{{ review.title || 'No Title' }}</h5>
 
             <!-- User -->
-            <p class="d-flex align-items-center user-section">
+            <p
+              class="d-flex align-items-center user-section"
+              [routerLink]="['/user', review.author.username]"
+            >
               <!-- Profile picture -->
               <img
                 [src]="review.author.profileImg || defaultProfileImg"

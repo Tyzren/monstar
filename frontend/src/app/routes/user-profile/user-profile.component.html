@@ -2,22 +2,48 @@
 
 <div class="page-container">
   <!-- Left profile panel -->
-  <div class="left">
-    <div class="user-header">
-      <img class="profile-img" [src]="state?.profileImg" />
-      <span class="username">{{ state?.username ?? 'username not found' }}</span>
+  @if (state) {
+    <app-profile-panel [state]="state" (logoutPressed)="logout()" />
+  } @else {
+    <div class="profile-panel-skeleton">
+      <div class="skeleton-header">
+        <p-skeleton shape="circle" size="50px" />
+        <p-skeleton width="10rem" height="1.2rem" borderRadius="8px" />
+      </div>
+      <p-skeleton width="100%" height="1rem" borderRadius="8px" />
+      <p-skeleton width="80%" height="1rem" borderRadius="8px" />
+      <p-skeleton width="100%" height="3rem" borderRadius="8px" />
     </div>
-    <p class="bio">
-      My name is jenul how are you?
-    </p>
-    <div class="field">
-      <i class="pi pi-graduation-cap"></i>
-      Bachelor of Computer Science
-    </div>
-
-    <app-logout-button></app-logout-button>
-  </div>
+  }
 
   <!-- Contributions panel RHS -->
-  <div class="right">testing</div>
+  <div class="right">
+    <h2>{{ state?.isCurrentUser ? 'Your amazing contributions' : 'Contributions' }}</h2>
+    @if (state) {
+      @for (review of state.reviews; track $index) {
+        <div class="review-group">
+          <div class="unit-title-header">
+            <h3>{{ review.unit.unitCode.toUpperCase() }}</h3>
+            <p>{{ review.unit.name }}</p>
+          </div>
+          <app-review-card
+            class="review"
+            [review]="review"
+            [unit]="review.unit"
+            [variant]="'profile'"
+          />
+        </div>
+      }
+    } @else {
+      @for (_ of [1, 2, 3]; track $index) {
+        <div class="review-group-skeleton">
+          <div class="skeleton-unit-header">
+            <p-skeleton width="5rem" height="1.3rem" borderRadius="8px" />
+            <p-skeleton width="8rem" height="0.9rem" borderRadius="8px" />
+          </div>
+          <p-skeleton width="100%" height="10rem" borderRadius="12px" />
+        </div>
+      }
+    }
+  </div>
 </div>

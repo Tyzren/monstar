@@ -51,9 +51,7 @@ class ReviewRepository {
    * @returns {Promise<Array<IReview>>}
    */
   static async findByUserId(userId) {
-    return await Review.find({ author: userId })
-      .populate('unit')
-      .populate('author');
+    return await Review.find({ author: userId }).populate('unit');
   }
 
   /**

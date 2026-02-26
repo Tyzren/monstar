@@ -6,6 +6,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule, SlicePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import {
   Component,
   EventEmitter,
@@ -54,6 +55,7 @@ import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit
     BadgeModule,
     WriteReviewUnitComponent,
     HighlightUnitPipe,
+    RouterLink,
   ],
   providers: [ConfirmationService],
   templateUrl: './review-card.component.html',
@@ -80,7 +82,7 @@ import { WriteReviewUnitComponent } from '../write-review-unit/write-review-unit
 export class ReviewCardComponent implements OnInit, OnDestroy {
   Math = Math;
 
-  @Input() variant: 'default' | 'compact' = 'default';
+  @Input() variant: 'default' | 'compact' | 'profile' = 'default';
 
   private review$ = new ReplaySubject<IReviewAuthorPopulated>(1);
   private _review: IReviewAuthorPopulated | IReviewFullyPopulated | undefined;
