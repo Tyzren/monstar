@@ -11,6 +11,8 @@ export class DeleteReviewService {
   private http = inject(HttpClient);
 
   deleteById(id: string) {
-    return this.http.delete(`${this.urlV2}/reviews/delete/${id}`);
+    return this.http.delete(`${this.urlV2}/reviews/delete/${id}`, {
+      withCredentials: true,
+    });
   }
 }
