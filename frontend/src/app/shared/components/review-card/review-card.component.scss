@@ -1,4 +1,4 @@
-@import '../../../_variables.scss';
+@import 'variables';
 
 // * Review card
 .review-card-container {
@@ -630,7 +630,6 @@ h6 {
     transform: none;
   }
 
-
   .review-card {
     padding: 14px;
     margin-top: 10px;
@@ -735,4 +734,3 @@ h6 {
     }
   }
 }
-

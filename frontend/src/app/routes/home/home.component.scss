@@ -1,4 +1,4 @@
-@import '../../_variables.scss';
+@import 'variables';
 
 // * Hero Section
 .hero-section {
@@ -218,7 +218,6 @@
       opacity: 0; // Fully faded out
     }
   }
-
 }
 
 // Floating emotes

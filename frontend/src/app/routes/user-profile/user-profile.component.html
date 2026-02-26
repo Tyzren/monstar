@@ -1,6 +1,7 @@
 @let state = state$ | async;
 
 <div class="page-container">
+  <!-- Left profile panel -->
   <div class="left">
     <div class="user-header">
       <img class="profile-img" [src]="state?.profileImg" />
@@ -13,6 +14,10 @@
       <i class="pi pi-graduation-cap"></i>
       Bachelor of Computer Science
     </div>
+
+    <app-logout-button></app-logout-button>
   </div>
+
+  <!-- Contributions panel RHS -->
   <div class="right">testing</div>
 </div>
