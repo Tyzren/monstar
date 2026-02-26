@@ -1,9 +1,22 @@
 /* ----------------------- Load environment variables ----------------------- */
 require('dotenv').config({ quiet: true });
-require('module-alias/register');
+// require('module-alias/register');
 
 /* ----------------------------- Module imports ----------------------------- */
 const path = require('path');
+
+require('module-alias').addAliases({
+  '@models': path.join(__dirname, 'models'),
+  '@routes': path.join(__dirname, 'infra/routes'),
+  '@controllers': path.join(__dirname, 'infra/controllers'),
+  '@providers': path.join(__dirname, 'infra/providers'),
+  '@middleware': path.join(__dirname, 'infra/middleware'),
+  '@services': path.join(__dirname, 'infra/services'),
+  '@repositories': path.join(__dirname, 'infra/repositories'),
+  '@utilities': path.join(__dirname, 'infra/utilities'),
+  '@constants': path.join(__dirname, 'constants'),
+  '@docs': path.join(__dirname, 'docs'),
+});
 
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
