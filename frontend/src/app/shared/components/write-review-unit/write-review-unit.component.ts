@@ -71,8 +71,10 @@ export class WriteReviewUnitComponent implements OnInit {
 
   @Input({ required: true }) unit: IUnit | undefined;
 
-  @Input() review: IUpdateReview | undefined = UpdateReviewSchema.safeParse({})
-    .data!;
+  @Input() review: IUpdateReview | undefined = UpdateReviewSchema.safeParse({
+    _id: '',
+    author: '',
+  }).data;
 
   @Input({ required: true }) editMode: boolean = false;
   @Input() visible: boolean = false;

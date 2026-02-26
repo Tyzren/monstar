@@ -1,5 +1,7 @@
 @let state = state$ | async;
 
+<p-toast></p-toast>
+
 <div class="page-container">
   <!-- Left profile panel -->
   @if (state) {
@@ -31,6 +33,8 @@
             [review]="review"
             [unit]="review.unit"
             [variant]="'profile'"
+            (reviewEdited)="onEditReview($event)"
+            (reviewDeleted)="onDeleteReview($event)"
           />
         </div>
       }

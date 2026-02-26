@@ -129,7 +129,10 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   viewportType: ViewportType = 'desktop';
 
   // Inputted to child in template (write-review-unit)
-  reviewEdit: IUpdateReview = UpdateReviewSchema.safeParse({}).data!;
+  reviewEdit: IUpdateReview = UpdateReviewSchema.safeParse({
+    _id: '',
+    author: '',
+  }).data!;
   startEditReview(review: IReviewAuthorPopulated) {
     this.reviewEdit = UpdateReviewSchema.parse({
       ...review,
