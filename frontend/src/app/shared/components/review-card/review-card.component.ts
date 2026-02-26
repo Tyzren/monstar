@@ -131,7 +131,10 @@ export class ReviewCardComponent implements OnInit, OnDestroy {
   // Inputted to child in template (write-review-unit)
   reviewEdit: IUpdateReview = UpdateReviewSchema.safeParse({}).data!;
   startEditReview(review: IReviewAuthorPopulated) {
-    this.reviewEdit = UpdateReviewSchema.parse(review);
+    this.reviewEdit = UpdateReviewSchema.parse({
+      ...review,
+      author: typeof review.author === 'object' ? review.author._id : review.author,
+    });
     if (this.writeReviewDialog) {
       this.writeReviewDialog.openDialog();
     }
