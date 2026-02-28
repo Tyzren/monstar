@@ -231,8 +231,8 @@
 }
 .floating-emote {
   position: absolute;
-  width: 128px;
-  height: 128px;
+  // width: 128px;
+  // height: 128px;
   opacity: 0;
   animation: fade-in 0.5s forwards;
   object-fit: contain;
