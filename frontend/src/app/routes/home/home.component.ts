@@ -260,7 +260,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const emoteList = [
       'emotes/emote-angry.webp',
       'emotes/emote-cool.webp',
-      'emotes/emote-default.webp',
       'emotes/emote-fine.webp',
       'emotes/emote-nerd.webp',
       'emotes/emote-study.webp',

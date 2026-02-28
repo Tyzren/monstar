@@ -558,6 +558,13 @@ h2 {
   }
 }
 
+.see-more-button-row {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+}
+
 // === Media Queries ===
 // Hide the Popular Units header and carousel on small screens
 @media screen and (max-width: 440px) {
