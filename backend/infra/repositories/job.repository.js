@@ -9,4 +9,9 @@ class JobRepository {
         const all = await this.findAll();
         return all.filter(job => job['Status']?.toUpperCase() === status.toUpperCase());
     }
+
+    static async findById(id) {
+        const all = await this.findAll();
+        return all.find(job => job.id === id) ?? null;
+    }
 }

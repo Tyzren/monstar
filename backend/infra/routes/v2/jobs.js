@@ -25,4 +25,11 @@ router.get(
     JobController.getByStatus
 );
 
+router.get(
+    '/:jobId',
+    // #swagger.tags = ['Jobs']
+    // #swagger.summary = 'Get a single job listing by ID'
+    JobController.getById
+);
+
 module.exports = router;

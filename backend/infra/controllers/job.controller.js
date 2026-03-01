@@ -17,4 +17,10 @@ class JobController {
         const jobs = await JobService.fetchByStatus(status);
         return res.status(200).json(jobs);
     });
+
+    static getById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const job = await JobService.fetchById(id);
+        return res.status(200).json(job);
+    });
 }

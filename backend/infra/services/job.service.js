@@ -33,4 +33,15 @@ class JobService {
           this.CACHE_TTL
         );
     };
+
+    static fetchById = async (id) => {
+        const cacheKey = `${this.CACHE_PREFIX}:id:${id}`;
+        const job = await CacheProvider.getOrSet(
+          cacheKey,
+          async () => await JobRepository.findById(id),
+          this.CACHE_TTL
+        );
+        if (!job) throw new Error404NotFound('Job listing not found');
+        return job;
+    };
 }
