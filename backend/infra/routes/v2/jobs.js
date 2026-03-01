@@ -26,17 +26,17 @@ router.get(
 );
 
 router.get(
-    '/:jobId',
-    // #swagger.tags = ['Jobs']
-    // #swagger.summary = 'Get a single job listing by ID'
-    JobController.getById
-);
-
-router.get(
     '/role-type/:roleType',
     // #swagger.tags = ['Jobs']
     // #swagger.summary = 'Get job listings by role type category'
     JobController.getByRoleType
+);
+
+router.get(
+    '/:jobId',
+    // #swagger.tags = ['Jobs']
+    // #swagger.summary = 'Get a single job listing by ID'
+    JobController.getById
 );
 
 router.post(

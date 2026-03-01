@@ -59,3 +59,5 @@ class JobService {
         NotionProvider.clearMetaCache();
     };
 }
+
+module.exports = JobService;

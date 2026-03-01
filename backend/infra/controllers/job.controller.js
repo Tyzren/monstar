@@ -44,3 +44,5 @@ class JobController {
             .json({ message: 'Jobs cache invalidated successfully' });
     });
 }
+
+module.exports = JobController;
