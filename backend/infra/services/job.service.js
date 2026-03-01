@@ -15,4 +15,22 @@ class JobService {
             this.CACHE_TTL
         );
     };
+
+    static fetchByStatus = async (status) => {
+        const cacheKey = `${this.CACHE_PREFIX}:status:${status}`;
+        return await CacheProvider.getOrSet(
+          cacheKey,
+          async () => await JobRepository.findByStatus(status),
+          this.CACHE_TTL
+        );
+    };
+    
+    static fetchOpen = async () => {
+        const cacheKey = `${this.CACHE_PREFIX}:status:OPEN`;
+        return await CacheProvider.getOrSet(
+          cacheKey,
+          async () => await JobRepository.findByStatus('OPEN'),
+          this.CACHE_TTL
+        );
+    };
 }

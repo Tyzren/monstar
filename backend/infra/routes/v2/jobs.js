@@ -11,4 +11,18 @@ router.get(
     JobController.getAll
 );
 
+router.get(
+    '/open',
+    // #swagger.tags = ['Jobs']
+    // #swagger.summary = 'Get all open job listings'
+    JobController.getOpen
+);
+
+router.get(
+    '/status/:status',
+    // #swagger.tags = ['Jobs']
+    // #swagger.summary = 'Get job listings by status (OPEN, CLOSED, Opening Soon)'
+    JobController.getByStatus
+);
+
 module.exports = router;
