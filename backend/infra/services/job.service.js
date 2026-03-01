@@ -44,4 +44,13 @@ class JobService {
         if (!job) throw new Error404NotFound('Job listing not found');
         return job;
     };
+
+    static fetchByRoleType = async (roleType) => {
+        const cacheKey = `${this.CACHE_PREFIX}:roleType:${roleType}`;
+        return await CacheProvider.getOrSet(
+          cacheKey,
+          async () => await JobRepository.findByRoleType(roleType),
+          this.CACHE_TTL
+        );
+    };
 }

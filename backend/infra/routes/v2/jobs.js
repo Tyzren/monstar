@@ -32,4 +32,11 @@ router.get(
     JobController.getById
 );
 
+router.get(
+    '/role-type/:roleType',
+    // #swagger.tags = ['Jobs']
+    // #swagger.summary = 'Get job listings by role type category'
+    JobController.getByRoleType
+);
+
 module.exports = router;

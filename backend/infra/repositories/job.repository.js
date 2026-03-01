@@ -14,4 +14,12 @@ class JobRepository {
         const all = await this.findAll();
         return all.find(job => job.id === id) ?? null;
     }
+
+    static async findByRoleType(roleType) {
+        const all = await this.findAll();
+        const target = roleType.toLowerCase();
+        return all.filter((job) =>
+            (job['Role Type'] || []).some((rt) => rt.toLowerCase() === target)
+        );
+    }
 }
