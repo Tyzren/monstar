@@ -36,4 +36,11 @@ class JobController {
         const jobs = await JobService.fetchByRoleType(normalizeJobRoleType(roleType));
         return res.status(200).json(jobs);
     });
+
+    static refreshCache = asyncHandler(async (req, res) => {
+        await JobService.invalidateCache();
+        return res
+            .status(200)
+            .json({ message: 'Jobs cache invalidated successfully' });
+    });
 }

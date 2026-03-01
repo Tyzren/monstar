@@ -39,4 +39,12 @@ router.get(
     JobController.getByRoleType
 );
 
+router.post(
+    '/refresh-cache',
+    userMiddleware,
+    // #swagger.tags = ['Jobs']
+    // #swagger.summary = 'Invalidate jobs cache (auth required)'
+    JobController.refreshCache
+);
+
 module.exports = router;
