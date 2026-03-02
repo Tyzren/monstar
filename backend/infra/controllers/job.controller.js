@@ -31,8 +31,8 @@ class JobController {
   });
 
   static getById = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const job = await JobService.fetchById(id);
+    const { notionId } = req.params;
+    const job = await JobService.fetchByNotionId(notionId);
     return res.status(200).json(job);
   });
 

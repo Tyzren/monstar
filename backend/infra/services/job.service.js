@@ -34,11 +34,11 @@ class JobService {
     );
   };
 
-  static fetchById = async (id) => {
-    const cacheKey = `${this.CACHE_PREFIX}:id:${id}`;
+  static fetchByNotionId = async (notionId) => {
+    const cacheKey = `${this.CACHE_PREFIX}:notionId:${notionId}`;
     const job = await CacheProvider.getOrSet(
       cacheKey,
-      async () => await JobRepository.findById(id),
+      async () => await JobRepository.findByNotionId(notionId),
       this.CACHE_TTL
     );
     if (!job) throw new Error404NotFound('Job listing not found');

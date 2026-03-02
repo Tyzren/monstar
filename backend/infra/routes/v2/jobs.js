@@ -34,7 +34,7 @@ router.get(
 );
 
 router.get(
-  '/:jobId',
+  '/:notionId',
   // #swagger.tags = ['Jobs']
   // #swagger.summary = 'Get a single job listing by ID'
   JobController.getById

@@ -12,9 +12,9 @@ class JobRepository {
     );
   }
 
-  static async findById(id) {
+  static async findByNotionId(notionId) {
     const all = await this.findAll();
-    return all.find((job) => job.id === id) ?? null;
+    return all.find((job) => job.notionId === notionId) ?? null;
   }
 
   static async findByRoleType(roleType) {

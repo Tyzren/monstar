@@ -133,9 +133,9 @@ class NotionProvider {
    */
   static _parseRow(block, schema) {
     const props = block.value?.value?.properties ?? block.value?.properties ?? {};
-    const id = block.value?.value?.id ?? block.value?.id;
+    const notionId = block.value?.value?.id ?? block.value?.id;
 
-    const row = { id };
+    const row = { notionId };
 
     for (const [key, def] of Object.entries(schema)) {
       const raw = props[key];
