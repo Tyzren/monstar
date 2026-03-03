@@ -26,7 +26,7 @@ class OrgLogoController {
   });
 
   static delete = asyncHandler(async (req, res) => {
-    const organisation = decodeURIComponent(req.params.organisation);
+    const organisation = req.params.organisation;
     const deleted = await OrgLogoService.deleteLogo(organisation);
 
     if (!deleted) {
