@@ -42,6 +42,11 @@ async function generateSitemaps() {
         priority: 0.8,
       },
       {
+        url: 'https://monstar.wired.org.au/jobs',
+        changefreq: 'daily',
+        priority: 0.8,
+      },
+      {
         url: 'https://monstar.wired.org.au/about',
         changefreq: 'monthly',
         priority: 0.6,

@@ -14,6 +14,16 @@ import { Meta, Title } from '@angular/platform-browser';
 import { IJob } from '@models/job.schema';
 import { JobService } from '@services/api/jobs.api.service';
 import { UserService } from '@services/api/user.service';
+import {
+  BASE_URL,
+  META_AUTHOR,
+  META_JOBS_DESCRIPTION,
+  META_JOBS_KEYWORDS,
+  META_JOBS_OPEN_GRAPH_DESCRIPTION,
+  META_JOBS_TITLE,
+  META_JOBS_TWITTER_DESCRIPTION,
+  META_SITENAME,
+} from '../../shared/constants/constants';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { DropdownModule } from 'primeng/dropdown';
@@ -103,8 +113,23 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
     window.removeEventListener('resize', this.resizeHandler);
     document.body.style.overflow = '';
     this.footerService.showFooter();
+
+    // Remove meta tags
     this.meta.removeTag("name='description'");
     this.meta.removeTag("name='keywords'");
+    this.meta.removeTag("name='author'");
+    this.meta.removeTag("property='og:site_name'");
+    this.meta.removeTag("property='og:title'");
+    this.meta.removeTag("property='og:description'");
+    this.meta.removeTag("property='og:url'");
+    this.meta.removeTag("property='og:type'");
+    this.meta.removeTag("property='og:locale'");
+    this.meta.removeTag("name='twitter:card'");
+    this.meta.removeTag("name='twitter:title'");
+    this.meta.removeTag("name='twitter:description'");
+
+    // Remove JSON-LD structured data
+    this.removeJsonLd();
   }
 
   private loadJobs(): void {
@@ -119,6 +144,7 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
           this.orgLogoMap = buildOrgLogoMap(jobs, logos);
           this.buildRoleTypeOptions();
           this.applyFilters();
+          this.injectJsonLd(jobs);
           this.loading = false;
         },
         error: () => {
@@ -225,16 +251,90 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
   }
 
   private updateMetaTags(): void {
-    this.titleService.setTitle('Jobs Board | MonSTAR');
+    const pageUrl = BASE_URL + '/jobs';
+
+    // Set the document title
+    this.titleService.setTitle(META_JOBS_TITLE);
+
+    // Basic meta tags
     this.meta.updateTag({
       name: 'description',
-      content:
-        'Browse student job opportunities, internships, and graduate roles curated for Monash students.',
+      content: META_JOBS_DESCRIPTION,
+    });
+    this.meta.updateTag({ name: 'keywords', content: META_JOBS_KEYWORDS });
+    this.meta.updateTag({ name: 'author', content: META_AUTHOR });
+
+    // Open Graph tags for social sharing
+    this.meta.updateTag({ property: 'og:site_name', content: META_SITENAME });
+    this.meta.updateTag({ property: 'og:title', content: META_JOBS_TITLE });
+    this.meta.updateTag({
+      property: 'og:description',
+      content: META_JOBS_OPEN_GRAPH_DESCRIPTION,
+    });
+    this.meta.updateTag({ property: 'og:url', content: pageUrl });
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:locale', content: 'en_AU' });
+
+    // Twitter Card tags
+    this.meta.updateTag({
+      name: 'twitter:card',
+      content: 'summary_large_image',
     });
     this.meta.updateTag({
-      name: 'keywords',
-      content:
-        'monash jobs, student jobs, internships, graduate roles, monash university',
+      name: 'twitter:title',
+      content: META_JOBS_TITLE,
     });
+    this.meta.updateTag({
+      name: 'twitter:description',
+      content: META_JOBS_TWITTER_DESCRIPTION,
+    });
+  }
+
+  private injectJsonLd(jobs: IJob[]): void {
+    this.removeJsonLd();
+
+    const openJobs = jobs.filter((job) => job.status === 'OPEN');
+    const itemListElements = openJobs.map((job, index) => ({
+      '@type': 'JobPosting',
+      position: index + 1,
+      title: job.opportunityTitle,
+      hiringOrganization: {
+        '@type': 'Organization',
+        name: job.organisation,
+      },
+      employmentType: job.roleType,
+      validThrough: job.closeDate
+        ? new Date(job.closeDate).toISOString().split('T')[0]
+        : undefined,
+      url: job.applicationLink,
+      datePosted: job.lastVerified
+        ? new Date(job.lastVerified).toISOString().split('T')[0]
+        : undefined,
+    }));
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Monash University Student Roles',
+      description: META_JOBS_DESCRIPTION,
+      url: BASE_URL + '/jobs',
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: itemListElements,
+      },
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'jobs-board-jsonld';
+    script.textContent = JSON.stringify(jsonLd);
+    document.head.appendChild(script);
+  }
+
+  private removeJsonLd(): void {
+    const existing = document.getElementById('jobs-board-jsonld');
+    if (existing) {
+      existing.remove();
+    }
   }
 }

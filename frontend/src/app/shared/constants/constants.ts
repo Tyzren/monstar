@@ -52,6 +52,26 @@ export const META_HOME_OPEN_GRAPH_DESCRIPTION =
 export const META_HOME_TWITTER_DESCRIPTION =
   'Find Monash University Units based on Student Reviews and Ratings.';
 
+// * Jobs Board ----------------------------------------------------------------|
+// Title
+export const META_JOBS_TITLE = 'Monash University Student Roles | MonSTAR';
+
+// Description
+export const META_JOBS_DESCRIPTION =
+  'Browse roles for student teams, clubs and societies at Monash University.';
+
+// Keywords
+export const META_JOBS_KEYWORDS =
+  'monash student roles, student opportunities, internships, student experience, monash university, part-time roles monash, MonSTAR roles board';
+
+// Open Graph Description
+export const META_JOBS_OPEN_GRAPH_DESCRIPTION =
+  'Discover student roles at Monash University - student teams, clubs and societies.';
+
+// Twitter Description
+export const META_JOBS_TWITTER_DESCRIPTION =
+  'Browse roles at student teams, clubs and societies for Monash University students.';
+
 // * Unit list ----------------------------------------------------------------|
 // Title
 export const META_UNIT_LIST_TITLE =
