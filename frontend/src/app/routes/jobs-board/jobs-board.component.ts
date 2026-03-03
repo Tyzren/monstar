@@ -194,7 +194,7 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
   }
 
   onIconClick(event: MouseEvent, job: IJob): void {
-    if (this.isAdmin && !this.getLogoUrl(job)) {
+    if (this.isAdmin) {
       event.stopPropagation();
       this.onLogoUpload(job);
     }

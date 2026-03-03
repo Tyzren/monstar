@@ -94,7 +94,7 @@
               >
                 <div
                   class="job-card-icon"
-                  [class.admin-clickable]="isAdmin && !getLogoUrl(job)"
+                  [class.admin-clickable]="isAdmin"
                   (click)="onIconClick($event, job)"
                 >
                   @if (getLogoUrl(job)) {
