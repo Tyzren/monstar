@@ -11,19 +11,19 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
+import { IJob } from '@models/job.schema';
 import { JobService } from '@services/api/jobs.api.service';
 import { UserService } from '@services/api/user.service';
-import { IJob } from '@models/job.schema';
-import { buildOrgLogoMap } from '../../shared/utils/string-similarity';
-import { forkJoin } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
+import { ChipModule } from 'primeng/chip';
 import { DropdownModule } from 'primeng/dropdown';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
-import { ChipModule } from 'primeng/chip';
 import { ToolbarModule } from 'primeng/toolbar';
+import { forkJoin } from 'rxjs';
 import { FooterService } from '../../shared/services/footer.service';
+import { buildOrgLogoMap } from '../../shared/utils/string-similarity';
 
 @Component({
   selector: 'app-jobs-board',
@@ -151,10 +151,7 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
         return a.status === 'OPEN' ? -1 : 1;
       });
 
-    if (
-      this.selectedJob &&
-      !this.filteredJobs.includes(this.selectedJob)
-    ) {
+    if (this.selectedJob && !this.filteredJobs.includes(this.selectedJob)) {
       this.selectedJob = this.filteredJobs[0] || null;
     }
 
