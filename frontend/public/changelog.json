@@ -6,6 +6,10 @@
         {
           "month": 2,
           "content": {
+            "Student Roles Board!": [
+              "A really cool feature, that makes MonSTAR your go to place to find university student teams, clubs and societies that are looking for students in various roles.",
+              "Thanks to @openuniroles we were able to integrate their data into a beautiful student roles board."
+            ],
             "New Login and Profile Page": [
               "We migrated from a ugly profile dialog to a full page layout.",
               "Added a new full page login page.",
