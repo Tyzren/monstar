@@ -12,6 +12,8 @@ const redis =
 class CacheProvider {
   static CLIENT = redis;
   static POPULAR_UNITS_TTL = 604800; // 1 week
+  /** Return this from fetchFn to skip caching the result. */
+  static SKIP_CACHE = Symbol('SKIP_CACHE');
 
   /**
    * Get cached data or fetch from source
@@ -23,7 +25,8 @@ class CacheProvider {
     if (!this.CLIENT) {
       if (process.env.NODE_ENV !== 'test')
         console.warn('Redis not configured, fetching directly');
-      return await fetchFn();
+      const result = await fetchFn();
+      return result === this.SKIP_CACHE ? [] : result;
     }
 
     try {
@@ -34,12 +37,15 @@ class CacheProvider {
 
       const data = await fetchFn();
 
+      if (data === this.SKIP_CACHE) return [];
+
       await redis.setex(key, ttl, JSON.stringify(data));
 
       return data;
     } catch (err) {
       console.error('Redis error:', err);
-      return await fetchFn();
+      const result = await fetchFn();
+      return result === this.SKIP_CACHE ? [] : result;
     }
   }
 

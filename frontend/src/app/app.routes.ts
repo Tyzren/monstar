@@ -13,6 +13,7 @@ import { TermsAndCondsComponent } from './routes/terms-and-conds/terms-and-conds
 import { UnitListComponent } from './routes/unit-list/unit-list.component';
 import { UnitMapComponent } from './routes/unit-map/unit-map.component';
 import { UnitOverviewComponent } from './routes/unit-overview/unit-overview.component';
+import { JobsBoardComponent } from './routes/jobs-board/jobs-board.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
     ? [{ path: 'setu/:unitCode', component: SetuOverviewComponent }]
     : []),
   { path: 'terms-and-conditions', component: TermsAndCondsComponent },
+  { path: 'jobs', component: JobsBoardComponent },
   { path: 'about', component: AboutComponent },
   { path: 'changelog', component: ChangelogComponent },
 

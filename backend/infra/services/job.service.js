@@ -11,7 +11,11 @@ class JobService {
     const cacheKey = `${this.CACHE_PREFIX}:all`;
     return await CacheProvider.getOrSet(
       cacheKey,
-      async () => await JobRepository.findAll(),
+      async () => {
+        const jobs = await JobRepository.findAll();
+        if (jobs.length === 0) return CacheProvider.SKIP_CACHE;
+        return jobs;
+      },
       this.CACHE_TTL
     );
   };
