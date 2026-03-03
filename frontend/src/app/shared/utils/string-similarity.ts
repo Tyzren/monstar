@@ -45,7 +45,7 @@ export function buildOrgLogoMap(
   // Index logos by normalised name
   const logoIndex = new Map<string, string>();
   for (const logo of logos) {
-    logoIndex.set(logo.organisation, logo.logoUrl);
+    logoIndex.set(logo.organisation.toLowerCase().trim(), logo.logoUrl);
   }
 
   // Get unique org names from jobs
