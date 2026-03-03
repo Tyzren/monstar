@@ -92,6 +92,7 @@ app.use('/api/v2/users', require('./infra/routes/v2/users'));
 app.use('/api/v1/notifications', require('./infra/routes/v1/notifications'));
 app.use('/api/v1/github', require('./infra/routes/v1/github'));
 app.use('/api/v1/setus', require('./infra/routes/v1/setus'));
+app.use('/api/v2/jobs', require('./infra/routes/v2/jobs'));
 if (isDevelopment && !isProductionMachine) {
   app.use('/api/admin', require('./infra/routes/v1/admin'));
 }
