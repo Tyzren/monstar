@@ -1,11 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
-const mongoose = require('mongoose');
+const backendRoot = path.join(__dirname, '..', '..');
+
 require('dotenv').config({
-  path: path.join(__dirname, '..', '.env'),
+  path: path.join(backendRoot, '.env'),
   quiet: true,
 });
+
+require('module-alias').addAliases({
+  '@models': path.join(backendRoot, 'models'),
+});
+
+const mongoose = require('mongoose');
 
 const MONGODB_URI = process.env.MONGODB_CONN_STRING;
 const TODAY = new Date().toISOString().split('T')[0];
@@ -121,7 +128,7 @@ async function generateSitemaps() {
     const sitemapIndex = generateSitemapIndexXML();
 
     // Output directory
-    const outputDir = path.join(__dirname, '..', '..', 'frontend', 'public');
+    const outputDir = path.join(backendRoot, '..', 'frontend', 'public');
 
     // Write sitemaps to files
     fs.writeFileSync(path.join(outputDir, 'sitemap-index.xml'), sitemapIndex);
