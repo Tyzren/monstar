@@ -12,7 +12,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
 import { JobService } from '@services/api/jobs.api.service';
+import { UserService } from '@services/api/user.service';
 import { IJob } from '@models/job.schema';
+import { buildOrgLogoMap } from '../../shared/utils/string-similarity';
+import { forkJoin } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
@@ -41,9 +44,11 @@ import { FooterService } from '../../shared/services/footer.service';
 })
 export class JobsBoardComponent implements OnInit, OnDestroy {
   @ViewChild('jobsBoardContainer') jobsBoardContainer!: ElementRef;
+  @ViewChild('logoFileInput') logoFileInput!: ElementRef<HTMLInputElement>;
 
   private destroyRef = inject(DestroyRef);
   private jobService = inject(JobService);
+  private userService = inject(UserService);
   private meta = inject(Meta);
   private titleService = inject(Title);
   private footerService = inject(FooterService);
@@ -53,6 +58,10 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
   selectedJob: IJob | null = null;
   mobileDetailOpen = false;
   loading = true;
+
+  isAdmin = false;
+  orgLogoMap = new Map<string, string>();
+  private _uploadTargetOrg = '';
 
   statusFilter = 'All';
   statusOptions = [
@@ -82,6 +91,12 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
     window.addEventListener('resize', this.resizeHandler);
     this.updateMetaTags();
     this.loadJobs();
+
+    this.userService.currentUser$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => {
+        this.isAdmin = !!user?.admin;
+      });
   }
 
   ngOnDestroy(): void {
@@ -93,12 +108,15 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
   }
 
   private loadJobs(): void {
-    this.jobService
-      .getAllJobs()
+    forkJoin({
+      jobs: this.jobService.getAllJobs(),
+      logos: this.jobService.getOrgLogos(),
+    })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (jobs) => {
+        next: ({ jobs, logos }) => {
           this.jobs = jobs;
+          this.orgLogoMap = buildOrgLogoMap(jobs, logos);
           this.buildRoleTypeOptions();
           this.applyFilters();
           this.loading = false;
@@ -169,6 +187,37 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
       month: 'short',
       year: 'numeric',
     });
+  }
+
+  getLogoUrl(job: IJob): string | undefined {
+    return this.orgLogoMap.get(job.organisation.toLowerCase().trim());
+  }
+
+  onLogoUpload(job: IJob): void {
+    this._uploadTargetOrg = job.organisation;
+    this.logoFileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file || !this._uploadTargetOrg) return;
+
+    this.jobService
+      .uploadOrgLogo(file, this._uploadTargetOrg)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          const normalised = this._uploadTargetOrg.toLowerCase().trim();
+          this.orgLogoMap.set(normalised, res.data.logoUrl);
+          this._uploadTargetOrg = '';
+          input.value = '';
+        },
+        error: () => {
+          this._uploadTargetOrg = '';
+          input.value = '';
+        },
+      });
   }
 
   private updateMetaTags(): void {

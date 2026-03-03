@@ -28,5 +28,24 @@ const storage = new CloudinaryStorage({
   },
 });
 
-// Export the Cloudinary instance and storage engine
-module.exports = { cloudinary, storage };
+// Create a Cloudinary storage instance for organisation logos
+const orgStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'orgs',
+    allowed_formats: ['jpg', 'png', 'jpeg', 'svg', 'webp'],
+    transformation: [
+      {
+        width: 200,
+        height: 200,
+        crop: 'fill',
+        gravity: 'auto',
+        fetch_format: 'auto',
+        quality: 'auto',
+      },
+    ],
+  },
+});
+
+// Export the Cloudinary instance and storage engines
+module.exports = { cloudinary, storage, orgStorage };

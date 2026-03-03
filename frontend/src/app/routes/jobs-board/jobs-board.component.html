@@ -1,3 +1,11 @@
+<input
+  #logoFileInput
+  type="file"
+  accept="image/*"
+  style="display: none"
+  (change)="onFileSelected($event)"
+/>
+
 <div #jobsBoardContainer class="jobs-board-container">
   <!-- Toolbar -->
   <p-toolbar styleClass="jobs-toolbar">
@@ -58,8 +66,19 @@
               [class.active]="selectedJob === job"
               (click)="selectJob(job)"
             >
-              <div class="job-card-icon">
-                <i class="pi pi-building"></i>
+              <div
+                class="job-card-icon"
+                [class.admin-clickable]="isAdmin && !getLogoUrl(job)"
+                (click)="$event.stopPropagation(); isAdmin && !getLogoUrl(job) && onLogoUpload(job)"
+              >
+                @if (getLogoUrl(job)) {
+                  <img [src]="getLogoUrl(job)" [alt]="job.organisation + ' logo'" />
+                } @else if (isAdmin) {
+                  <i class="pi pi-building"></i>
+                  <span class="upload-hint">+</span>
+                } @else {
+                  <i class="pi pi-building"></i>
+                }
               </div>
               <div class="job-card-body">
                 <div class="job-card-header">

@@ -18,7 +18,7 @@ class ReviewController {
   static getMostLiked = asyncHandler(async (req, res) => {
     const reviews = await ReviewService.fetchMostLiked(req.query.n);
     return res.status(200).json(reviews);
-  })
+  });
 
   /**
    * Get all reviews for a specific unit

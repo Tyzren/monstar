@@ -1,9 +1,14 @@
 const express = require('express');
+const multer = require('multer');
 
 const JobController = require('@controllers/job.controller');
+const OrgLogoController = require('@controllers/orgLogo.controller');
+const adminMiddleware = require('@middleware/admin.middleware');
 const userMiddleware = require('@middleware/user.middleware');
+const { orgStorage } = require('@providers/cloudinary.provider');
 
 const router = express.Router();
+const uploadLogo = multer({ storage: orgStorage });
 
 router.get(
   '/',
@@ -17,6 +22,30 @@ router.get(
   // #swagger.tags = ['Jobs']
   // #swagger.summary = 'Get all open job listings'
   JobController.getOpen
+);
+
+router.get(
+  '/logos',
+  // #swagger.tags = ['Jobs']
+  // #swagger.summary = 'Get all organisation logos'
+  OrgLogoController.getAll
+);
+
+router.put(
+  '/logos',
+  adminMiddleware,
+  uploadLogo.single('logo'),
+  // #swagger.tags = ['Jobs']
+  // #swagger.summary = 'Upload or update an organisation logo (admin only)'
+  OrgLogoController.upload
+);
+
+router.delete(
+  '/logos/:organisation',
+  adminMiddleware,
+  // #swagger.tags = ['Jobs']
+  // #swagger.summary = 'Delete an organisation logo (admin only)'
+  OrgLogoController.delete
 );
 
 router.get(

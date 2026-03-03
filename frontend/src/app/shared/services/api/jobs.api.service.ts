@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IJob } from '@models/job.schema';
+import { IOrgLogo } from '@models/orgLogo.schema';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -35,5 +36,30 @@ export class JobService {
     return this.http
       .get<Array<Record<string, unknown>>>(`${this.urlV2}/jobs`)
       .pipe(map((jobs) => jobs.map(mapRawJob)));
+  }
+
+  getOrgLogos(): Observable<IOrgLogo[]> {
+    return this.http.get<IOrgLogo[]>(`${this.urlV2}/jobs/logos`);
+  }
+
+  uploadOrgLogo(
+    file: File,
+    organisation: string
+  ): Observable<{ message: string; data: IOrgLogo }> {
+    const formData = new FormData();
+    formData.append('logo', file);
+    formData.append('organisation', organisation);
+    return this.http.put<{ message: string; data: IOrgLogo }>(
+      `${this.urlV2}/jobs/logos`,
+      formData,
+      { withCredentials: true }
+    );
+  }
+
+  deleteOrgLogo(organisation: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.urlV2}/jobs/logos/${encodeURIComponent(organisation)}`,
+      { withCredentials: true }
+    );
   }
 }
