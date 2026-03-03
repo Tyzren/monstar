@@ -107,29 +107,27 @@
     position: absolute;
     width: 4px;
     height: 4px;
-    background: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 1),
-      rgba(255, 255, 255, 0)
-    );
+    background: white;
     border-radius: 50%;
+    // Reduced from 4 shadows to 2 (less rasterization cost per layer)
     box-shadow:
-      0 0 0 4px rgba(255, 255, 255, 0.1),
-      0 0 0 8px rgba(255, 255, 255, 0.1),
-      0 0 20px rgba(255, 255, 255, 1),
-      0 0 40px rgba(255, 255, 255, 0.4);
+      0 0 6px 2px rgba(255, 255, 255, 0.3),
+      0 0 20px rgba(255, 255, 255, 0.6);
     animation: shooting-star 3s linear infinite;
+    // Promotes to own compositor layer — shadow is rasterized once,
+    // then only transform/opacity change per frame (GPU-only, no repaints)
+    will-change: transform, opacity;
 
     &::after {
-      // Add trailing effect
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 40px; // Longer trail
+      top: calc(50% - 1px);
+      left: 50%;
+      width: 40px;
       height: 2px;
+      transform-origin: left center;
+      transform: rotate(240deg);
       background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), transparent);
-      transform: translateX(-30px) translateY(-18px) rotateZ(240deg);
     }
   }
 
