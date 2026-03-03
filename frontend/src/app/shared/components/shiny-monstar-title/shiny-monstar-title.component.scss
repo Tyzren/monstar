@@ -57,6 +57,12 @@ h1 {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  h1 .star-gradient {
+    animation: none;
+  }
+}
+
 // Breathing glow via opacity (GPU-composited, replaces expensive per-frame filter recalculation)
 @keyframes breathing {
   0%, 100% {

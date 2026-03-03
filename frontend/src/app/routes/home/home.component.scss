@@ -522,6 +522,29 @@ h2 {
   padding-bottom: 1rem;
 }
 
+// === Reduced Motion ===
+@media (prefers-reduced-motion: reduce) {
+  .hero-section {
+    &::before {
+      animation: none;
+      opacity: 0.2;
+    }
+
+    .shooting-star {
+      animation: none;
+      display: none;
+    }
+  }
+
+  .floating-emotes-container {
+    display: none;
+  }
+
+  .sponsors-section .sponsors-track {
+    animation: none;
+  }
+}
+
 // === Media Queries ===
 // Hide the Popular Units header and carousel on small screens
 @media screen and (max-width: 440px) {
