@@ -7,8 +7,8 @@ import { DeleteReviewService } from '@services/api/delete-review.service';
 import { GetReviewService } from '@services/api/get-review.service';
 import { ModifyReviewService } from '@services/api/modify-review.service';
 import { UserService } from '@services/api/user.service';
-import { IUpdateReview } from 'app/shared/models/v2/review.schema';
 import { DEFAULT_PROFILE_IMG } from 'app/shared/constants/constants';
+import { IUpdateReview } from 'app/shared/models/v2/review.schema';
 import { MessageService } from 'primeng/api';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
@@ -16,7 +16,6 @@ import {
   BehaviorSubject,
   catchError,
   combineLatest,
-  exhaustMap,
   map,
   Observable,
   of,
@@ -30,7 +29,13 @@ import { State } from './user-profile.state';
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [AsyncPipe, ProfilePanelComponent, ReviewCardComponent, SkeletonModule, ToastModule],
+  imports: [
+    AsyncPipe,
+    ProfilePanelComponent,
+    ReviewCardComponent,
+    SkeletonModule,
+    ToastModule,
+  ],
   providers: [MessageService],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
@@ -64,9 +69,9 @@ export class UserProfileComponent {
 
       const userSource$ = isSameUser
         ? of(currUser)
-        : this.userService.getByUsername(username).pipe(
-            catchError(() => of(null))
-          );
+        : this.userService
+            .getByUsername(username)
+            .pipe(catchError(() => of(null)));
 
       return userSource$.pipe(
         switchMap((user) => {
@@ -94,7 +99,9 @@ export class UserProfileComponent {
         // Sorting reviews by their unitcode digit
         const levelA = parseInt(a.unit.unitCode[3]);
         const levelB = parseInt(b.unit.unitCode[3]);
-        return levelA - levelB || a.unit.unitCode.localeCompare(b.unit.unitCode);
+        return (
+          levelA - levelB || a.unit.unitCode.localeCompare(b.unit.unitCode)
+        );
       }),
     })),
     shareReplay(1)

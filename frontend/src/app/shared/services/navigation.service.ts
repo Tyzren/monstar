@@ -20,19 +20,6 @@ export class NavigationService {
       // Option 2: Body and HTML elements
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
-
-      // Option 3: Common container names
-      const containers = [
-        '.main-content',
-        '.content-container',
-        '.app-content',
-        '.scrollable-content',
-      ];
-
-      containers.forEach((selector) => {
-        const el = document.querySelector(selector);
-        if (el) el.scrollTop = 0;
-      });
     }, 100); // Small delay to ensure DOM is ready
   }
 
