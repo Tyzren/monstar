@@ -37,29 +37,32 @@
 
       <!-- Profile -->
       @if (state) {
-      <div class="profile mr-2" type="button" (click)="clickedProfileIcon()">
-        @if (state.isAuthenticated && state.user) {
-          <!-- Avatar shown if logged in -->
-          <div
-            class="profile-pic pt-1"
-            style="transform: scale(0.9)"
-            pTooltip="Profile (CTRL + P)"
-            tooltipStyleClass="mt-1"
-          >
-            <p-avatar [image]="state.user.profileImg" shape="circle"></p-avatar>
-            <span class="online-badge"></span>
-          </div>
-        } @else {
-          <!-- Icon shown if not logged in -->
-          <i
-            class="pi pi-user-plus mr-1 mb-2"
-            pTooltip="Sign In (CTRL + P)"
-            tooltipStyleClass="mt-2"
-            [style]="{ transform: 'scale(1.2)' }"
-            [style.color]="profileColor"
-          ></i>
-        }
-      </div>
+        <div class="profile mr-2" type="button" (click)="clickedProfileIcon()">
+          @if (state.isAuthenticated && state.user) {
+            <!-- Avatar shown if logged in -->
+            <div
+              class="profile-pic pt-1"
+              style="transform: scale(0.9)"
+              pTooltip="Profile (CTRL + P)"
+              tooltipStyleClass="mt-1"
+            >
+              <p-avatar
+                [image]="state.user.profileImg"
+                shape="circle"
+              ></p-avatar>
+              <span class="online-badge"></span>
+            </div>
+          } @else {
+            <!-- Icon shown if not logged in -->
+            <i
+              class="pi pi-user-plus mr-1 mb-2"
+              pTooltip="Sign In (CTRL + P)"
+              tooltipStyleClass="mt-2"
+              [style]="{ transform: 'scale(1.2)' }"
+              [style.color]="profileColor"
+            ></i>
+          }
+        </div>
       }
     </div>
   </div>
@@ -98,7 +101,7 @@
         <hr class="mx-3 border-top-1 border-none surface-border" />
         <a
           pRipple
-          (click)="closeSidebar($event); clickedProfileIcon();"
+          (click)="closeSidebar($event); clickedProfileIcon()"
           class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
           style="text-decoration: none"
         >
@@ -161,7 +164,31 @@
                   style="text-decoration: none"
                 >
                   <i class="pi pi-briefcase mr-2"></i>
-                  <span class="font-medium">Jobs</span>
+                  <span class="font-medium">Student Roles</span>
+                </a>
+              </li>
+              <!-- Changelog Page -->
+              <li>
+                <a
+                  pRipple
+                  (click)="closeSidebar($event); navigateTo('/changelog')"
+                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                  style="text-decoration: none"
+                >
+                  <i class="pi pi-sitemap mr-2"></i>
+                  <span class="font-medium">Changelog</span>
+                </a>
+              </li>
+              <!-- About Page -->
+              <li>
+                <a
+                  pRipple
+                  (click)="closeSidebar($event); navigateTo('/about')"
+                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                  style="text-decoration: none"
+                >
+                  <i class="pi pi-info-circle mr-2"></i>
+                  <span class="font-medium">Contributions</span>
                 </a>
               </li>
               <!-- Terms and Conditions Page -->
@@ -175,31 +202,7 @@
                   style="text-decoration: none"
                 >
                   <i class="pi pi-shield mr-2"></i>
-                  <span class="font-medium">Terms & Conditions</span>
-                </a>
-              </li>
-              <!-- About Page -->
-              <li>
-                <a
-                  pRipple
-                  (click)="closeSidebar($event); navigateTo('/about')"
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
-                  style="text-decoration: none"
-                >
-                  <i class="pi pi-info-circle mr-2"></i>
-                  <span class="font-medium">About</span>
-                </a>
-              </li>
-              <!-- Changelog Page -->
-              <li>
-                <a
-                  pRipple
-                  (click)="closeSidebar($event); navigateTo('/changelog')"
-                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
-                  style="text-decoration: none"
-                >
-                  <i class="pi pi-sitemap mr-2"></i>
-                  <span class="font-medium">Changelog</span>
+                  <span class="font-medium">Ts & Cs</span>
                 </a>
               </li>
             </ul>
