@@ -198,11 +198,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
    *  ! |======================================================================|
    */
 
-  /**
-   * * Runs on init
-   *
-   * Fetches popular units and starts the subheader rotation
-   */
   ngOnInit() {
     // Set meta tags for SEO
     this.updateMetaTags();
@@ -211,20 +206,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.preloadEmotes();
   }
 
-  /**
-   * * Runs after view has initialised
-   *
-   * Gets the popular units
-   */
   ngAfterViewInit() {
     this.getPopularUnits();
   }
 
-  /**
-   * * Runs on destroy
-   *
-   * Clear the interval for the subheader rotation
-   */
   ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
 
@@ -254,11 +239,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
    *  ! |======================================================================|
    */
 
-  /**
-   * * Fetches popular units from the API
-   *
-   * Makes a GET request to the API to fetch popular units and stores them in the popularUnits array.
-   */
   getPopularUnits() {
     this.loading = true;
     this.apiService.getPopularUnitsGET().subscribe({
@@ -276,14 +256,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
    *  ! |======================================================================|
    */
 
-  /**
-   * * Preload all emote images before displaying
-   */
   private preloadEmotes(): void {
     const emoteList = [
       'emotes/emote-angry.webp',
       'emotes/emote-cool.webp',
-      'emotes/emote-default.webp',
       'emotes/emote-fine.webp',
       'emotes/emote-nerd.webp',
       'emotes/emote-study.webp',
@@ -310,7 +286,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * * Starts the subheader rotation animation
+   * Starts the subheader rotation animation
    */
   private startSubheaderRotation() {
     this.intervalId = setInterval(() => {
@@ -338,7 +314,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * * Safely renders HTML content
+   * Safely renders HTML content
    *
    * @param html The HTML string to sanitize
    * @returns SafeHtml that can be rendered with innerHTML
@@ -353,18 +329,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
    *  ! |======================================================================|
    */
 
-  /**
-   * * Navigates to the unit list page
-   *
-   * This is used for the explore units button on the home page.
-   */
-  exploreUnits() {
-    this.router.navigate(['/list']);
-  }
-
-  /**
-   * * Navigates to the about page
-   */
   navigateTo(nav: string) {
     this.navigationService.navigateTo([nav]);
   }
@@ -375,9 +339,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
    *  ! |======================================================================|
    */
 
-  /**
-   * * Updates meta tags for SEO
-   */
   private updateMetaTags(): void {
     const pageUrl = BASE_URL;
 

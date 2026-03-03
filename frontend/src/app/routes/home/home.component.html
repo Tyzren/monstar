@@ -21,7 +21,7 @@
       [rounded]="true"
       [raised]="true"
       icon="pi pi-compass"
-      (onClick)="exploreUnits()"
+      (onClick)="navigateTo('/list')"
     ></p-button>
   </div>
 
@@ -154,6 +154,17 @@
       </ng-template>
     </p-carousel>
   }
+
+  <!-- Another button to go to unit list -->
+  <div class="see-more-button-row">
+    <p-button
+      label="See more units"
+      [rounded]="true"
+      [raised]="true"
+      icon="pi pi-compass"
+      (onClick)="navigateTo('/list')"
+    ></p-button>
+  </div>
 
   <!-- Divider -->
   <p-divider [style]="{ 'margin-bottom': '3rem' }"></p-divider>
