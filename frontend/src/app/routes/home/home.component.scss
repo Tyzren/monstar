@@ -68,9 +68,8 @@
       left: 50%;
       width: 700px;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       border-radius: 3rem;
-      backdrop-filter: blur(3px);
       z-index: -1;
 
       @media (max-width: 768px) {
