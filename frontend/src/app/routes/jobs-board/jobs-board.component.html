@@ -1,10 +1,27 @@
+<input
+  #logoFileInput
+  type="file"
+  accept="image/*"
+  style="display: none"
+  (change)="onFileSelected($event)"
+/>
+
 <div #jobsBoardContainer class="jobs-board-container">
   <!-- Toolbar -->
   <p-toolbar styleClass="jobs-toolbar">
     <div class="p-toolbar-group-start">
       <div>
         <h2 class="jobs-title">Monash University Student Roles</h2>
-        <span class="jobs-attribution">Special thanks to <a href="https://www.instagram.com/openuniroles" target="_blank" rel="noopener noreferrer">&commat;openuniroles</a> for providing the data.</span>
+        <span class="jobs-attribution"
+          >Special thanks to
+          <a
+            href="https://www.instagram.com/openuniroles"
+            target="_blank"
+            rel="noopener noreferrer"
+            >&commat;openuniroles</a
+          >
+          for providing the data.</span
+        >
       </div>
     </div>
     <div class="p-toolbar-group-end filters">
@@ -30,56 +47,87 @@
   <div class="jobs-content">
     <!-- Left Panel: Job List -->
     @if (!mobileDetailOpen) {
-    <div class="left-panel">
-      <p-scrollPanel
-        styleClass="job-list-scroll"
-        [style]="{ width: '100%', height: '100%' }"
-      >
-        @if (loading) {
-          @for (i of [1, 2, 3, 4, 5]; track $index) {
-            <div class="job-card skeleton-card">
-              <p-skeleton width="70%" height="1.2rem" borderRadius="8px"></p-skeleton>
-              <p-skeleton width="50%" height="1rem" borderRadius="8px" styleClass="mt-2"></p-skeleton>
-              <div class="skeleton-chips mt-2">
-                <p-skeleton width="60px" height="1.5rem" borderRadius="12px"></p-skeleton>
-                <p-skeleton width="80px" height="1.5rem" borderRadius="12px"></p-skeleton>
-              </div>
-            </div>
-          }
-        } @else if (filteredJobs.length === 0) {
-          <div class="empty-state">
-            <i class="pi pi-briefcase"></i>
-            <p>No jobs match your filters.</p>
-          </div>
-        } @else {
-          @for (job of filteredJobs; track job.notionId) {
-            <div
-              class="job-card"
-              [class.active]="selectedJob === job"
-              (click)="selectJob(job)"
-            >
-              <div class="job-card-icon">
-                <i class="pi pi-building"></i>
-              </div>
-              <div class="job-card-body">
-                <div class="job-card-header">
-                  <span class="job-card-title">{{ job.organisation }}</span>
-                  <p-tag
-                    [value]="job.status"
-                    [severity]="getStatusSeverity(job.status)"
-                  ></p-tag>
+      <div class="left-panel">
+        <p-scrollPanel
+          styleClass="job-list-scroll"
+          [style]="{ width: '100%', height: '100%' }"
+        >
+          @if (loading) {
+            @for (i of [1, 2, 3, 4, 5]; track $index) {
+              <div class="job-card skeleton-card">
+                <p-skeleton
+                  width="70%"
+                  height="1.2rem"
+                  borderRadius="8px"
+                ></p-skeleton>
+                <p-skeleton
+                  width="50%"
+                  height="1rem"
+                  borderRadius="8px"
+                  styleClass="mt-2"
+                ></p-skeleton>
+                <div class="skeleton-chips mt-2">
+                  <p-skeleton
+                    width="60px"
+                    height="1.5rem"
+                    borderRadius="12px"
+                  ></p-skeleton>
+                  <p-skeleton
+                    width="80px"
+                    height="1.5rem"
+                    borderRadius="12px"
+                  ></p-skeleton>
                 </div>
-                <div class="job-card-chips">
-                  @for (role of job.roleType; track role) {
-                    <p-chip [label]="role" styleClass="role-chip"></p-chip>
+              </div>
+            }
+          } @else if (filteredJobs.length === 0) {
+            <div class="empty-state">
+              <i class="pi pi-briefcase"></i>
+              <p>No jobs match your filters.</p>
+            </div>
+          } @else {
+            @for (job of filteredJobs; track job.notionId) {
+              <div
+                class="job-card"
+                [class.active]="selectedJob === job"
+                (click)="selectJob(job)"
+              >
+                <div
+                  class="job-card-icon"
+                  [class.admin-clickable]="isAdmin"
+                  (click)="onIconClick($event, job)"
+                >
+                  @if (getLogoUrl(job)) {
+                    <img
+                      [src]="getLogoUrl(job)"
+                      [alt]="job.organisation + ' logo'"
+                    />
+                  } @else if (isAdmin) {
+                    <i class="pi pi-building"></i>
+                    <span class="upload-hint">+</span>
+                  } @else {
+                    <i class="pi pi-building"></i>
                   }
                 </div>
+                <div class="job-card-body">
+                  <div class="job-card-header">
+                    <span class="job-card-title">{{ job.organisation }}</span>
+                    <p-tag
+                      [value]="job.status"
+                      [severity]="getStatusSeverity(job.status)"
+                    ></p-tag>
+                  </div>
+                  <div class="job-card-chips">
+                    @for (role of job.roleType; track role) {
+                      <p-chip [label]="role" styleClass="role-chip"></p-chip>
+                    }
+                  </div>
+                </div>
               </div>
-            </div>
+            }
           }
-        }
-      </p-scrollPanel>
-    </div>
+        </p-scrollPanel>
+      </div>
     }
 
     <!-- Right Panel: Job Detail (desktop side-by-side) -->
@@ -90,12 +138,41 @@
       >
         @if (loading) {
           <div class="job-detail">
-            <p-skeleton width="80%" height="2rem" borderRadius="8px"></p-skeleton>
-            <p-skeleton width="50%" height="1.2rem" borderRadius="8px" styleClass="mt-3"></p-skeleton>
-            <p-skeleton width="100%" height="1rem" borderRadius="8px" styleClass="mt-4"></p-skeleton>
-            <p-skeleton width="100%" height="1rem" borderRadius="8px" styleClass="mt-2"></p-skeleton>
-            <p-skeleton width="100%" height="1rem" borderRadius="8px" styleClass="mt-2"></p-skeleton>
-            <p-skeleton width="60%" height="1rem" borderRadius="8px" styleClass="mt-2"></p-skeleton>
+            <p-skeleton
+              width="80%"
+              height="2rem"
+              borderRadius="8px"
+            ></p-skeleton>
+            <p-skeleton
+              width="50%"
+              height="1.2rem"
+              borderRadius="8px"
+              styleClass="mt-3"
+            ></p-skeleton>
+            <p-skeleton
+              width="100%"
+              height="1rem"
+              borderRadius="8px"
+              styleClass="mt-4"
+            ></p-skeleton>
+            <p-skeleton
+              width="100%"
+              height="1rem"
+              borderRadius="8px"
+              styleClass="mt-2"
+            ></p-skeleton>
+            <p-skeleton
+              width="100%"
+              height="1rem"
+              borderRadius="8px"
+              styleClass="mt-2"
+            ></p-skeleton>
+            <p-skeleton
+              width="60%"
+              height="1rem"
+              borderRadius="8px"
+              styleClass="mt-2"
+            ></p-skeleton>
           </div>
         } @else if (!selectedJob) {
           <div class="empty-state">
@@ -111,7 +188,11 @@
 
   <!-- Mobile Full-Screen Detail Overlay -->
   @if (mobileDetailOpen && selectedJob) {
-    <div class="mobile-detail-overlay" (wheel)="$event.stopPropagation()" (touchmove)="$event.stopPropagation()">
+    <div
+      class="mobile-detail-overlay"
+      (wheel)="$event.stopPropagation()"
+      (touchmove)="$event.stopPropagation()"
+    >
       <button class="mobile-close-btn" (click)="closeDetail()">
         <i class="pi pi-times"></i>
       </button>
@@ -139,21 +220,31 @@
     <div class="detail-fields">
       @if (selectedJob!.timeCommitment.length > 0) {
         <div class="detail-field">
-          <span class="field-label"><i class="pi pi-clock"></i> Time Commitment</span>
-          <span class="field-value">{{ selectedJob!.timeCommitment.join(', ') }}</span>
+          <span class="field-label"
+            ><i class="pi pi-clock"></i> Time Commitment</span
+          >
+          <span class="field-value">{{
+            selectedJob!.timeCommitment.join(', ')
+          }}</span>
         </div>
       }
 
       @if (selectedJob!.closeDate) {
         <div class="detail-field">
-          <span class="field-label"><i class="pi pi-calendar"></i> Close Date</span>
-          <span class="field-value">{{ formatDate(selectedJob!.closeDate) }}</span>
+          <span class="field-label"
+            ><i class="pi pi-calendar"></i> Close Date</span
+          >
+          <span class="field-value">{{
+            formatDate(selectedJob!.closeDate)
+          }}</span>
         </div>
       }
 
       @if (selectedJob!.eligibility) {
         <div class="detail-field">
-          <span class="field-label"><i class="pi pi-users"></i> Eligibility</span>
+          <span class="field-label"
+            ><i class="pi pi-users"></i> Eligibility</span
+          >
           <span class="field-value">{{ selectedJob!.eligibility }}</span>
         </div>
       }
@@ -167,15 +258,21 @@
 
       @if (selectedJob!.interviewWindow) {
         <div class="detail-field">
-          <span class="field-label"><i class="pi pi-comments"></i> Interview Window</span>
+          <span class="field-label"
+            ><i class="pi pi-comments"></i> Interview Window</span
+          >
           <span class="field-value">{{ selectedJob!.interviewWindow }}</span>
         </div>
       }
 
       @if (selectedJob!.lastVerified) {
         <div class="detail-field">
-          <span class="field-label"><i class="pi pi-check-circle"></i> Last Verified</span>
-          <span class="field-value">{{ formatDate(selectedJob!.lastVerified) }}</span>
+          <span class="field-label"
+            ><i class="pi pi-check-circle"></i> Last Verified</span
+          >
+          <span class="field-value">{{
+            formatDate(selectedJob!.lastVerified)
+          }}</span>
         </div>
       }
     </div>
