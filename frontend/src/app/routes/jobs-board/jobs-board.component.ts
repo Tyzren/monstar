@@ -193,6 +193,13 @@ export class JobsBoardComponent implements OnInit, OnDestroy {
     return this.orgLogoMap.get(job.organisation.toLowerCase().trim());
   }
 
+  onIconClick(event: MouseEvent, job: IJob): void {
+    if (this.isAdmin && !this.getLogoUrl(job)) {
+      event.stopPropagation();
+      this.onLogoUpload(job);
+    }
+  }
+
   onLogoUpload(job: IJob): void {
     this._uploadTargetOrg = job.organisation;
     this.logoFileInput.nativeElement.click();
